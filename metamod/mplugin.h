@@ -118,6 +118,7 @@ class MPlugin {
 		char *file;							// ie "mm_test_i386.so", ptr from filename
 		char desc[MAX_DESC_LEN];			// ie "Test metamod plugin", from inifile
 		char pathname[PATH_MAX];	// UNIQUE, ie "/home/willday/half-life/cstrike/dlls/mm_test_i386.so", built with GameDLL.gamedir
+		int pfspecific;                     // level of specific platform affinity, used during load time
 		PLUG_STATUS status;					// current status of plugin (loaded, etc)
 		PLUG_ACTION action;					// what to do with plugin (load, unload, etc)
 		PLOAD_SOURCE source;				// source of the request to load the plugin
@@ -143,6 +144,8 @@ class MPlugin {
 		char *resolve_prefix(char *path);
 		char *resolve_suffix(char *path);
 
+		mBOOL platform_match(MPlugin* plugin);
+		
 		mBOOL load(PLUG_LOADTIME now);
 		mBOOL unload(PLUG_LOADTIME now, PL_UNLOAD_REASON reason);
 		mBOOL reload(PLUG_LOADTIME now, PL_UNLOAD_REASON reason);

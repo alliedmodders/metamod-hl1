@@ -49,6 +49,7 @@ typedef enum {
 	ME_NOERROR = 0,
 	ME_FORMAT,			// invalid format
 	ME_COMMENT,			// ignored comment
+	ME_BLANK,			// ignored blank (empty) line
 	ME_ALREADY,			// request had already been done
 	ME_DELAYED,			// request is delayed
 	ME_NOTALLOWED,		// request not allowed

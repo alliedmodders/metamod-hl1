@@ -67,6 +67,7 @@ class MPluginList {
 		MPlugin *find(plid_t id);			// find by plid_t
 		MPlugin *find_memloc(void *memptr);	// find by memory location
 		MPlugin *find_match(const char *prefix);	// find by partial prefix match
+		MPlugin *find_match(MPlugin *pmatch);	// find by platform_match()
 		MPlugin *add(MPlugin *padd);
 
 		mBOOL ini_startup(void);			// read inifile at startup

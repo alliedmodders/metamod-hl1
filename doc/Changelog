@@ -1,20 +1,32 @@
 # vim: set tw=75 ft=none :
 
-yyyy/mm/dd 1.17.2
+2004/08/20 1.17.2
  - Fixed a memory leak the size of the gamedll when extracting a missing
    gamedll from the cache file on Windows Steam servers. Found by Wei
    Mingzhi.
  - Made game directory lookup case-insensitive.
  - Added MOD recognition for CSV15 (Counter-Strike 1.5 for Steam).
  - Added MOD recognition for Adrenaline Gamer 6.5 and up. 
- - Changed MOD recognition for Adrenaline Gamer 3.x. The 3.x version of the
-   MOD is now searched in the game directory 'ag3' instead of 'ag'.
  - Added MOD recognition and entities for The Terrorist Revenge 0.2.1.
  - Added MOD recognition and entities for Pirates, Vikings and Knights Beta 2.1.
  - Added more entities for Sven Coop 3.0.
  - Added entities for Vampire Slayer "Chapter VI".
  - Added entities for Earth Special Forces Beta 1.2.
  - Added entities for Science & Industry 1.0.
+ - Changed MOD recognition for Adrenaline Gamer 3.x. The 3.x version of the
+   MOD is now being deprecated and support will be removed from a future
+   version of Metamod. It can currently still be used by renaming the game 
+   directory from "ag" to "ag3" or by explicitly specifying the gamedll.
+ - Improved parsing of plugins.ini file to not report errors on empty lines
+   and commented out lines that start with whitespace.
+ - Added support for loading AMD64 games (Linux game dso needs to end in 
+   "_amd64.so" instead of "_i386.so") in AMD64 Metamod version.
+ - Added "lin32" and "lin64" keywords in addition to "linux" keyword for 
+   plugins.ini file to support using the same file for the same game on
+   both 32bit and 64bit servers.
+ - Internal changes:
+	- Changed Makefile to use different object files directory on AMD64
+	  build machines and "_amd64.so" extension for AMD64 Metamod.
 
 2004/05/31 1.17.1
  - Additional entities for DoD 1.1.

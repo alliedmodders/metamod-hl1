@@ -195,6 +195,33 @@ MPlugin *MPluginList::find_match(const char *prefix) {
 		RETURN_ERRNO(NULL, ME_NOTFOUND);
 }
 
+
+// Find a plugin with same file, logtag, desc or significant 
+// prefix of file. Uses the platform_match() method of MPlugin.
+// meta_errno values:
+//  - ME_ARGUMENT	null prefix
+//  - ME_NOTFOUND	couldn't find a matching plugin
+MPlugin *MPluginList::find_match(MPlugin *pmatch) {
+	int i;
+	MPlugin *iplug, *pfound;
+	if(!pmatch)
+		RETURN_ERRNO(NULL, ME_ARGUMENT);
+	pfound=NULL;
+	for(i=0; i < endlist; i++) {
+		iplug=&plist[i];
+		if(pmatch->platform_match(iplug)) {
+			pfound=iplug;
+			break;
+		}
+	}
+
+	if(pfound)
+		return(pfound);
+	else
+		RETURN_ERRNO(NULL, ME_NOTFOUND);
+}
+
+
 // Add a plugin to the list.
 // meta_errno values:
 //  - ME_MAXREACHED		reached max plugins
@@ -245,6 +272,7 @@ mBOOL MPluginList::ini_startup() {
 	FILE *fp;
 	char line[MAX_STRBUF_LEN];
 	int n, ln;
+	MPlugin *pmatch;
 
 	if(!valid_gamedir_file(inifile)) {
 		META_ERROR("ini: Metamod plugins file empty or missing: %s", inifile);
@@ -279,9 +307,22 @@ mBOOL MPluginList::ini_startup() {
 		}
 		// Check for a duplicate - an existing entry with this pathname.
 		if(find(plist[n].pathname)) {
+			// Should we check platform specific level here?
 			META_ERROR("ini: Skipping duplicate plugin, line %d of %s: %s", 
 					ln, inifile, plist[n].pathname);
 			continue;
+		}
+		// Check for a matching platform with different platform specifics
+		// level.
+		if(NULL != (pmatch=find_match(&plist[n]))) {
+			if(pmatch->pfspecific >= plist[n].pfspecific) {
+				META_DEBUG(1, ("ini: Skipping plugin, line %d of %s: plugin with higher platform specific level already exists. (%d >= %d)",
+                         n, inifile, pmatch->pfspecific, plist[n].pfspecific)); 
+				continue;
+			}
+			META_DEBUG(1, ("ini: Plugin in line %d overrides existing plugin with lower platform specific level %d, ours %d",
+					n, pmatch->pfspecific, plist[n].pfspecific));
+			memset(pmatch, 0, sizeof(MPlugin));
 		}
 		plist[n].action=PA_LOAD;
 		META_LOG("ini: Read plugin config for: %s", plist[n].desc);
@@ -337,6 +378,18 @@ mBOOL MPluginList::ini_refresh() {
 		// Try to find plugin with this pathname in the current list of
 		// plugins.
 		if(!(pl_found=find(pl_temp.pathname))) {
+			// Check for a matching platform with higher platform specifics
+			// level.
+			if(NULL != (pl_found=find_match(&pl_temp))) {
+				if(pl_found->pfspecific >= pl_temp.pfspecific) {
+					META_DEBUG(1, ("ini: Skipping plugin, line %d of %s: plugin with higher platform specific level already exists. (%d >= %d)",
+                       		 ln, inifile, pl_found->pfspecific, pl_temp.pfspecific)); 
+					continue;
+				}
+				META_DEBUG(1, ("ini: Plugin in line %d should override existing plugin with lower platform specific level %d, ours %d",
+							ln, pl_found->pfspecific, pl_temp.pfspecific));
+				continue;
+			}
 			// new plugin; add to list
 			if((pl_added=add(&pl_temp))) {
 				// try to load this plugin at the next opportunity

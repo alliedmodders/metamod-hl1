@@ -44,10 +44,17 @@ METADIR=../metamod
 CC=gcc
 
 
+# set timezone string
+ifeq "$(OS)" "linux"
+	COMPILE_TZ=$(shell date +%z)
+else
+	COMPILE_TZ=
+endif
 
-COMPILE_TZ=
+
 ## Developer overrrides
 ifeq "$(USER)" "willday"
+	CC=gcc-2.95
     ifeq "$(OS)" "linux"
        SDKTOP=$(HOME)/src/hl/hlsdk-2.3
        INST_DIR=$(HOME)/half-life/cstrike/dlls
@@ -57,14 +64,10 @@ ifeq "$(USER)" "willday"
        SDKTOP=/hlsdk
        TEST_DIR=/hlserver/tfc/dlls
     endif
-	COMPILE_TZ=$(shell date +%z)
-	CC=gcc-2.95
 endif
 ifeq "$(USER)" "flori"
     PATH_WIN=/usr/local/cross-tools/i386-mingw32msvc/bin
     TEST_DIR=/data/hlds_l/Admin/dlls
-    CC = gcc
-	COMPILE_TZ=$(shell date +%z)
 endif
 
 SDKSRC=$(SDKTOP)/multiplayer
@@ -74,12 +77,22 @@ SDKSRC=$(SDKTOP)/multiplayer
 #############################################################################
 
 ARCH=i586
+ARCHD=
 ifeq "$(OS)" "linux"
 	INSTALL=install -m 644
 	LD_WINDLL= PATH=$(PATH_WIN) $(PATH_WIN)/dllwrap
 	TARGET=linux
 	LIBFILE=$(LIBFILE_LINUX)
 	TARGET_FILE=$(TARGET_LINUX)
+	ARCHD = $(shell uname -m)
+	ifeq "$(ARCHD)" "x86_64"
+		ARCH=x86_64
+		ARCHD=.amd64
+		MODARCH=amd64
+	else
+		ARCHD=
+		MODARCH=i386
+	endif
 else	## windows
 	INSTALL=cp
 	LD_WINDLL= $(PATH_WIN)/dllwrap
@@ -90,9 +103,9 @@ endif
 
 CC_WIN=$(PATH_WIN)/gcc
 RES_WIN=$(PATH_WIN)/windres
-OBJDIR_LINUX_OPT=opt.linux
+OBJDIR_LINUX_OPT=opt.linux$(ARCHD)
 OBJDIR_WIN_OPT=opt.win32
-OBJDIR_LINUX_DBG=debug.linux
+OBJDIR_LINUX_DBG=debug.linux$(ARCHD)
 OBJDIR_WIN_DBG=debug.win32
 
 
@@ -115,7 +128,12 @@ GCCMAJ = $(shell gcc -dumpversion | sed -e 's/\.[0-9][0-9]*\.[0-9]//')
 # full optimization, adapted from adminmod Makefile
 # "WONT WORK WITH omit-frame-pointer"?
 # - disable (unneeded) C++ exceptions and rtti code to save some space ?
-CCOPT = -march=$(ARCH)
+ifeq "$(ARCH)" "x86_64"
+	# K8 targets only available from gcc 3.4 on.
+	CCOPT =
+else
+	CCOPT = -march=$(ARCH)
+endif
 
 CCOPT += $(CCO) -ffast-math -funroll-loops \
 	-fomit-frame-pointer -fexpensive-optimizations \
@@ -245,7 +263,7 @@ $(OBJDIR_LINUX)/%.o: $(SRCDIR)/%.cpp
 	$(DO_CC_LINUX)
 
 # linux .so target file
-LIBFILE_LINUX = $(MODNAME)_i386.so
+LIBFILE_LINUX = $(MODNAME)_$(MODARCH).so
 TARGET_LINUX = $(OBJDIR_LINUX)/$(LIBFILE_LINUX)
 
 

@@ -63,6 +63,15 @@ mBOOL MPlugin::ini_parseline(char *line) {
 	char *ptr_token;
 	char *cp;
 
+	// skip whitespace at start of line
+	while(*line==' ' || *line=='\t' ) line++;
+
+	// skip empty lines
+	if(line[0]=='\0') {
+		META_DEBUG(7, ("ini: Ignoring empty line: %s", line));
+		RETURN_ERRNO(mFALSE, ME_BLANK);
+	}
+
 	if(line[0]=='#' || line[0]==';' || strstr(line, "//")==line) {
 		META_DEBUG(7, ("ini: Ignoring commented line: %s", line));
 		RETURN_ERRNO(mFALSE, ME_COMMENT);
@@ -72,7 +81,11 @@ mBOOL MPlugin::ini_parseline(char *line) {
 	token=strtok_r(line, " \t", &ptr_token);
 	if(!token)
 		RETURN_ERRNO(mFALSE, ME_FORMAT);
-	if(strcasecmp(token, PLATFORM)) {
+	if(strcasecmp(token, PLATFORM) == 0) {
+		pfspecific=0;
+	} else if(strcasecmp(token, PLATFORM_SPC) == 0) {
+		pfspecific=1;
+	} else {
 		// plugin is not for this OS
 		META_DEBUG(7, ("ini: Ignoring entry for %s", token));
 		RETURN_ERRNO(mFALSE, ME_OSNOTSUP);
@@ -371,10 +384,51 @@ char *MPlugin::resolve_suffix(char *path) {
 	snprintf(buf, sizeof(buf), "%s_i686.so", path);
 	if(stat(buf, &st) == 0 && S_ISREG(st.st_mode))
 		return(buf);
+	snprintf(buf, sizeof(buf), "%s_amd64.so", path);
+	if(stat(buf, &st) == 0 && S_ISREG(st.st_mode))
+		return(buf);
 #endif /* linux */
 
 	return(NULL);
 }
+
+// Check if a given plugin is the same but possibly for a
+// different platform. A match is considered to be found if
+// 1.  the filename without the path is the same, or
+// 2a. for an attached plugin the logtag is the same, or
+// 2b. the description is the same, or
+// 3.  a significant part of the filename is the same.
+// A significant part of a plugin name is currently defined to
+// the the part up to the last underscore, if one exists.
+// meta_errno values:
+//  - none
+mBOOL MPlugin::platform_match(MPlugin* other) {
+	char *end, *other_end;
+	int prefixlen;
+
+	if(status == PL_EMPTY || other->status == PL_EMPTY) return mFALSE;
+
+	if(strcmp(file, other->file) == 0) return mTRUE;
+
+	if(status >= PL_OPENED && other->status >= PL_OPENED &&
+       strcmp(info->logtag, other->info->logtag) == 0 ) return mTRUE;
+	if(*desc != '\0' && strcasecmp(desc,other->desc) == 0) return mTRUE;
+
+	end=strrchr(file, '_');
+	if(end == NULL) end=strrchr(file, '.');
+	other_end=strrchr(other->file, '_');
+	if(other_end == NULL) other_end=strrchr(other->file, '.');
+
+	if(end == NULL || other_end == NULL) return mFALSE;
+
+	prefixlen=end-file;
+	if((other_end-other->file) != prefixlen) return mFALSE;
+
+	if(strncmp(file,other->file, prefixlen) == 0) return mTRUE;
+
+	return mFALSE;
+}
+
 
 // Load a plugin; query, check allowed time, attach.
 // meta_errno values:

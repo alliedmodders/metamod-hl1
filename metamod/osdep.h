@@ -49,9 +49,15 @@
 
 // String describing platform/DLL-type, for matching lines in plugins.ini.
 #ifdef linux
-	#define PLATFORM	"linux"
+	#define PLATFORM		"linux"
+#  ifdef __amd64__
+	#define PLATFORM_SPC	"lin64"
+#  else
+	#define PLATFORM_SPC	"lin32"
+#  endif
 #elif defined(_WIN32)
-	#define PLATFORM	"win32"
+	#define PLATFORM		"mswin"
+	#define PLATFORM_SPC	"win32"
 #else /* unknown */
 	#error "OS unrecognized"
 #endif /* unknown */
