@@ -48,6 +48,7 @@
 	{"bumpercars",	"hl_i386.so",	"hl.dll",	"Bumper Cars"},
 	{"buzzybots",	"bb_i386.so",	"bb.dll",	"BuzzyBots"},
 	{"cstrike",	"cs_i386.so",	"mp.dll",	"Counter-Strike"},
+	{"czero",	"cs_i386.so",	"mp.dll",	"Counter-Strike:Condition Zero"},
 	{"dcrisis",	"dc_i386.so",	"dc.dll",	"Desert Crisis"},
 	{"dmc",	"dmc_i386.so",	"dmc.dll",	"Deathmatch Classic"},
 	{"dod",	"dod_i386.so",	"dod.dll",	"Day of Defeat"},

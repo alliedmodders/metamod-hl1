@@ -66,4 +66,4 @@ cat > linkgame.cpp <<EOC
 
 EOC
 
-egrep -hv "^#|^//|^$" ents/* | sort -u | sed "s/.*/LINK_ENTITY_TO_GAME(&);/" >> linkgame.cpp
+egrep -hv '^#|^//|^ *$' ents/* | sort -u | sed "s/.*/LINK_ENTITY_TO_GAME(&);/" >> linkgame.cpp
