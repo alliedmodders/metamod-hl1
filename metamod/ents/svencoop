@@ -49,8 +49,8 @@ weapon_uzi
 
 // Version 3.0
 //
-// Date: Sun, 14 Mar 2004 04:13:08 -0500 (EST)
 // From: David Anderson <bailopan@amxmodx.org>
+// Date: Sun, 14 Mar 2004 04:13:08 -0500 (EST)
 
 ammo_556
 ammo_762
@@ -74,3 +74,25 @@ trigger_random_unique
 weapon_grapple
 weapon_minigun
 weapon_sniperrifle
+
+//
+// From: "Sniper" <sniper@rochester.rr.com>
+// Date: Sun, 6 Jun 2004 00:58:19 -0400
+
+_squadfix
+gonomespit
+grappletongue
+monster_grunt_ally_medic_dead
+monster_grunt_ally_torch_dead
+monster_human_medic_ally_dead
+monster_human_torch_ally_dead
+monster_robogrunt_dead
+monster_robogrunt_repel
+path_monster
+pitdronespike
+playerhornet
+shock_beam
+sporegrenade
+trigger_setorigin
+voltigoreshock
+weapon_crowbar_electric

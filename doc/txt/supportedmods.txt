@@ -184,7 +184,7 @@ see Adding game support.
 | (www.planethalflife.com/       | v1.0     | 12/29  | [ents] |          |
 | snowwar/)                      |          |        |        |          |
 |--------------------------------+----------+--------+--------+----------|
-| StargateTC (www.stargatetc.com | Beta 2.3 | 2004/  | [ents] |          |
+| StargateTC (www.stargatetc.com | Beta 1.1 | 2004/  | [ents] |          |
 | /)                             |          | 05/26  |        |          |
 |--------------------------------+----------+--------+--------+----------|
 | Sven Coop (www.svencoop.com/)  | v3.0     | 2004/  | [ents] |          |

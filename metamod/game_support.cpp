@@ -64,7 +64,7 @@ game_modinfo_t *lookup_game(const char *name) {
 	int i;
 	for(i=0; known_games[i].name; i++) {
 		imod=&known_games[i];
-		if(strmatch(imod->name, name))
+		if(strcasematch(imod->name, name))
 			return(imod);
 	}
 	// no match found
@@ -80,7 +80,7 @@ mBOOL install_gamedll(char *from, const char *to) {
 	if ( NULL == from ) return mFALSE;
 	if ( NULL == to ) to = from;
 
-	const char* cachefile = (const char*)LOAD_FILE_FOR_ME( from, &length_in );
+	byte* cachefile = LOAD_FILE_FOR_ME(from, &length_in);
 
 	// If the file seems to exist in the chache.
 	if ( NULL != cachefile ) {
@@ -88,22 +88,23 @@ mBOOL install_gamedll(char *from, const char *to) {
 		int fd=open(to, O_WRONLY|O_CREAT|O_EXCL|O_BINARY, S_IRUSR|S_IWUSR|S_IRGRP|S_IWGRP);
 		if(fd < 0) {
 			META_DEBUG(3, ("Installing gamedll from cache: Failed to create file %s: %s\n", to, strerror(errno)) );
+			FREE_FILE(cachefile);
 			return mFALSE;
 		}
 	
 		length_out=write(fd, cachefile, length_in);
+		FREE_FILE(cachefile);
+		close(fd);
 	
 		// Writing the file was not successfull
 		if(length_out != length_in) {
 			META_DEBUG(3,("Installing gamedll from chache: Failed to write all %d bytes to file, only %d written: %s\n", length_in, length_out, strerror(errno)) );
 			// Let's not leave a mess but clean up nicely.
-			if (length_out > 0 ) unlink(to);
-			close(fd);
+			if (length_out >= 0) unlink(to);
 			return mFALSE;
 		}
 
-		META_LOG( "Installed gamedll %s from cache.\n", to );
-		close(fd);
+		META_LOG("Installed gamedll %s from cache.\n", to);
 
 	} else {
 		META_DEBUG(3, ("Failed to install gamedll from cache: file %s not found in cache.\n", from) );

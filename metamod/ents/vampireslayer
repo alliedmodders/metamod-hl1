@@ -5,6 +5,11 @@
 //
 // From: "Mark Gornall" <routetwo@planethalflife.com>
 // Date: Sat, 28 Apr 2001 11:57:28 +0100
+// 
+// Game directory: vs
+// Win32 DLL: mp.dll
+// Linux DSO: vsi386.so
+
 
 // Version 1.1
 info_player_vampire
@@ -34,3 +39,11 @@ item_flag_vampire
 weapon_vscue
 weapon_vsthunderfive
 weapon_vswinchester
+
+// Version "Chapter VI"
+//
+// From: "Mark Gornall" <routetwo@planethalflife.com>
+// Date: Thu, 10 Jun 2004 20:11:27 +0100
+//
+info_dm 
+weapon_vsbike

@@ -1,5 +1,14 @@
 # vim: set tw=75 ft=none :
 
+yyyy/mm/dd 1.17.2
+ - Fixed a memory leak the size of the gamedll when extracting a missing
+   gamedll from the cache file on Windows Steam servers. Found by Wei
+   Mingzhi.
+ - Made game directory lookup case-insensitive.
+ - Added MOD recognition and entities for The Terrorist Revenge 0.2.1.
+ - Added more entities for Sven Coop 3.0.
+ - Added entities for Vampire Slayer "Chapter VI".
+
 2004/05/31 1.17.1
  - Additional entities for DoD 1.1.
  - Added MOD recognition and entities for Hostile Intent 1.1.
@@ -8,7 +17,7 @@
  - Additional entities for Digital Paintball 2.1.
  - Added MOD recognition for CS13, no new entities.
  - Additional entity for The Specialits Beta 2.1.
- - Additional entities for StargateTC Beta 2.3.
+ - Additional entities for StargateTC Beta 1.1.
  - Added MOD recognition and entities for Rocket Crowbar 2.
  - Added MOD recognition and entities for Counter-Strike:Condition Zero.
  - Additional entities for International Soccer Online 3.0

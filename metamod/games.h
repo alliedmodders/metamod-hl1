@@ -102,6 +102,7 @@
 	{"timeless",	"pt_i386.so",	"timeless.dll",	"Project Timeless"},
 	{"tod",	"hl_i386.so",	"hl.dll",	"Tour of Duty"},
 	{"trainhunters",	"th_i386.so",	"th.dll",	"Train Hunters"},
+	{"trevenge",	"trevenge.so",	"trevenge.dll",	"The Terrorist Revenge"},
 	{"TS",	"ts_i386.so",	"mp.dll",	"The Specialists"},
 	{"underworld",	"uw_i386.so",	"uw.dll",	"Underworld Bloodline"},
 	{"valve",	"hl_i386.so",	"hl.dll",	"Half-Life Deathmatch"},
