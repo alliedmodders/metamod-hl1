@@ -39,21 +39,21 @@ RSC=rc.exe
 # PROP Use_MFC 0
 # PROP Use_Debug_Libraries 0
 # PROP Output_Dir "release"
-# PROP Intermediate_Dir "release"
-# PROP Ignore_Export_Lib 0
+# PROP Intermediate_Dir "release\obj"
+# PROP Ignore_Export_Lib 1
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /MT /W3 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "METAMOD_EXPORTS" /YX /FD /c
-# ADD CPP /nologo /MT /W3 /GX /O2 /I ".." /I "\hl\hlsdk\multiplayer source\common" /I "\hl\hlsdk\multiplayer source\engine" /I "\hl\hlsdk\multiplayer source\dlls" /I "\hl\hlsdk\multiplayer source\pm_shared" /I "\hl\hlsdk\multiplayer source\common" /I "\hl\hlsdk\multiplayer source\engine" /I "\hl\hlsdk\multiplayer source\dlls" /I "\hl\hlsdk\multiplayer source\pm_shared" /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "METAMOD_EXPORTS" /YX /FD /c
+# ADD CPP /nologo /MD /W3 /GX /O2 /I ".." /I "..\..\..\hlsdk\multiplayer\common" /I "..\..\..\hlsdk\multiplayer\engine" /I "..\..\..\hlsdk\multiplayer\dlls" /I "..\..\..\hlsdk\multiplayer\pm_shared" /I "..\..\..\hlsdk\multiplayer source\common" /I "..\..\..\hlsdk\multiplayer source\engine" /I "..\..\..\hlsdk\multiplayer source\dlls" /I "..\..\..\hlsdk\multiplayer source\pm_shared" /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "METAMOD_EXPORTS" /YX /FD /c
 # ADD BASE MTL /nologo /D "NDEBUG" /mktyplib203 /win32
 # ADD MTL /nologo /D "NDEBUG" /mktyplib203 /win32
 # ADD BASE RSC /l 0x409 /d "NDEBUG"
 # ADD RSC /l 0x409 /d "NDEBUG"
 BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
-# ADD BSC32 /nologo
+# ADD BSC32 /nologo /o"release/inf/metamod.bsc"
 LINK32=link.exe
 # ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /dll /machine:I386
-# ADD LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /dll /machine:I386 /def:".\metamod.def"
+# ADD LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /dll /pdb:none /machine:I386 /def:".\metamod.def"
 # SUBTRACT LINK32 /verbose
 
 !ELSEIF  "$(CFG)" == "metamod - Win32 Debug"
@@ -66,21 +66,23 @@ LINK32=link.exe
 # PROP Use_MFC 0
 # PROP Use_Debug_Libraries 1
 # PROP Output_Dir "debug"
-# PROP Intermediate_Dir "debug"
-# PROP Ignore_Export_Lib 0
+# PROP Intermediate_Dir "debug\obj"
+# PROP Ignore_Export_Lib 1
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /MTd /W3 /Gm /GX /ZI /Od /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "METAMOD_EXPORTS" /YX /FD /c
-# ADD CPP /nologo /MTd /W3 /Gm /GX /ZI /Od /I ".." /I "\hl\hlsdk\multiplayer source\common" /I "\hl\hlsdk\multiplayer source\engine" /I "\hl\hlsdk\multiplayer source\dlls" /I "\hl\hlsdk\multiplayer source\pm_shared" /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "METAMOD_EXPORTS" /YX /FD /c
+# ADD CPP /nologo /W3 /Gm /GX /Zi /Od /I ".." /I "..\..\..\hlsdk\multiplayer\common" /I "..\..\..\hlsdk\multiplayer\engine" /I "..\..\..\hlsdk\multiplayer\dlls" /I "..\..\..\hlsdk\multiplayer\pm_shared" /I "..\..\..\hlsdk\multiplayer source\common" /I "..\..\..\hlsdk\multiplayer source\engine" /I "..\..\..\hlsdk\multiplayer source\dlls" /I "..\..\..\hlsdk\multiplayer source\pm_shared" /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "METAMOD_EXPORTS" /YX /FD /c
+# SUBTRACT CPP /Fr
 # ADD BASE MTL /nologo /D "_DEBUG" /mktyplib203 /win32
 # ADD MTL /nologo /D "_DEBUG" /mktyplib203 /win32
 # ADD BASE RSC /l 0x409 /d "_DEBUG"
 # ADD RSC /l 0x409 /d "_DEBUG"
 BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
-# ADD BSC32 /nologo
+# ADD BSC32 /nologo /o"debug/inf/metamod.bsc"
 LINK32=link.exe
 # ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /dll /debug /machine:I386 /pdbtype:sept
-# ADD LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /dll /debug /machine:I386 /def:".\metamod.def" /pdbtype:sept
+# ADD LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /dll /pdb:"debug/inf/metamod.pdb" /debug /machine:I386 /def:".\metamod.def" /pdbtype:sept
+# SUBTRACT LINK32 /map
 
 !ENDIF 
 
@@ -225,11 +227,11 @@ SOURCE=..\games.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\info_name.h
+SOURCE=..\h_export.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\h_export.h
+SOURCE=..\info_name.h
 # End Source File
 # Begin Source File
 

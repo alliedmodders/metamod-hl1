@@ -36,11 +36,20 @@
 
 #ifdef linux
 // enable extra routines in system header files, like dladdr
-#define _GNU_SOURCE
+#  ifndef _GNU_SOURCE
+#    define _GNU_SOURCE
+#  endif
 #include <dlfcn.h>			// dlopen, dladdr, etc
 #include <signal.h>			// sigaction, etc
 #include <setjmp.h>			// sigsetjmp, longjmp, etc
 #endif /* linux */
+
+#if defined(_MSC_VER) && (_MSC_VER < 1300)
+#   include <new.h>         // set_new_handler()
+#else
+#   include <new>			// set_new_handler()
+#endif
+
 
 #include <string.h>			// strpbrk, etc
 
@@ -51,6 +60,20 @@
 #include "log_meta.h"		// META_ERROR, etc
 #include "types_meta.h"		// mBOOL
 #include "support_meta.h"	// MAX_STRBUF_LEN
+
+// To keep the rest of the sources clean and keep not only OS but also
+// compiler dependant differences in this file, we define a local function
+// to set the new handler.
+void mm_set_new_handler( void )
+{
+#if defined(_MSC_VER) && (_MSC_VER < 1300)
+    _set_new_handler(meta_new_handler);
+#else
+    std::set_new_handler(meta_new_handler);
+#endif
+}
+
+
 
 
 #ifdef _WIN32
@@ -204,8 +227,8 @@ mBOOL os_safe_call(REG_CMD_FN pfn) {
 }
 
 // See comments in osdep.h.
-#ifdef __GNUC__
-void meta_new_handler(void) {
+#if defined(__GNUC__) || (defined(_MSC_VER) && (_MSC_VER >= 1300))
+void MM_CDECL meta_new_handler(void) {
 	// This merely because we don't want the program to exit if new()
 	// fails..
 	return;

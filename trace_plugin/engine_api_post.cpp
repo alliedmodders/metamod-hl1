@@ -332,7 +332,11 @@ void AlertMessage_Post(ALERT_TYPE atype, char *szFmt, ...) {
 	ENGINE_TRACE(pfnAlertMessage, P_POST, (""));
 	RETURN_META(MRES_IGNORED);
 }
+#ifdef HLSDK_3_2_OLD_EIFACE
 void EngineFprintf_Post(FILE *pfile, char *szFmt, ...) {
+#else 
+void EngineFprintf_Post(void *pfile, char *szFmt, ...) {
+#endif
 	// trace output in Pre
 	ENGINE_TRACE(pfnEngineFprintf, P_POST, (""));
 	RETURN_META(MRES_IGNORED);

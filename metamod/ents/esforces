@@ -2,6 +2,11 @@
 
 // Earth`s Special Forces
 //    http://www.esforces.com/
+//
+// Dame dir : esf
+// Linux dso: hl_i386.so
+// Win32 dll: hl.dll
+//
 
 // Version Alpha 2.0
 //
@@ -73,3 +78,12 @@ powerstruggle
 weapon_kametorpedo
 weapon_renzoku
 weapon_sword
+
+// Version Beta 1.2
+//
+// Date: Wed, 16 Jun 2004 19:38:50 +0000
+//
+afterimage
+monster_player
+weapon_bodypart
+weapon_telekinesis

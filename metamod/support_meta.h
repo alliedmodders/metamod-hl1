@@ -43,7 +43,7 @@
 
 #include "osdep.h"		// strcasecmp, S_ISREG,
 
-void do_exit(int exitval);
+void do_exit(int exitval) ATTRIBUTE(__noreturn__);
 
 // Unlike snprintf(), strncpy() doesn't necessarily null-terminate the
 // target.  It appears the former function reasonably considers the given

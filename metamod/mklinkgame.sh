@@ -16,6 +16,7 @@ if [ "$build" = 0 ]; then
 	exit
 fi
 echo "Building linkgame.cpp" >& 2
+lastyear=`date +%Y`
 
 cat > linkgame.cpp <<EOC
 // vi: set ts=4 sw=4 :
@@ -24,7 +25,7 @@ cat > linkgame.cpp <<EOC
 // linkgame.cpp - export entities from mod "games" back to the HL engine
 
 /*
- * Copyright (c) 2001-2002 Will Day <willday@hpgx.net>
+ * Copyright (c) 2001-${lastyear} Will Day <willday@hpgx.net>
  *
  *    This file is part of Metamod.
  *

@@ -80,6 +80,17 @@
 	#define WINAPI		/* */
 #endif /* linux */
 
+#ifdef __GNUC__
+#   define DECLSPEC(kw)
+#   define ATTRIBUTE(kw) __attribute__((kw))
+#   define MM_CDECL
+#elif defined(_MSC_VER)
+#   define DECLSPEC(kw) __declspec(kw)
+#   define ATTRIBUTE(kw)
+#   define MM_CDECL __cdecl
+#endif /* _MSC_VER */
+
+
 // Simplified macro for declaring/defining exported DLL functions.  They
 // need to be 'extern "C"' so that the C++ compiler enforces parameter
 // type-matching, rather than considering routines with mis-matched
@@ -238,12 +249,18 @@ mBOOL os_safe_call(REG_CMD_FN pfn);
 //    "real" function and uses the "old" semantic; handler-type is: 
 //       int newhandler(size_t)
 //
-#ifdef __GNUC__
-	void meta_new_handler(void);
+#if defined(__GNUC__) || (defined(_MSC_VER) && (_MSC_VER >= 1300))
+	void MM_CDECL meta_new_handler(void);
 #elif defined(_MSC_VER)
 	int meta_new_handler(size_t size);
-	#define set_new_handler	_set_new_handler
 #endif /* _MSC_VER */
+
+
+// To keep the rest of the sources clean and keep not only OS but also
+// compiler dependant differences in this file, we define a local function
+// to set the new handler.
+void mm_set_new_handler( void );
+
 
 
 // Thread handling...

@@ -36,7 +36,6 @@
 
 #include <malloc.h>				// malloc, etc
 #include <errno.h>				// errno, etc
-#include <new.h>				// set_new_handler(), etc
 
 #include <extdll.h>				// always
 #include <enginecallback.h>		// GET_GAME_DIR, etc
@@ -110,7 +109,7 @@ void metamod_startup(void) {
 	}
 
 	// specify our new() handler
-	set_new_handler(meta_new_handler);
+    mm_set_new_handler();
 
 	// Get gamedir, very early on, because it seems we need it all over the
 	// place here at the start.

@@ -1,6 +1,12 @@
 // vim: set ft=cpp :
 
 // Science & Industry
+//    http://www.planethalflife.com/si/
+//
+// Game directory: si
+// Linux DSO name: si_i386.so
+// Win32 DLL name: si.dll
+//
 ammo_mindrayclip
 ammo_vomitclip
 info_administrator
@@ -14,7 +20,6 @@ weapon_transistor
 weapon_vomit
 
 // Science & Industry
-//    http://www.planethalflife.com/si/
 //
 // Version 0.97
 // Additional entities, as guessed from symbol list of linux .so ...
@@ -46,3 +51,18 @@ weapon_grapple
 weapon_rocketpistol
 weapon_snUZI
 weapon_tommygun
+
+// From: "Sylvain Gravejat" <sylvain.gravejat@bigfoot.com>
+// Date: Sat, 24 Jul 2004 01:53:38 +0200
+//
+// Version 1.0
+//
+emp_cannister
+emp_pulse
+env_model
+fev_cloud
+fev_vial
+rocketpistol_rocket
+trigger_deliveryzone
+weapon_empcannon
+weapon_resource
