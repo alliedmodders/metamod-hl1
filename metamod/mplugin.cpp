@@ -66,6 +66,10 @@ mBOOL MPlugin::ini_parseline(char *line) {
 	// skip whitespace at start of line
 	while(*line==' ' || *line=='\t' ) line++;
 
+	// remove whitespace at end of line
+	cp = line + strlen(line) -1;
+	while(*cp==' ' || *cp=='\t') *cp--='\0';
+
 	// skip empty lines
 	if(line[0]=='\0') {
 		META_DEBUG(7, ("ini: Ignoring empty line: %s", line));

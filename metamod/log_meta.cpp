@@ -78,6 +78,28 @@ void META_DEV(char *fmt, ...) {
 	ALERT(at_logged, "[META] dev: %s\n", buf);
 }
 
+// Log infos.
+void META_INFO(char *fmt, ...) {
+	va_list ap;
+	char buf[MAX_LOGMSG_LEN];
+
+	va_start(ap, fmt);
+	vsnprintf(buf, sizeof(buf), fmt, ap);
+	va_end(ap);
+	ALERT(at_logged, "[META] INFO: %s\n", buf);
+}
+
+// Log warnings.
+void META_WARNING(char *fmt, ...) {
+	va_list ap;
+	char buf[MAX_LOGMSG_LEN];
+
+	va_start(ap, fmt);
+	vsnprintf(buf, sizeof(buf), fmt, ap);
+	va_end(ap);
+	ALERT(at_logged, "[META] WARNING: %s\n", buf);
+}
+
 // Log errors.
 void META_ERROR(char *fmt, ...) {
 	va_list ap;

@@ -308,7 +308,7 @@ mBOOL MPluginList::ini_startup() {
 		// Check for a duplicate - an existing entry with this pathname.
 		if(find(plist[n].pathname)) {
 			// Should we check platform specific level here?
-			META_ERROR("ini: Skipping duplicate plugin, line %d of %s: %s", 
+			META_INFO("ini: Skipping duplicate plugin, line %d of %s: %s", 
 					ln, inifile, plist[n].pathname);
 			continue;
 		}
@@ -317,11 +317,11 @@ mBOOL MPluginList::ini_startup() {
 		if(NULL != (pmatch=find_match(&plist[n]))) {
 			if(pmatch->pfspecific >= plist[n].pfspecific) {
 				META_DEBUG(1, ("ini: Skipping plugin, line %d of %s: plugin with higher platform specific level already exists. (%d >= %d)",
-                         n, inifile, pmatch->pfspecific, plist[n].pfspecific)); 
+                         ln, inifile, pmatch->pfspecific, plist[n].pfspecific)); 
 				continue;
 			}
 			META_DEBUG(1, ("ini: Plugin in line %d overrides existing plugin with lower platform specific level %d, ours %d",
-					n, pmatch->pfspecific, plist[n].pfspecific));
+					ln, pmatch->pfspecific, plist[n].pfspecific));
 			memset(pmatch, 0, sizeof(MPlugin));
 		}
 		plist[n].action=PA_LOAD;
@@ -386,9 +386,16 @@ mBOOL MPluginList::ini_refresh() {
                        		 ln, inifile, pl_found->pfspecific, pl_temp.pfspecific)); 
 					continue;
 				}
-				META_DEBUG(1, ("ini: Plugin in line %d should override existing plugin with lower platform specific level %d, ours %d",
-							ln, pl_found->pfspecific, pl_temp.pfspecific));
-				continue;
+				if(PA_LOAD == pl_found->action) {
+					META_DEBUG(1, ("ini: Plugin in line %d overrides loading of plugin with lower platform specific level %d, ours %d",
+								ln, pl_found->pfspecific, pl_temp.pfspecific));
+					memset(pl_found, 0, sizeof(MPlugin));
+				}
+				else {
+					META_DEBUG(1, ("ini: Plugin in line %d should override existing plugin with lower platform specific level %d, ours %d. Unable to comply.",
+								ln, pl_found->pfspecific, pl_temp.pfspecific));
+					continue;
+				}
 			}
 			// new plugin; add to list
 			if((pl_added=add(&pl_temp))) {
@@ -429,7 +436,12 @@ mBOOL MPluginList::ini_refresh() {
 				META_ERROR("ini: Plugin '%s' has newer file, but unexpected status (%s)",
 						pl_found->desc, pl_found->str_status());
 		}
-		META_LOG("ini: Read plugin config for: %s", plist[n].desc);
+		if(NULL != pl_found) {
+			META_LOG("ini: Read plugin config for: %s", pl_found->desc);
+		}
+		else {
+			META_LOG("ini: Read plugin config for: %s", pl_temp.desc);
+		}
 		n++;
 	}
 	META_LOG("ini: Finished reading plugins list: %s; Found %d plugins", inifile, n);

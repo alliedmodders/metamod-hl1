@@ -23,7 +23,9 @@
    "_amd64.so" instead of "_i386.so") in AMD64 Metamod version.
  - Added "lin32" and "lin64" keywords in addition to "linux" keyword for 
    plugins.ini file to support using the same file for the same game on
-   both 32bit and 64bit servers.
+   both 32bit and 64bit servers. The "lin32" and "lin64" keywords override
+   the "linux" keyword when used on the same plugin. Do not use "linux"
+   when using "lin32" and/or "lin64" keywords for the same plugin.
  - Internal changes:
 	- Changed Makefile to use different object files directory on AMD64
 	  build machines and "_amd64.so" extension for AMD64 Metamod.

@@ -86,6 +86,8 @@ extern cvar_t meta_debug;
 
 void META_CONS(char *fmt, ...);
 void META_DEV(char *fmt, ...);
+void META_INFO(char *fmt, ...);
+void META_WARNING(char *fmt, ...);
 void META_ERROR(char *fmt, ...);
 void META_LOG(char *fmt, ...);
 void META_CLIENT(edict_t *pEntity, char *fmt, ...);
