@@ -1,5 +1,10 @@
 # vim: set tw=75 ft=none :
 
+xxxx/xx/xx ???
+ - Additional entities for International Soccer Online 3.0
+ - Additional entities for Firearms 2.9 and one missing entity
+   for previous Firearms versions.
+
 2003/11/15	1.17
  - Added support for recently added routines in the HL Engine:
       SequenceGet()

@@ -145,3 +145,13 @@ weapon_m249
 // Date: Sat, 18 Oct 2003 13:20:53 +0200
 ammo_remington
 weapon_remington
+
+// Versoin 2.9
+// 
+// From: "SirCampalot" <sir@firearmsmod.com>
+// Date: Mon, 12 Apr 2004 15:33:56 -0400
+//
+env_precip
+trigger_noclaymore
+trigger_reinforcements
+weapon_m14
