@@ -41,7 +41,7 @@ DLLS_DIR=../dlls
 METADIR=../metamod
 
 # set compiler to use
-CC=gcc-2.95
+CC=gcc
 
 
 
@@ -57,7 +57,8 @@ ifeq "$(USER)" "willday"
        SDKTOP=/hlsdk
        TEST_DIR=/hlserver/tfc/dlls
     endif
-	COMPILE_TZ=Eastern
+	COMPILE_TZ=$(shell date +%z)
+	CC=gcc-2.95
 endif
 ifeq "$(USER)" "flori"
     PATH_WIN=/usr/local/cross-tools/i386-mingw32msvc/bin
@@ -72,6 +73,7 @@ SDKSRC=$(SDKTOP)/multiplayer
 # OS DEPENDENCIES
 #############################################################################
 
+ARCH=i586
 ifeq "$(OS)" "linux"
 	INSTALL=install -m 644
 	LD_WINDLL= PATH=$(PATH_WIN) $(PATH_WIN)/dllwrap
@@ -98,6 +100,8 @@ OBJDIR_WIN_DBG=debug.win32
 # COMPILE OPTIONS
 #############################################################################
 
+GCCMAJ = $(shell gcc -dumpversion | sed -e 's/\.[0-9][0-9]*\.[0-9]//')
+
 # original safe optimization, from valve Makefile
 #CCOPT = -O2 -ffast-math -funroll-loops \
 #	-fomit-frame-pointer -fexpensive-optimizations -malign-loops=2 \
@@ -111,9 +115,17 @@ OBJDIR_WIN_DBG=debug.win32
 # full optimization, adapted from adminmod Makefile
 # "WONT WORK WITH omit-frame-pointer"?
 # - disable (unneeded) C++ exceptions and rtti code to save some space ?
-CCOPT = -march=i586 $(CCO) -ffast-math -funroll-loops \
-	-fomit-frame-pointer -fexpensive-optimizations -malign-loops=2 \
-	-malign-jumps=2 -malign-functions=2 -fno-exceptions -fno-rtti -s
+CCOPT = -march=$(ARCH)
+
+CCOPT += $(CCO) -ffast-math -funroll-loops \
+	-fomit-frame-pointer -fexpensive-optimizations \
+	-fno-exceptions -fno-rtti -s
+
+ifeq "$(GCCMAJ)" "3"
+	CCOPT += -falign-loops=2 -falign-jumps=2 -falign-functions=2 
+else
+	CCOPT += -malign-loops=2 -malign-jumps=2 -malign-functions=2 
+endif
 
 # optimization level; overridden for certain problematic files
 CCO = -O6
@@ -137,11 +149,16 @@ CFLAGS=-Wall -Wno-unknown-pragmas
 ifeq "$(USER)" "flori"
 	# extra warnings
 	CFLAGS+=-W -Wundef \
-		-Wshadow -Wpointer-arith -Wbad-function-cast -Wcast-qual -Wcast-align \
+		-Wshadow -Wpointer-arith -Wcast-qual -Wcast-align \
 		-Wconversion -Wsign-compare \
-		-Wstrict-prototypes -Wmissing-prototypes -Wmissing-declarations \
-		-Wmissing-noreturn -Wnested-externs -Winline \
+		-Wstrict-prototypes -Wmissing-prototypes \
+		-Wmissing-noreturn -Winline \
 		-Wlong-long 
+	ifeq "$(GCCMAJ)" "2"
+		CFLAGS += -Wbad-function-cast -Wmissing-declarations -Wnested-externs
+	else
+		CFLAGS += -Wno-deprecated
+	endif
 	# extra C++ warnings
 	CFLAGS+=-Wctor-dtor-privacy -Wnon-virtual-dtor -Wreorder \
 		-Woverloaded-virtual -Wsign-promo -Wsynth -Weffc++
@@ -284,6 +301,9 @@ endif
 default: $(TARGET_FILE)
 
 ifeq "$(USER)" "willday"
+include ../priv/metamod.mak
+endif
+ifeq "$(USER)" "flori"
 include ../priv/metamod.mak
 endif
 
