@@ -46,6 +46,10 @@
 
 char const *COMPILE_TIME=__DATE__ ", " __TIME__;
 
+#ifndef COMPILE_TZ
+#  define COMPILE_TZ ""
+#endif
+
 char const *COMPILE_TZONE = COMPILE_TZ;
 
 // Include a string for /usr/bin/ident.
