@@ -141,3 +141,12 @@ weapon_metabolize
 // Gamedir changed to nsp for Beta version
 //
 item_catalyst
+
+// Version 3.0 beta5
+//
+// From: "[MoD] Cha0s C0ntr0L" <modchaoscontrol@hotmail.com>
+// Date: Thu, 09 Sep 2004 22:42:45 +0000
+//
+// Gamedir changed to ns again
+//
+item_ammopack

@@ -1,20 +1,37 @@
 # vim: set tw=75 ft=none :
 
+2004/11/10 1.17.3
+ - Added Mod recognition and entities for Zombie Panic Beta 0.91c.
+ - Added Mod recognition and entities for Out Break 1.0.
+ - Added Mod recognition and entities for Operations 1942 v2.0.
+ - Added Mod recognition and entities for The Trenches 1.0-Beta.
+ - Added Mod recognition and entities for The Ship V0052.
+ - Added additional entity for Natural Selection 3.0 beta 5.
+ - Added Mod entities for Wizard Wars 1.2.
+ - When reloading plugins honour their load time settings. Does no longer
+   attempt to reload plugins when the loading after the unloading would
+   fail due to a load time conflict.
+ - Fixed only loading one plugin when multiple plugins with the same prefix
+   were used, e.g. mm_pluginA.dll and mm_pluginB.dll. (Bug 1040186)
+ - Fixed a minor memory leak when unloading plugins.
+ - Fixed potential bug initializing plugin incorrectly after unloading and
+   loading plugins.
+
 2004/08/20 1.17.2
  - Fixed a memory leak the size of the gamedll when extracting a missing
    gamedll from the cache file on Windows Steam servers. Found by Wei
    Mingzhi.
  - Made game directory lookup case-insensitive.
- - Added MOD recognition for CSV15 (Counter-Strike 1.5 for Steam).
- - Added MOD recognition for Adrenaline Gamer 6.5 and up. 
- - Added MOD recognition and entities for The Terrorist Revenge 0.2.1.
- - Added MOD recognition and entities for Pirates, Vikings and Knights Beta 2.1.
+ - Added Mod recognition for CSV15 (Counter-Strike 1.5 for Steam).
+ - Added Mod recognition for Adrenaline Gamer 6.5 and up. 
+ - Added Mod recognition and entities for The Terrorist Revenge 0.2.1.
+ - Added Mod recognition and entities for Pirates, Vikings and Knights Beta 2.1.
  - Added more entities for Sven Coop 3.0.
  - Added entities for Vampire Slayer "Chapter VI".
  - Added entities for Earth Special Forces Beta 1.2.
  - Added entities for Science & Industry 1.0.
- - Changed MOD recognition for Adrenaline Gamer 3.x. The 3.x version of the
-   MOD is now being deprecated and support will be removed from a future
+ - Changed Mod recognition for Adrenaline Gamer 3.x. The 3.x version of the
+   Mod is now being deprecated and support will be removed from a future
    version of Metamod. It can currently still be used by renaming the game 
    directory from "ag" to "ag3" or by explicitly specifying the gamedll.
  - Improved parsing of plugins.ini file to not report errors on empty lines
@@ -32,15 +49,15 @@
 
 2004/05/31 1.17.1
  - Additional entities for DoD 1.1.
- - Added MOD recognition and entities for Hostile Intent 1.1.
- - Added MOD recognition and entities for Natural Selection Beta 3.0.
+ - Added Mod recognition and entities for Hostile Intent 1.1.
+ - Added Mod recognition and entities for Natural Selection Beta 3.0.
  - Additional entities for Sven Coop 3.0.
  - Additional entities for Digital Paintball 2.1.
- - Added MOD recognition for CS13, no new entities.
+ - Added Mod recognition for CS13, no new entities.
  - Additional entity for The Specialits Beta 2.1.
  - Additional entities for StargateTC Beta 1.1.
- - Added MOD recognition and entities for Rocket Crowbar 2.
- - Added MOD recognition and entities for Counter-Strike:Condition Zero.
+ - Added Mod recognition and entities for Rocket Crowbar 2.
+ - Added Mod recognition and entities for Counter-Strike:Condition Zero.
  - Additional entities for International Soccer Online 3.0
  - Additional entities for Firearms 2.9 and one missing entity
    for previous Firearms versions.

@@ -2,6 +2,10 @@
 
 // Wizard Wars
 //    http://www.planethalflife.com/wizardwars/
+//
+// Game directory: ww
+// Win32 Game DLL: hl.dll
+// Linux Game DSO: mp_i386.so
 
 // Wizard Wars beta 2
 monster_balllightning
@@ -163,3 +167,77 @@ weapon_shieldspell
 weapon_updraftspell
 weapon_wyvernspell
 ww_monstermaker
+
+// Version 1.2
+//
+// Date: Sun, 31 Oct 2004 13:45:08 -0800
+// From: Justin 'Kukyona' O'Dell <kukyona@planethalflife.com>
+//
+bird
+cocklebur
+func_nobuild
+func_nogrenades
+i_w_g
+i_w_t
+info_ww_teamcheck
+info_ww_teamset
+info_wwgoal
+info_wwgoal_timer
+item_wwgoal
+proj_iceshard
+proj_missile
+proj_stone
+skull
+spore
+thornbush
+ww_ammo_satchels
+ww_ammo_spellbook
+ww_bearbite
+ww_emitter
+ww_satchel
+ww_satchel_archmage
+ww_satchel_death
+ww_satchel_dragon
+ww_satchel_earth
+ww_satchel_fire
+ww_satchel_ice
+ww_satchel_life
+ww_satchel_lightning
+ww_satchel_nature
+ww_satchel_wind
+ww_seal
+ww_seal_death
+ww_seal_dragon
+ww_seal_earth
+ww_seal_fire
+ww_seal_ice
+ww_seal_life
+ww_seal_lightning
+ww_seal_nature
+ww_seal_wind
+ww_sentrycrystal
+ww_spell_beanstalk
+ww_spell_bird
+ww_spell_deathray
+ww_spell_doublemissile
+ww_spell_dragonbreath
+ww_spell_fireball
+ww_spell_flamelick
+ww_spell_forceblast
+ww_spell_freezeray
+ww_spell_iceshard
+ww_spell_levitate
+ww_spell_lightningbolt
+ww_spell_missile
+ww_spell_pebbleblast
+ww_spell_seal
+ww_spell_shield
+ww_spell_skull
+ww_spell_spotbolt
+ww_spell_stone
+ww_spell_thornblast
+ww_spell_updraft
+ww_spell_whiteray
+ww_spell_wyvern
+ww_staff
+wyvern

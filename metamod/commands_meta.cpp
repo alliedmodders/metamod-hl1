@@ -438,6 +438,8 @@ void cmd_doplug(PLUG_CMD pcmd) {
 				META_CONS("Reloaded plugin '%s'", findp->desc);
 			else if(meta_errno == ME_DELAYED)
 				META_CONS("Reload delayed for plugin '%s'", findp->desc);
+			else if(meta_errno == ME_NOTALLOWED)
+				META_CONS("Reload not allowed for plugin '%s' now, only allowed %s", findp->desc, findp->str_loadable(SL_ALLOWED));
 			else
 				META_CONS("Reload failed for plugin '%s'", findp->desc);
 		}

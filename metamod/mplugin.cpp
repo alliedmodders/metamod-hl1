@@ -396,14 +396,34 @@ char *MPlugin::resolve_suffix(char *path) {
 	return(NULL);
 }
 
+
+// Check if a passed string starts with a known platform postfix.
+// It does not check beyond the period in order to work for both
+// Linux and Win32.
+static mBOOL is_platform_postfix(char* pf)
+{
+	if ( NULL == pf ) return mFALSE;
+
+	if ( 0 == strncmp(pf, "_i386.", 6) ) return mTRUE;
+	if ( 0 == strncmp(pf, "_i486.", 6) ) return mTRUE;
+	if ( 0 == strncmp(pf, "_i586.", 6) ) return mTRUE;
+	if ( 0 == strncmp(pf, "_i686.", 6) ) return mTRUE;
+	if ( 0 == strncmp(pf, "_amd64.", 7) ) return mTRUE;
+
+	return mFALSE;
+}
+
+
 // Check if a given plugin is the same but possibly for a
 // different platform. A match is considered to be found if
 // 1.  the filename without the path is the same, or
 // 2a. for an attached plugin the logtag is the same, or
 // 2b. the description is the same, or
 // 3.  a significant part of the filename is the same.
-// A significant part of a plugin name is currently defined to
-// the the part up to the last underscore, if one exists.
+// A significant part of a plugin name is currently defined to:
+//  the part up to a known platform postfix as determined by 
+//  the is_platform_postfix() function (see above), or
+//  the part up to the last dot, if one exists.
 // meta_errno values:
 //  - none
 mBOOL MPlugin::platform_match(MPlugin* other) {
@@ -419,9 +439,9 @@ mBOOL MPlugin::platform_match(MPlugin* other) {
 	if(*desc != '\0' && strcasecmp(desc,other->desc) == 0) return mTRUE;
 
 	end=strrchr(file, '_');
-	if(end == NULL) end=strrchr(file, '.');
+	if(end == NULL || !is_platform_postfix(end)) end=strrchr(file, '.');
 	other_end=strrchr(other->file, '_');
-	if(other_end == NULL) other_end=strrchr(other->file, '.');
+	if(other_end == NULL || !is_platform_postfix(other_end)) other_end=strrchr(other->file, '.');
 
 	if(end == NULL || other_end == NULL) return mFALSE;
 
@@ -944,9 +964,32 @@ mBOOL MPlugin::detach(PLUG_LOADTIME now, PL_UNLOAD_REASON reason) {
 
 // Reload a plugin; unload and load again.
 // meta_errno values:
+//  - ME_NOTALLOWED	plugin not loadable after startup
+//  - errno's from check_input()
 //  - errno's from unload()
 //  - errno's from load()
 mBOOL MPlugin::reload(PLUG_LOADTIME now, PL_UNLOAD_REASON reason) {
+	if(!check_input()) {
+		// details logged, meta_errno set in check_input()
+		RETURN_ERRNO(mFALSE, ME_ARGUMENT);
+	}
+	// Are we allowed to load this plugin at this time?
+	// If we cannot load the plugin after unloading it, we keep it.
+	if(info->loadable < now) {
+		if(info->loadable > PT_STARTUP) {
+			META_DEBUG(2, ("dll: Delaying reload plugin '%s'; would not be able to reattach now: allowed=%s; now=%s", desc, str_loadable(), str_loadtime(now, SL_SIMPLE)));
+			// caller should give message to user
+			// try to reload again at next opportunity
+			RETURN_ERRNO(mFALSE, ME_DELAYED);
+		}
+		else {
+			META_DEBUG(2, ("dll: Failed reload plugin '%s'; would not be able to reattach now: allowed=%s; now=%s", desc, str_loadable(), str_loadtime(now, SL_SIMPLE)));
+			// don't try to reload again later
+			action=PA_NONE;
+			RETURN_ERRNO(mFALSE, ME_NOTALLOWED);
+		}
+	}
+
 	if(!unload(now, reason)) {
 		META_ERROR("dll: Failed to unload plugin '%s' for reloading", desc);
 		// meta_errno should be set already in unload()
@@ -1043,6 +1086,12 @@ mBOOL MPlugin::clear(void) {
 
 	if(gamedll_funcs.dllapi_table) free(gamedll_funcs.dllapi_table);
 	if(gamedll_funcs.newapi_table) free(gamedll_funcs.newapi_table);
+	if(dllapi_table) free(dllapi_table);
+	if(dllapi_post_table) free(dllapi_post_table);
+	if(newapi_table) free(newapi_table);
+	if(newapi_post_table) free(newapi_post_table);
+	if(engine_table) free(engine_table);
+	if(engine_post_table) free(engine_post_table);
 
 	status=PL_EMPTY;
 	action=PA_NULL;
@@ -1055,6 +1104,8 @@ mBOOL MPlugin::clear(void) {
 	newapi_post_table=NULL;
 	engine_table=NULL;
 	engine_post_table=NULL;
+	gamedll_funcs.dllapi_table = NULL;
+	gamedll_funcs.newapi_table = NULL;
 	return(mTRUE);
 }
 

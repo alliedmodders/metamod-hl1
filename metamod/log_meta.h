@@ -65,10 +65,15 @@
 // for times when it might be called as a single-statement result of an
 // else (or other flow control).
 //
+// As suggested by Jussi Kivilinna: Use "if(meta_debug.value < level); else
+// DO(something);" style because "meta_debug.value < level" is in most common
+// case "false". Check disasm, contitional jumps are predicted not to be
+// taken by CPU.
+//
 // Yes, it's all a bit of a hack.
 
 #define META_DEBUG(level, args) \
-	do { if(meta_debug.value >= level) ALERT(at_logged, "[META] (debug:%d) %s\n", level, UTIL_VarArgs args ); } while(0)
+	do { if(meta_debug.value < level) break; else ALERT(at_logged, "[META] (debug:%d) %s\n", level, UTIL_VarArgs args ); } while(0)
 
 // max buffer size for printed messages
 #define MAX_LOGMSG_LEN	1024
