@@ -167,7 +167,7 @@ ifeq "$(USER)" "flori"
 	# to help debugging; requires edited SDK
 	CCDEBUG+=-Werror
 	# link against older libc for compatibility
-	#EXTRA_LINK = -L../priv/libc -lc
+	#EXTRA_LINK = -L../../priv/libc -lc
 endif
 
 ifeq "$(USER)" "willday"
@@ -304,7 +304,7 @@ ifeq "$(USER)" "willday"
 include ../priv/metamod.mak
 endif
 ifeq "$(USER)" "flori"
-include ../priv/metamod.mak
+include ../../priv/metamod.mak
 endif
 
 all: do_dll_linux do_dll_win32

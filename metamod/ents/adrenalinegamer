@@ -26,3 +26,11 @@ info_player_team1
 info_player_team2
 item_flag_team1
 item_flag_team2
+
+// Version 6.5
+//
+// Game directory changed to 'ag'
+// Version 3.x is now sought for in game directory 'ag3'.
+//
+//From: Matthew Cheale <say_ten@multiplay.co.uk>
+//Date: Tue, 20 Jul 2004 16:49:28 +0100

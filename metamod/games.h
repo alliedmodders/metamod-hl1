@@ -38,7 +38,8 @@
 // list from game data stored in a convenient db.
 
 	{"action",            "ahl_i386.so",         "ahl.dll",           "Action Half-Life"},
-	{"ag",                "hl_i386.so",          "hl.dll",            "Adrenalinegamer 3.x"},
+	{"ag",                "ag_i386.so",          "ag.dll",            "Adrenaline Gamer Steam"},
+	{"ag3",               "hl_i386.so",          "hl.dll",            "Adrenalinegamer 3.x"},
 	{"aghl",              "ag_i386.so",          "ag.dll",            "Adrenalinegamer 4.x"},
 	{"arg",               "arg_i386.so",         "hl.dll",            "Arg!"},
 	{"asheep",            "hl_i386.so",          "hl.dll",            "Azure Sheep"},

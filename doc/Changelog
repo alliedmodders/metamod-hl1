@@ -5,6 +5,10 @@ yyyy/mm/dd 1.17.2
    gamedll from the cache file on Windows Steam servers. Found by Wei
    Mingzhi.
  - Made game directory lookup case-insensitive.
+ - Added MOD recognition for CSV15 (Counter-Strike 1.5 for Steam).
+ - Added MOD recognition for Adrenaline Gamer 6.5 and up. 
+ - Changed MOD recognition for Adrenaline Gamer 3.x. The 3.x version of the
+   MOD is now searched in the game directory 'ag3' instead of 'ag'.
  - Added MOD recognition and entities for The Terrorist Revenge 0.2.1.
  - Added MOD recognition and entities for Pirates, Vikings and Knights Beta 2.1.
  - Added more entities for Sven Coop 3.0.
