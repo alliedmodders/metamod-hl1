@@ -382,12 +382,20 @@ void mm_AlertMessage(ALERT_TYPE atype, char *szFmt, ...) {
 	// usual return.
 	RETURN_API_void()
 }
+#ifdef HLSDK_3_2_OLD_EIFACE
 void mm_EngineFprintf(FILE *pfile, char *szFmt, ...) {
+#else
+void mm_EngineFprintf(void *pfile, char *szFmt, ...) {
+#endif
 	META_ENGINE_HANDLE_void_varargs(FN_ENGINEFPRINTF, pfnEngineFprintf, pfile, szFmt);
 	RETURN_API_void()
 }
 
+#ifdef HLSDK_3_2_OLD_EIFACE
 void *mm_PvAllocEntPrivateData(edict_t *pEdict, long cb) {
+#else
+void *mm_PvAllocEntPrivateData(edict_t *pEdict, int32 cb) {
+#endif
 	META_ENGINE_HANDLE(void *, NULL, FN_PVALLOCENTPRIVATEDATA, pfnPvAllocEntPrivateData, (pEdict, cb));
 	RETURN_API()
 }
@@ -475,11 +483,20 @@ void mm_GetBonePosition(const edict_t *pEdict, int iBone, float *rgflOrigin, flo
 	RETURN_API_void()
 }
 
+#ifdef HLSDK_3_2_OLD_EIFACE
 unsigned long mm_FunctionFromName( const char *pName ) {
 	META_ENGINE_HANDLE(unsigned long, 0, FN_FUNCTIONFROMNAME, pfnFunctionFromName, (pName));
+#else
+uint32 mm_FunctionFromName( const char *pName ) {
+	META_ENGINE_HANDLE(uint32, 0, FN_FUNCTIONFROMNAME, pfnFunctionFromName, (pName));
+#endif
 	RETURN_API()
 }
+#ifdef HLSDK_3_2_OLD_EIFACE
 const char *mm_NameForFunction( unsigned long function ) {
+#else
+const char *mm_NameForFunction( uint32 function ) {
+#endif
 	META_ENGINE_HANDLE(const char *, NULL, FN_NAMEFORFUNCTION, pfnNameForFunction, (function));
 	RETURN_API()
 }
@@ -530,8 +547,13 @@ CRC32_t mm_CRC32_Final(CRC32_t pulCRC) {
 	RETURN_API()
 }
 
+#ifdef HLSDK_3_2_OLD_EIFACE
 long mm_RandomLong(long lLow, long lHigh) {
 	META_ENGINE_HANDLE(long, 0, FN_RANDOMLONG, pfnRandomLong, (lLow, lHigh));
+#else
+int32 mm_RandomLong(int32 lLow, int32 lHigh) {
+	META_ENGINE_HANDLE(int32, 0, FN_RANDOMLONG, pfnRandomLong, (lLow, lHigh));
+#endif
 	RETURN_API()
 }
 float mm_RandomFloat(float flLow, float flHigh) {
@@ -783,13 +805,13 @@ const char *mm_GetPlayerAuthId(edict_t *e) {
 
 // Added 2003/11/10 (no SDK update):
 
-void *mm_SequenceGet(const char *fileName, const char *entryName) {
-	META_ENGINE_HANDLE(void *, NULL, FN_SEQUENCEGET, pfnSequenceGet, (fileName, entryName));
+sequenceEntry_s *mm_SequenceGet(const char *fileName, const char *entryName) {
+	META_ENGINE_HANDLE(sequenceEntry_s *, NULL, FN_SEQUENCEGET, pfnSequenceGet, (fileName, entryName));
 	RETURN_API()
 }
 
-void *mm_SequencePickSentence(const char *groupName, int pickMethod, int *picked) {
-	META_ENGINE_HANDLE(void *, NULL, FN_SEQUENCEPICKSENTENCE, pfnSequencePickSentence, (groupName, pickMethod, picked));
+sentenceEntry_s *mm_SequencePickSentence(const char *groupName, int pickMethod, int *picked) {
+	META_ENGINE_HANDLE(sentenceEntry_s *, NULL, FN_SEQUENCEPICKSENTENCE, pfnSequencePickSentence, (groupName, pickMethod, picked));
 	RETURN_API()
 }
 

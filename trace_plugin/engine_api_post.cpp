@@ -338,7 +338,11 @@ void EngineFprintf_Post(FILE *pfile, char *szFmt, ...) {
 	RETURN_META(MRES_IGNORED);
 }
 
+#ifdef HLSDK_3_2_OLD_EIFACE
 void *PvAllocEntPrivateData_Post(edict_t *pEdict, long cb) {
+#else
+void *PvAllocEntPrivateData_Post(edict_t *pEdict, int32 cb) {
+#endif
 	ENGINE_TRACE(pfnPvAllocEntPrivateData, P_POST, (""));
 	RETURN_META_VALUE(MRES_IGNORED, NULL);
 }
@@ -410,11 +414,19 @@ void GetBonePosition_Post(const edict_t *pEdict, int iBone, float *rgflOrigin, f
 	RETURN_META(MRES_IGNORED);
 }
 
+#ifdef HLSDK_3_2_OLD_EIFACE
 unsigned long FunctionFromName_Post( const char *pName ) {
+#else
+uint32 FunctionFromName_Post( const char *pName ) {
+#endif
 	ENGINE_TRACE(pfnFunctionFromName, P_POST, (""));
 	RETURN_META_VALUE(MRES_IGNORED, 0UL);
 }
+#ifdef HLSDK_3_2_OLD_EIFACE
 const char *NameForFunction_Post( unsigned long function ) {
+#else
+const char *NameForFunction_Post( uint32 function ) {
+#endif
 	ENGINE_TRACE(pfnNameForFunction, P_POST, (""));
 	RETURN_META_VALUE(MRES_IGNORED, NULL);
 }
@@ -470,7 +482,11 @@ CRC32_t CRC32_Final_Post(CRC32_t pulCRC) {
 	RETURN_META_VALUE(MRES_IGNORED, 0);
 }
 
+#ifdef HLSDK_3_2_OLD_EIFACE
 long RandomLong_Post(long lLow, long lHigh) {
+#else
+int32 RandomLong_Post(int32 lLow, int32 lHigh) {
+#endif
 	ENGINE_TRACE(pfnRandomLong, P_POST, ("random=%ld", 
 				META_RESULT_ORIG_RET(long)));
 	RETURN_META_VALUE(MRES_IGNORED, 0L);
@@ -752,13 +768,13 @@ const char *GetPlayerAuthId_Post(edict_t *e) {
 
 // Added 2003/11/10 (no SDK update):
 
-void *SequenceGet_Post(const char* fileName, const char* entryName) {
+sequenceEntry_s *SequenceGet_Post(const char* fileName, const char* entryName) {
 	// trace output in Post
 	ENGINE_TRACE(pfnSequenceGet, P_PRE, (""));
 	RETURN_META_VALUE(MRES_IGNORED, NULL);
 }
 
-void *SequencePickSentence_Post(const char* groupName, int pickMethod, int *picked) {
+sentenceEntry_s *SequencePickSentence_Post(const char* groupName, int pickMethod, int *picked) {
 	// trace output in Post
 	ENGINE_TRACE(pfnSequencePickSentence, P_PRE, (""));
 	RETURN_META_VALUE(MRES_IGNORED, NULL);

@@ -103,4 +103,8 @@ inline void SET_LOCALINFO(char *key, char *value) {
 short FixedSigned16(float value, float scale);
 unsigned short FixedUnsigned16(float value, float scale);
 
+// Our slightly modified version, using an edict_t pointer instead of a
+// CBaseEntity pointer.
+void META_UTIL_HudMessage(edict_t *pEntity, const hudtextparms_t &textparms, const char *pMessage);
+
 #endif /* SDK_UTIL_H */

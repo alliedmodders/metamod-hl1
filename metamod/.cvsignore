@@ -2,5 +2,13 @@ debug.linux
 debug.win32
 opt.linux
 opt.win32
+debug.linux.steam
+debug.win32.steam
+opt.linux.steam
+opt.win32.steam
+debug.linux.won
+debug.win32.won
+opt.linux.won
+opt.win32.won
 Rules.depend
 msgs

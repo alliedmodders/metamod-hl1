@@ -118,9 +118,17 @@ extern void CVarSetFloat_Post(const char *szVarName, float flValue);
 extern void CVarSetString_Post(const char *szVarName, const char *szValue);
 
 extern void AlertMessage_Post(ALERT_TYPE atype, char *szFmt, ...);
+#ifdef HLSDK_3_2_OLD_EIFACE
 extern void EngineFprintf_Post(FILE *pfile, char *szFmt, ...);
+#else
+extern void EngineFprintf_Post(void *pfile, char *szFmt, ...);
+#endif
 
+#ifdef HLSDK_3_2_OLD_EIFACE
 extern void *PvAllocEntPrivateData_Post(edict_t *pEdict, long cb);
+#else
+extern void *PvAllocEntPrivateData_Post(edict_t *pEdict, int32 cb);
+#endif
 extern void *PvEntPrivateData_Post(edict_t *pEdict);
 extern void FreeEntPrivateData_Post(edict_t *pEdict);
 
@@ -140,8 +148,13 @@ extern int RegUserMsg_Post(const char *pszName, int iSize);
 extern void AnimationAutomove_Post(const edict_t *pEdict, float flTime);
 extern void GetBonePosition_Post(const edict_t *pEdict, int iBone, float *rgflOrigin, float *rgflAngles );
 
+#ifdef HLSDK_3_2_OLD_EIFACE
 extern unsigned long FunctionFromName_Post( const char *pName );
 extern const char *NameForFunction_Post( unsigned long function );
+#else
+extern uint32 FunctionFromName_Post( const char *pName );
+extern const char *NameForFunction_Post( uint32 function );
+#endif
 
 extern void ClientPrintf_Post( edict_t *pEdict, PRINT_TYPE ptype, const char *szMsg ); //! JOHN: engine callbacks so game DLL can print messages to individual clients
 extern void ServerPrint_Post( const char *szMsg );
@@ -157,7 +170,11 @@ extern void CRC32_ProcessBuffer_Post(CRC32_t *pulCRC, void *p, int len);
 extern void CRC32_ProcessByte_Post(CRC32_t *pulCRC, unsigned char ch);
 extern CRC32_t CRC32_Final_Post(CRC32_t pulCRC);
 
+#ifdef HLSDK_3_2_OLD_EIFACE
 extern long RandomLong_Post(long lLow, long lHigh);
+#else
+extern int32 RandomLong_Post(int32 lLow, int32 lHigh);
+#endif
 extern float RandomFloat_Post(float flLow, float flHigh);
 
 extern void SetView_Post(const edict_t *pClient, const edict_t *pViewent );
@@ -234,8 +251,8 @@ extern qboolean Voice_SetClientListening_Post(int iReceiver, int iSender, qboole
 extern const char *GetPlayerAuthId(edict_t *e);
 
 // Added 2003/11/10 (no SDK update):
-extern void *SequenceGet(const char* fileName, const char* entryName);
-extern void *SequencePickSentence(const char* groupName, int pickMethod, int *picked);
+extern sequenceEntry_s *SequenceGet(const char* fileName, const char* entryName);
+extern sentenceEntry_s *SequencePickSentence(const char* groupName, int pickMethod, int *picked);
 extern int GetFileSize(char *filename);
 extern unsigned int GetApproxWavePlayLen(const char *filepath);
 extern int IsCareerMatch(void);

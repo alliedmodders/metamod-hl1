@@ -143,7 +143,6 @@ void mutil_CenterSayVarargs(plid_t plid, hudtextparms_t tparms,
 	char buf[MAX_LOGMSG_LEN];
 	int n;
 	edict_t *pEntity;
-	CBaseEntity *pPlayer;
 
 	vsnprintf(buf, sizeof(buf), fmt, ap);
 
@@ -152,8 +151,7 @@ void mutil_CenterSayVarargs(plid_t plid, hudtextparms_t tparms,
 		pEntity=INDEXENT(n);
 		if(FNullEnt(pEntity) || pEntity->free)
 			continue;
-		pPlayer=(CBaseEntity*)GET_PRIVATE(pEntity);
-		UTIL_HudMessage(pPlayer, tparms, buf);
+		META_UTIL_HudMessage(pEntity, tparms, buf);
 	}
 }
 

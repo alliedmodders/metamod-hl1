@@ -29,21 +29,47 @@ endif
 # set paths for your environment
 ifeq "$(OS)" "linux"
 	PATH_WIN=/usr/local/cross-tools/i586-mingw32msvc/bin
-	SDKTOP=$(HOME)/src/hl/hlsdk-2.3
-	INST_DIR=$(HOME)/half-life/cstrike/dlls
-	TEST_DIR=$(HOME)/test/tfc/dlls
-	TST_DIR=$(HOME)/tmp
+	SDKTOP=../../hlsdk
+	INST_DIR=/usr/local/hlds_l/addons/metamod/dlls
 else	## windows
 	PATH_WIN=/gcc-2.95.2-msvcrt/bin
-	SDKTOP=/hlsdk2.3
+	SDKTOP=../../hlsdk
 	INST_DIR=/hlserver/tfc/dlls
-	TEST_DIR=/hlserver/tfc/dlls
 endif
 
-DLLS_DIR=../dlls
-SDKSRC=$(SDKTOP)/multiplayer
+#default HL online platform is Steam
+HLPF=steam
+
+DLLS_DIR=../dlls/$(HLPF)
 METADIR=../metamod
 
+# set compiler to use
+CC=gcc-2.95
+
+
+
+COMPILE_TZ=UTC
+## Developer overrrides
+ifeq "$(USER)" "willday"
+    ifeq "$(OS)" "linux"
+       SDKTOP=$(HOME)/src/hl/hlsdk-2.3
+       INST_DIR=$(HOME)/half-life/cstrike/dlls
+       TEST_DIR=$(HOME)/test/tfc/dlls
+       TST_DIR=$(HOME)/tmp
+    else
+       SDKTOP=/hlsdk
+       TEST_DIR=/hlserver/tfc/dlls
+    endif
+	COMPILE_TZ=Eastern
+endif
+ifeq "$(USER)" "flori"
+    PATH_WIN=/usr/local/cross-tools/i386-mingw32msvc/bin
+    TEST_DIR=/data/hlds_l/Admin/dlls
+    CC = gcc
+	COMPILE_TZ=$(shell date +%Z)
+endif
+
+SDKSRC=$(SDKTOP)/multiplayer
 
 #############################################################################
 # OS DEPENDENCIES
@@ -103,7 +129,6 @@ CCDEBUG+= -ggdb3
 # COMPILE SETUP
 #############################################################################
 
-CC=gcc-2.95
 
 SRCDIR=.
 INCLUDEDIRS=-I$(SRCDIR) -I$(METADIR) -I$(SDKSRC)/engine -I$(SDKSRC)/common -I$(SDKSRC)/pm_shared -I$(SDKSRC)/dlls -I$(SDKSRC)
@@ -111,7 +136,26 @@ FILES_ALL = *.cpp *.h [A-Z]* *.rc
 
 CFLAGS=-Wall -Wno-unknown-pragmas 
 #CFLAGS += -DTEST
-	
+
+ifeq "$(USER)" "flori"
+	# extra warnings
+	CFLAGS+=-W -Wundef \
+		-Wshadow -Wpointer-arith -Wbad-function-cast -Wcast-qual -Wcast-align \
+		-Wconversion -Wsign-compare \
+		-Wstrict-prototypes -Wmissing-prototypes -Wmissing-declarations \
+		-Wmissing-noreturn -Wnested-externs -Winline \
+		-Wlong-long 
+	# extra C++ warnings
+	CFLAGS+=-Wctor-dtor-privacy -Wnon-virtual-dtor -Wreorder \
+		-Woverloaded-virtual -Wsign-promo -Wsynth -Weffc++
+	# undesired warnings
+	#CFLAGS+=-pedantic -Waggregate-return -Wredundant-decls -Wtraditional 
+	# to help debugging; requires edited SDK
+	CCDEBUG+=-Werror
+	# link against older libc for compatibility
+	#EXTRA_LINK = -L../priv/libc -lc
+endif
+
 ifeq "$(USER)" "willday"
 	# extra warnings
 	CFLAGS+=-W -Wundef \
@@ -134,19 +178,29 @@ endif
 ifeq "$(OPT)" "opt"
 	ODEF = -DOPT_TYPE=\"optimized\"
 	CFLAGS := $(CCOPT) $(CFLAGS) $(ODEF)
-	OBJDIR_LINUX = $(OBJDIR_LINUX_OPT)
-	OBJDIR_WIN = $(OBJDIR_WIN_OPT)
+	OBJDIR_LINUX = $(OBJDIR_LINUX_OPT).$(HLPF)
+	OBJDIR_WIN = $(OBJDIR_WIN_OPT).$(HLPF)
 else	# debug
 	ODEF = -DOPT_TYPE=\"debugging\"
 	CFLAGS := $(CCDEBUG) $(CFLAGS) $(ODEF)
-	OBJDIR_LINUX = $(OBJDIR_LINUX_DBG)
-	OBJDIR_WIN = $(OBJDIR_WIN_DBG)
+	OBJDIR_LINUX = $(OBJDIR_LINUX_DBG).$(HLPF)
+	OBJDIR_WIN = $(OBJDIR_WIN_DBG).$(HLPF)
 	DLLS_DIR := $(DLLS_DIR)/debug
+endif
+
+
+
+ifeq "$(HLPF)" "won"
+	CFLAGS += -DHLSDK_3_2_OLD_EIFACE
 endif
 
 include Config.mak
 # any local CFLAGS from Config.mak
 CFLAGS += $(EXTRA_CFLAGS)
+
+# provide timezone info
+$(OBJDIR_LINUX)/vdate.o $(OBJDIR_WIN)/vdate.o: CFLAGS += -DCOMPILE_TZ=\"$(COMPILE_TZ)\"
+
 
 # ignore complaints from SDK files like cbase.h
 $(OBJDIR_LINUX)/sdk_util.o $(OBJDIR_WIN)/sdk_util.o: CFLAGS += -Wno-unused
@@ -242,7 +296,11 @@ ifeq "$(USER)" "willday"
 include ../priv/metamod.mak
 endif
 
-all: do_dll_linux do_dll_win32
+all: do_dll_linux do_dll_win32 won
+
+won:
+	$(MAKE) do_dll_linux HLPF=won
+	$(MAKE) do_dll_win32 HLPF=won
 
 opt:
 	$(MAKE) default OPT=opt
@@ -254,6 +312,16 @@ linux_opt:
 	$(MAKE) linux OPT=opt
 win32_opt: 
 	$(MAKE) win32 OPT=opt
+
+linux_won: 
+	$(MAKE) linux HLPF=won
+win32_won: 
+	$(MAKE) win32 HLPF=won
+
+linux_won_opt: 
+	$(MAKE) linux OPT=opt HLPF=won
+win32_won_opt: 
+	$(MAKE) win32 OPT=opt HLPF=won
 
 $(TARGET_LINUX): msgs/debug msgs/log msgs/error $(OBJDIR_LINUX) $(OBJ_LINUX)
 	$(LINK_LINUX)
@@ -269,10 +337,16 @@ $(TARGET_WIN): $(OBJDIR_WIN) $(OBJ_WIN) $(RES_OBJ_WIN)
 	$(LINK_WIN)
 
 $(OBJDIR_LINUX) $(OBJDIR_WIN) msgs:
-	mkdir $@
+	mkdir -p $@
 
 # make sure to recompile vdate.c for each link
-$(OBJDIR_LINUX)/vdate.o $(OBJDIR_WIN)/vdate.o : $(SRCFILES) *.h
+$(OBJDIR_LINUX)/vdate.o $(OBJDIR_WIN)/vdate.o : $(SRCFILES) *.h 
+
+ifdef LINKED_SRCFILES
+# copy linked files
+$(LINKED_SRCFILES): $(LINK_DEST_DIR)/$@
+	cp -f $(LINK_DEST_DIR)/$@ $@
+endif
 
 domsgs: msgs/debug msgs/log msgs/error
 
@@ -308,23 +382,43 @@ clean: clean_$(TARGET)
 
 clean_linux:
 	test -n "$(OBJDIR_LINUX)"
-	-rm -f $(OBJDIR_LINUX)/*
+#	-rm -f $(OBJDIR_LINUX)/*
+	-rm -rf $(OBJDIR_LINUX)
 
 clean_win32:
 	test -n "$(OBJDIR_WIN)"
-	-rm -f $(OBJDIR_WIN)/*
+#	-rm -f $(OBJDIR_WIN)/*
+	-rm -rf $(OBJDIR_WIN)
 
-cleanall_linux:
+cleanall_linux: cleansteam_linux cleanwon_linux
+
+cleansteam_linux:
 	$(MAKE) clean_linux
 	$(MAKE) clean_linux OPT=opt
 
-cleanall_win32:
+cleanwon_linux:
+	$(MAKE) clean_linux HLPF=won
+	$(MAKE) clean_linux OPT=opt HLPF=won
+
+cleanall_win32: cleansteam_win32 cleanwon_win32
+
+cleanwon_win32:
+	$(MAKE) clean_win32 HLPF=won
+	$(MAKE) clean_win32 OPT=opt HLPF=won
+
+cleansteam_win32:
 	$(MAKE) clean_win32
 	$(MAKE) clean_win32 OPT=opt
 
 cleanall: cleanall_linux cleanall_win32
 
-dll_linux dll_win32: 
+dll_linux dll_win32: dll_linux_steam dll_linux_won
+
+dll_linux_won dll_win32_won: 
+	$(MAKE) do_$@ HLPF=won
+	$(MAKE) do_$@ OPT=opt HLPF=won
+
+dll_linux_steam dll_win32_steam: 
 	$(MAKE) do_$@
 	$(MAKE) do_$@ OPT=opt
 
@@ -332,7 +426,7 @@ do_dll_linux: $(DLLS_DIR) $(DLLS_DIR)/$(LIBFILE_LINUX)
 do_dll_win32: $(DLLS_DIR) $(DLLS_DIR)/$(LIBFILE_WIN)
 
 $(DLLS_DIR):
-	mkdir $(DLLS_DIR)
+	mkdir -p $(DLLS_DIR)
 
 $(DLLS_DIR)/$(LIBFILE_LINUX): $(TARGET_LINUX)
 	$(INSTALL) $+ $@
@@ -342,7 +436,8 @@ $(DLLS_DIR)/$(LIBFILE_WIN): $(TARGET_WIN)
 
 dlls: dll_linux dll_win32
 rmdlls:
-	-rm -f ../dlls/*.* ../dlls/debug/*.*
+	-rm -f ../dlls/won/*.* ../dlls/won/debug/*.*
+	-rm -f ../dlls/steam/*.* ../dlls/steam/debug/*.*
 
 spotless: cleanall
 	-rmdir $(OBJDIR_LINUX) $(OBJDIR_WIN)

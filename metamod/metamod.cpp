@@ -4,7 +4,7 @@
 // metamod.cpp - (main) implementation of metamod operations
 
 /*
- * Copyright (c) 2001-2003 Will Day <willday@hpgx.net>
+ * Copyright (c) 2001-2004 Will Day <willday@hpgx.net>
  *
  *    This file is part of Metamod.
  *
@@ -54,8 +54,8 @@
 #include "support_meta.h"		// valid_gamedir_file, etc
 #include "log_meta.h"			// META_LOG, etc
 #include "types_meta.h"			// mBOOL
-#include "info_name.h"			// VNAME, etc
-#include "vdate.h"				// COMPILE_TIME, etc
+#include "info_name.h"			// VNAME, COPYRIGHT_YEAR, etc
+#include "vdate.h"				// COMPILE_TIME, COMPILE_TZONE, etc
 
 cvar_t meta_version = {"metamod_version", VVERSION, FCVAR_SERVER, 0, NULL};
 
@@ -92,7 +92,7 @@ void metamod_startup(void) {
 	char *cp, *mmfile=NULL, *cfile=NULL;
 
 	META_CONS("   ");
-	META_CONS("   %s version %s  Copyright (c) 2001-2003 %s", VNAME, VVERSION, VAUTHOR);
+	META_CONS("   %s version %s  Copyright (c) 2001-%s %s", VNAME, VVERSION, COPYRIGHT_YEAR, VAUTHOR);
 	META_CONS("   %s comes with ABSOLUTELY NO WARRANTY; for details type `meta gpl'.", VNAME);
 	META_CONS("   This is free software, and you are welcome to redistribute it");
 	META_CONS("   under certain conditions; type `meta gpl' for details.");
@@ -101,12 +101,13 @@ void metamod_startup(void) {
 	META_LOG("%s v%s  %s", VNAME, VVERSION, VDATE);
 	META_LOG("by %s", VAUTHOR);
 	META_LOG("   %s", VURL);
-	META_LOG("compiled: %s Eastern (%s)", COMPILE_TIME, OPT_TYPE);
+	META_LOG("compiled: %s %s (%s)", COMPILE_TIME, COMPILE_TZONE, OPT_TYPE);
 
 	// If running with "+developer", allow an opportunity to break in with
 	// a debugger.
-	if((int) CVAR_GET_FLOAT("developer") != 0)
-		sleep(1);
+	if((int) CVAR_GET_FLOAT("developer") != 0) {
+		sleep(10);
+	}
 
 	// specify our new() handler
 	set_new_handler(meta_new_handler);

@@ -6,6 +6,7 @@
 // Selected portions of dlls/util.cpp from SDK 2.1.
 // Functions copied from there as needed...
 // And modified to avoid buffer overflows (argh).
+// Also modified to remove dependency on CBaseEntity class.
 
 /***
 *
@@ -31,7 +32,6 @@
 
 #include <extdll.h>
 #include "sdk_util.h"
-#include <cbase.h>
 
 #include <string.h>			// for strncpy(), etc
 
@@ -68,13 +68,13 @@ void UTIL_LogPrintf( char *fmt, ... )
 }
 
 
-void UTIL_HudMessage(CBaseEntity *pEntity, const hudtextparms_t &textparms, 
+void META_UTIL_HudMessage(edict_t *pEntity, const hudtextparms_t &textparms, 
 		const char *pMessage)
 {
-	if ( !pEntity )
+	if ( FNullEnt(pEntity) || pEntity->free )
 		return;
 
-	MESSAGE_BEGIN( MSG_ONE, SVC_TEMPENTITY, NULL, ENT(pEntity->pev) );
+	MESSAGE_BEGIN( MSG_ONE, SVC_TEMPENTITY, NULL, pEntity );
 		WRITE_BYTE( TE_TEXTMESSAGE );
 		WRITE_BYTE( textparms.channel & 0xFF );
 

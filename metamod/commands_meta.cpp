@@ -4,7 +4,7 @@
 // commands_meta.cpp - implementation of various console commands
 
 /*
- * Copyright (c) 2001-2003 Will Day <willday@hpgx.net>
+ * Copyright (c) 2001-2004 Will Day <willday@hpgx.net>
  *
  *    This file is part of Metamod.
  *
@@ -42,7 +42,7 @@
 #include "metamod.h"		// Plugins, etc
 #include "log_meta.h"		// META_CONS, etc
 #include "info_name.h"		// VNAME, etc
-#include "vdate.h"			// COMPILE_TIME
+#include "vdate.h"			// COMPILE_TIME, COMPILE_TZONE
 
 
 // Register commands and cvars.
@@ -162,7 +162,7 @@ void cmd_meta_version(void) {
 	META_CONS("%s v%s  %s", VNAME, VVERSION, VDATE);
 	META_CONS("by %s", VAUTHOR);
 	META_CONS("   %s", VURL);
-	META_CONS("compiled: %s Eastern (%s)", COMPILE_TIME, OPT_TYPE);
+	META_CONS("compiled: %s %s (%s)", COMPILE_TIME, COMPILE_TZONE, OPT_TYPE);
 }
 
 // "meta version" client command.
@@ -174,13 +174,13 @@ void client_meta_version(edict_t *pEntity) {
 	META_CLIENT(pEntity, "%s v%s  %s", VNAME, VVERSION, VDATE);
 	META_CLIENT(pEntity, "by %s", VAUTHOR);
 	META_CLIENT(pEntity, "   %s", VURL);
-	META_CLIENT(pEntity, "compiled: %s Eastern (%s)", COMPILE_TIME, OPT_TYPE);
+	META_CLIENT(pEntity, "compiled: %s %s (%s)", COMPILE_TIME, COMPILE_TZONE, OPT_TYPE);
 }
 
 // "meta gpl" console command.
 void cmd_meta_gpl(void) {
 	META_CONS("%s version %s  %s", VNAME, VVERSION, VDATE);
-	META_CONS("Copyright (c) 2001-2003 Will Day <willday@hpgx.net>");
+	META_CONS("Copyright (c) 2001-%s Will Day <willday@hpgx.net>", COPYRIGHT_YEAR);
 	META_CONS("");
 	META_CONS("   Metamod is free software; you can redistribute it and/or");
 	META_CONS("   modify it under the terms of the GNU General Public License");

@@ -170,12 +170,20 @@ mBOOL os_safe_call(REG_CMD_FN pfn);
 // Various other windows routine differences.
 #ifdef linux
 	#include <unistd.h>	// sleep
+	#ifndef O_BINARY
+    	#define O_BINARY 0
+	#endif	
 #elif defined(_WIN32)
 	#define snprintf	_snprintf
 	#define vsnprintf	_vsnprintf
 	#define sleep(x)	Sleep(x*1000)
 	#define strcasecmp	stricmp
 	#define strncasecmp	_strnicmp
+    #include <io.h>
+    #define open _open
+    #define read _read
+    #define write _write
+    #define close _close
 #endif /* _WIN32 */
 
 #ifdef __GNUC__
@@ -190,6 +198,23 @@ mBOOL os_safe_call(REG_CMD_FN pfn);
 	// MSVC doesn't seem to.
 	#define S_ISREG(m)	((m) & S_IFREG)
 #endif /* not S_ISREG */
+#ifdef _WIN32
+	// The following two are defined in mingw but not in MSVC
+    #ifndef S_IRUSR
+        #define S_IRUSR _S_IREAD
+    #endif
+    #ifndef S_IWUSR
+        #define S_IWUSR _S_IWRITE
+    #endif
+	
+	// The following two are defined neither in mingw nor in MSVC
+    #ifndef S_IRGRP
+        #define S_IRGRP S_IRUSR
+    #endif
+    #ifndef S_IWGRP
+        #define S_IWGRP S_IWUSR
+    #endif
+#endif /* _WIN32 */
 
 
 // Our handler for new().
@@ -428,6 +453,14 @@ inline char *realpath(const char *file_name, char *resolved_name) {
 		return(NULL);
 	}
 	else if(ret > 0) {
+		HANDLE handle;
+		WIN32_FIND_DATA find_data;
+		handle=FindFirstFile(resolved_name, &find_data);
+		if(INVALID_HANDLE_VALUE == handle) {
+			errno=ENOENT;
+			return NULL;
+		}
+		FindClose(handle);
 		normalize_pathname(resolved_name);
 		return(resolved_name);
 	}

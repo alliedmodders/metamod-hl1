@@ -2,6 +2,10 @@
 
 // Digital Paintball
 //    http://www.digitalpaintball.net/
+//
+// Gamedir: dpb
+// Win32  : pb.dll
+// Linux  : pg_i686.so
 
 // Version 1.0
 //
@@ -30,3 +34,14 @@ weapon_pt
 weapon_shocker
 weapon_sl68
 weapon_spyder
+
+// Version 2.1
+//
+// Date: Wed, 07 Apr 2004 02:00:32 -0500 (EST)
+// From: David Anderson <bailopan@amxmodx.org>
+
+weapon_emag
+weapon_impulse
+weapon_matrix
+weapon_orracle
+weapon_timmy

@@ -686,7 +686,7 @@ mBOOL MPlugin::attach(PLUG_LOADTIME now) {
 	// a function isn't an option since we have varying types.
 #define GET_FUNC_TABLE_FROM_PLUGIN(pfnGetFuncs, STR_GetFuncs, struct_field, API_TYPE, TABLE_TYPE, vers_pass, vers_int, vers_want) \
 	if(meta_table.pfnGetFuncs) { \
-		struct_field = (TABLE_TYPE*) malloc(sizeof(TABLE_TYPE)); \
+		struct_field = (TABLE_TYPE*) calloc(1, sizeof(TABLE_TYPE)); \
 		if(meta_table.pfnGetFuncs(struct_field, vers_pass)) { \
 			META_DEBUG(3, ("dll: Plugin '%s': Found %s", desc, STR_GetFuncs)); \
 		} \

@@ -39,4 +39,6 @@
 
 extern char const *COMPILE_TIME;
 
+extern char const *COMPILE_TZONE;
+
 #endif /* VDATE_H */

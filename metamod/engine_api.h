@@ -37,6 +37,8 @@
 #ifndef ENGINE_API_H
 #define ENGINE_API_H
 
+#include <archtypes.h>
+
 // Plugin's GetEngineFunctions, called by metamod.
 typedef int (*GET_ENGINE_FUNCTIONS_FN) (enginefuncs_t *pengfuncsFromEngine, int *interfaceVersion);
 
@@ -125,9 +127,17 @@ extern void mm_CVarSetFloat(const char *szVarName, float flValue);
 extern void mm_CVarSetString(const char *szVarName, const char *szValue);
 
 extern void mm_AlertMessage(ALERT_TYPE atype, char *szFmt, ...);
+#ifdef HLSDK_3_2_OLD_EIFACE
 extern void mm_EngineFprintf(FILE *pfile, char *szFmt, ...);
+#else
+extern void mm_EngineFprintf(void *pfile, char *szFmt, ...);
+#endif
 
+#ifdef HLSDK_3_2_OLD_EIFACE
 extern void *mm_PvAllocEntPrivateData(edict_t *pEdict, long cb);
+#else
+extern void *mm_PvAllocEntPrivateData(edict_t *pEdict, int32 cb);
+#endif
 extern void *mm_PvEntPrivateData(edict_t *pEdict);
 extern void mm_FreeEntPrivateData(edict_t *pEdict);
 
@@ -147,8 +157,13 @@ extern int mm_RegUserMsg(const char *pszName, int iSize);
 extern void mm_AnimationAutomove(const edict_t *pEdict, float flTime);
 extern void mm_GetBonePosition(const edict_t *pEdict, int iBone, float *rgflOrigin, float *rgflAngles );
 
+#ifdef HLSDK_3_2_OLD_EIFACE
 extern unsigned long mm_FunctionFromName( const char *pName );
 extern const char *mm_NameForFunction( unsigned long function );
+#else
+extern uint32 mm_FunctionFromName( const char *pName );
+extern const char *mm_NameForFunction( uint32 function );
+#endif
 
 extern void mm_ClientPrintf( edict_t *pEdict, PRINT_TYPE ptype, const char *szMsg ); //! JOHN: engine callbacks so game DLL can print messages to individual clients
 extern void mm_ServerPrint( const char *szMsg );
@@ -164,7 +179,11 @@ extern void mm_CRC32_ProcessBuffer(CRC32_t *pulCRC, void *p, int len);
 extern void mm_CRC32_ProcessByte(CRC32_t *pulCRC, unsigned char ch);
 extern CRC32_t mm_CRC32_Final(CRC32_t pulCRC);
 
+#ifdef HLSDK_3_2_OLD_EIFACE
 extern long mm_RandomLong(long lLow, long lHigh);
+#else
+extern int32 mm_RandomLong(int32 lLow, int32 lHigh);
+#endif
 extern float mm_RandomFloat(float flLow, float flHigh);
 
 extern void mm_SetView(const edict_t *pClient, const edict_t *pViewent );
@@ -239,8 +258,8 @@ extern qboolean mm_Voice_SetClientListening(int iReceiver, int iSender, qboolean
 // Added for HL 1109 (no SDK update):
 extern const char *mm_pfnGetPlayerAuthId(edict_t *e);
 // Added 2003/11/10 (no SDK update):
-extern void * mm_SequenceGet(const char* fileName, const char* entryName);
-extern void * mm_SequencePickSentence(const char* groupName, int pickMethod, int *picked);
+extern sequenceEntry_s * mm_SequenceGet(const char* fileName, const char* entryName);
+extern sentenceEntry_s * mm_SequencePickSentence(const char* groupName, int pickMethod, int *picked);
 extern int mm_GetFileSize(char *filename);
 extern unsigned int mm_GetApproxWavePlayLen(const char *filepath);
 extern int mm_IsCareerMatch(void);
@@ -316,8 +335,13 @@ typedef const char * (*FN_CVARGETSTRING) (const char *szVarName);
 typedef void (*FN_CVARSETFLOAT) (const char *szVarName, float flValue);
 typedef void (*FN_CVARSETSTRING) (const char *szVarName, const char *szValue);
 typedef void (*FN_ALERTMESSAGE) (ALERT_TYPE atype, char *szFmt, ...);
+#ifdef HLSDK_3_2_OLD_EIFACE
 typedef void (*FN_ENGINEFPRINTF) (FILE *pfile, char *szFmt, ...);
 typedef void * (*FN_PVALLOCENTPRIVATEDATA) (edict_t *pEdict, long cb);
+#else
+typedef void (*FN_ENGINEFPRINTF) (void *pfile, char *szFmt, ...);
+typedef void * (*FN_PVALLOCENTPRIVATEDATA) (edict_t *pEdict, int32 cb);
+#endif
 typedef void * (*FN_PVENTPRIVATEDATA) (edict_t *pEdict);
 typedef void (*FN_FREEENTPRIVATEDATA) (edict_t *pEdict);
 typedef const char * (*FN_SZFROMINDEX) (int iString);
@@ -332,8 +356,13 @@ typedef void * (*FN_GETMODELPTR) (edict_t *pEdict);
 typedef int (*FN_REGUSERMSG) (const char *pszName, int iSize);
 typedef void (*FN_ANIMATIONAUTOMOVE) (const edict_t *pEdict, float flTime);
 typedef void (*FN_GETBONEPOSITION) (const edict_t *pEdict, int iBone, float *rgflOrigin, float *rgflAngles );
+#ifdef HLSDK_3_2_OLD_EIFACE
 typedef unsigned long (*FN_FUNCTIONFROMNAME) ( const char *pName );
 typedef const char * (*FN_NAMEFORFUNCTION) ( unsigned long function );
+#else
+typedef uint32 (*FN_FUNCTIONFROMNAME) ( const char *pName );
+typedef const char * (*FN_NAMEFORFUNCTION) ( uint32 function );
+#endif
 typedef void (*FN_CLIENTPRINTF) ( edict_t *pEdict, PRINT_TYPE ptype, const char *szMsg );
 typedef void (*FN_SERVERPRINT) ( const char *szMsg );
 typedef const char * (*FN_CMD_ARGS) ( void );
@@ -344,7 +373,11 @@ typedef void (*FN_CRC32_INIT) (CRC32_t *pulCRC);
 typedef void (*FN_CRC32_PROCESSBUFFER) (CRC32_t *pulCRC, void *p, int len);
 typedef void (*FN_CRC32_PROCESSBYTE) (CRC32_t *pulCRC, unsigned char ch);
 typedef CRC32_t (*FN_CRC32_FINAL) (CRC32_t pulCRC);
+#ifdef HLSDK_3_2_OLD_EIFACE
 typedef long (*FN_RANDOMLONG) (long lLow, long lHigh);
+#else
+typedef int32 (*FN_RANDOMLONG) (int32 lLow, int32 lHigh);
+#endif
 typedef float (*FN_RANDOMFLOAT) (float flLow, float flHigh);
 typedef void (*FN_SETVIEW) (const edict_t *pClient, const edict_t *pViewent );
 typedef float (*FN_TIME) ( void );
@@ -401,8 +434,8 @@ typedef qboolean (*FN_VOICE_SETCLIENTLISTENING) (int iReceiver, int iSender, qbo
 // Added for HL 1109 (no SDK update):
 typedef const char * (*FN_GETPLAYERAUTHID) (edict_t *e);
 // Added 2003/11/10 (no SDK update):
-typedef void * (*FN_SEQUENCEGET) (const char* fileName, const char* entryName);
-typedef void * (*FN_SEQUENCEPICKSENTENCE) (const char* groupName, int pickMethod, int *picked);
+typedef sequenceEntry_s * (*FN_SEQUENCEGET) (const char* fileName, const char* entryName);
+typedef sentenceEntry_s * (*FN_SEQUENCEPICKSENTENCE) (const char* groupName, int pickMethod, int *picked);
 typedef int (*FN_GETFILESIZE) (char *filename);
 typedef unsigned int (*FN_GETAPPROXWAVEPLAYLEN) (const char *filepath);
 typedef int (*FN_ISCAREERMATCH) (void);

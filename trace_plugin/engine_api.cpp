@@ -364,7 +364,11 @@ void AlertMessage(ALERT_TYPE atype, char *szFmt, ...) {
 				atype, buf));
 	RETURN_META(MRES_IGNORED);
 }
+#ifdef HLSDK_3_2_OLD_EIFACE
 void EngineFprintf(FILE *pfile, char *szFmt, ...) {
+#else
+void EngineFprintf(void *pfile, char *szFmt, ...) {
+#endif
 	va_list ap;
 	char buf[1024];
 	va_start(ap, szFmt);
@@ -374,7 +378,11 @@ void EngineFprintf(FILE *pfile, char *szFmt, ...) {
 	RETURN_META(MRES_IGNORED);
 }
 
+#ifdef HLSDK_3_2_OLD_EIFACE
 void *PvAllocEntPrivateData(edict_t *pEdict, long cb) {
+#else
+void *PvAllocEntPrivateData(edict_t *pEdict, int32 cb) {
+#endif
 	ENGINE_TRACE(pfnPvAllocEntPrivateData, P_PRE, (""));
 	RETURN_META_VALUE(MRES_IGNORED, NULL);
 }
@@ -444,11 +452,19 @@ void GetBonePosition(const edict_t *pEdict, int iBone, float *rgflOrigin, float 
 	RETURN_META(MRES_IGNORED);
 }
 
+#ifdef HLSDK_3_2_OLD_EIFACE
 unsigned long FunctionFromName( const char *pName ) {
+#else
+uint32 FunctionFromName( const char *pName ) {
+#endif
 	ENGINE_TRACE(pfnFunctionFromName, P_PRE, ("name=%s", pName));
 	RETURN_META_VALUE(MRES_IGNORED, 0UL);
 }
+#ifdef HLSDK_3_2_OLD_EIFACE
 const char *NameForFunction( unsigned long function ) {
+#else
+const char *NameForFunction( uint32 function ) {
+#endif
 	ENGINE_TRACE(pfnNameForFunction, P_PRE, (""));
 	RETURN_META_VALUE(MRES_IGNORED, NULL);
 }
@@ -502,7 +518,11 @@ CRC32_t CRC32_Final(CRC32_t pulCRC) {
 	RETURN_META_VALUE(MRES_IGNORED, 0);
 }
 
+#ifdef HLSDK_3_2_OLD_EIFACE
 long RandomLong(long lLow, long lHigh) {
+#else
+int32 RandomLong(int32 lLow, int32 lHigh) {
+#endif
 	// more output in Post
 	ENGINE_TRACE(pfnRandomLong, P_PRE, ("low=%ld, high=%ld", lLow, lHigh));
 	RETURN_META_VALUE(MRES_IGNORED, 0L);
@@ -769,12 +789,12 @@ const char *GetPlayerAuthId(edict_t *e) {
 
 // Added 2003/11/10 (no SDK update):
 
-void *SequenceGet(const char* fileName, const char* entryName) {
+sequenceEntry_s*SequenceGet(const char* fileName, const char* entryName) {
 	ENGINE_TRACE(pfnSequenceGet, P_PRE, (""));
 	RETURN_META_VALUE(MRES_IGNORED, NULL);
 }
 
-void *SequencePickSentence(const char* groupName, int pickMethod, int *picked) {
+sentenceEntry_s *SequencePickSentence(const char* groupName, int pickMethod, int *picked) {
 	ENGINE_TRACE(pfnSequencePickSentence, P_PRE, (""));
 	RETURN_META_VALUE(MRES_IGNORED, NULL);
 }

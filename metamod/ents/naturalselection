@@ -3,6 +3,10 @@
 // Natural Selection
 //    http://www.natural-selection.org/
 //    http://www.readyroom.org/
+//
+// Gamedir: ns
+// Win32  : ns.dll
+// Linux  : ns_i386.so
 
 // Version 1.0
 //
@@ -128,3 +132,12 @@ weapon_stomp
 //
 item_mine
 weapon_metabolize
+
+// Version 3.0
+//
+// Date: Thu, 4 Mar 2004 15:47:40 -0500
+// From: "Cheesy Peteza" <cheesy@yoclan.com>
+//
+// Gamedir changed to nsp for Beta version
+//
+item_catalyst

@@ -172,3 +172,8 @@ func_tankcannon
 func_tankmg
 func_tanktarget
 particle_shooter
+
+// Version 1.1
+
+dod_mapmarker
+env_rocketshooter

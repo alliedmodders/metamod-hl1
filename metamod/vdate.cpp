@@ -46,6 +46,8 @@
 
 char const *COMPILE_TIME=__DATE__ ", " __TIME__;
 
+char const *COMPILE_TZONE = COMPILE_TZ;
+
 // Include a string for /usr/bin/ident.
 
-char const *vstring="$Pg: " VNAME " -- " VVERSION " | " __DATE__ " - " __TIME__ " $";
+char const *vstring="\n$Pg: " VNAME " -- " VVERSION " | " __DATE__ " - " __TIME__ " $\n";

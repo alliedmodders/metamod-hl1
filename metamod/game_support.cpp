@@ -33,6 +33,7 @@
  *    version.
  *
  */
+#include <fcntl.h>          // open, write
 
 #include <extdll.h>			// always
 
@@ -70,6 +71,48 @@ game_modinfo_t *lookup_game(const char *name) {
 	return(NULL);
 }
 
+
+
+mBOOL install_gamedll(char *from, const char *to) {
+	int length_in;
+	int length_out;
+
+	if ( NULL == from ) return mFALSE;
+	if ( NULL == to ) to = from;
+
+	const char* cachefile = (const char*)LOAD_FILE_FOR_ME( from, &length_in );
+
+	// If the file seems to exist in the chache.
+	if ( NULL != cachefile ) {
+
+		int fd=open(to, O_WRONLY|O_CREAT|O_EXCL|O_BINARY, S_IRUSR|S_IWUSR|S_IRGRP|S_IWGRP);
+		if(fd < 0) {
+			META_DEBUG(3, ("Installing gamedll from cache: Failed to create file %s: %s\n", to, strerror(errno)) );
+			return mFALSE;
+		}
+	
+		length_out=write(fd, cachefile, length_in);
+	
+		// Writing the file was not successfull
+		if(length_out != length_in) {
+			META_DEBUG(3,("Installing gamedll from chache: Failed to write all %d bytes to file, only %d written: %s\n", length_in, length_out, strerror(errno)) );
+			// Let's not leave a mess but clean up nicely.
+			if (length_out > 0 ) unlink(to);
+			close(fd);
+			return mFALSE;
+		}
+
+		META_LOG( "Installed gamedll %s from cache.\n", to );
+		close(fd);
+
+	} else {
+		META_DEBUG(3, ("Failed to install gamedll from cache: file %s not found in cache.\n", from) );
+		return mFALSE;
+	}
+
+	return mTRUE;
+}
+
 // Set all the fields in the gamedll struct, - based either on an entry in
 // known_games matching the current gamedir, or on one specified manually 
 // by the server admin.
@@ -79,7 +122,7 @@ game_modinfo_t *lookup_game(const char *name) {
 mBOOL setup_gamedll(gamedll_t *gamedll) {
 	static char override_desc_buf[256];
 	game_modinfo_t *known;
-	char *cp, *knownfn;
+	const char *cp, *knownfn=0;
 	int override=0;
 
 	// Check for old-style "metagame.ini" file and complain.
@@ -106,9 +149,39 @@ mBOOL setup_gamedll(gamedll_t *gamedll) {
 		STRNCPY(gamedll->pathname, Config->gamedll, 
 				sizeof(gamedll->pathname));
 		override=1;
+
+		// If the path is relative, the gamedll file will be missing and
+		// it might be found in the cache file.
+		if(!is_absolute_path(gamedll->pathname)) {
+			// I abuse the real_pathname member here to pass a full pathname to
+			// the install_gamedll function. I am somewhat opposed to be pushing
+			// another MAX_PATH sized array on the stack, that's why.
+			snprintf(gamedll->real_pathname, sizeof(gamedll->real_pathname),
+					"%s/%s", gamedll->gamedir, gamedll->pathname);
+			// If we could successfully install the gamedll from the cache we
+			// rectify the pathname to be a full pathname.
+			if(install_gamedll(gamedll->pathname, gamedll->real_pathname))
+				STRNCPY(gamedll->pathname, gamedll->real_pathname, 
+						sizeof(gamedll->pathname));
+		}
 	}
 	// Else use Auto-detect dll.
 	else {
+		// Again, as above, I abuse the real_pathname member to store the full pathname
+		// and the pathname member to store the relative name to pass it to the 
+		// install_gamedll function to save stack space. They are going
+		// to get overwritten later on, so that's ok.
+		snprintf(gamedll->pathname, sizeof(gamedll->pathname), "dlls/%s", 
+				knownfn);
+		// Check if the gamedll file exists. If not, try to install it from
+		// the cache.
+		if(!valid_gamedir_file(gamedll->pathname)) {
+			snprintf(gamedll->real_pathname, sizeof(gamedll->real_pathname), "%s/dlls/%s", 
+					gamedll->gamedir, knownfn);
+			install_gamedll(gamedll->pathname, gamedll->real_pathname);
+		}
+
+		// Now make an absolute path
 		snprintf(gamedll->pathname, sizeof(gamedll->pathname), "%s/dlls/%s", 
 				gamedll->gamedir, knownfn);
 	}

@@ -1,10 +1,21 @@
 # vim: set tw=75 ft=none :
 
 xxxx/xx/xx ???
- - Added MOD recognition for Counter-Strike:Condition Zero.
+ - Additional entities for DoD 1.1.
+ - Added MOD recognition and entities for Hostile Intent 1.1.
+ - Added MOD recognition and entities for Natural Selection Beta 3.0.
+ - Additional entities for Sven Coop 3.0.
+ - Additional entities for Digital Paintball 2.1.
+ - Added MOD recognition for CS13, no new entities.
+ - Additional entity for The Specialits Beta 2.1.
+ - Additional entities for StargateTC Beta 2.3.
+ - Added MOD recognition and entities for Rocket Crowbar 2.
+ - Added MOD recognition and entities for Counter-Strike:Condition Zero.
  - Additional entities for International Soccer Online 3.0
  - Additional entities for Firearms 2.9 and one missing entity
    for previous Firearms versions.
+ - On Windows Steam servers extract the gamedll file from the cache file if
+   it is missing in the dlls directory.
 
 2003/11/15	1.17
  - Added support for recently added routines in the HL Engine:

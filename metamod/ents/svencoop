@@ -2,6 +2,10 @@
 
 // Sven Coop
 //    http://www.svencoop.com/
+//
+// Gamedir: svencoop
+// Win32  : hl.dll
+// Linux  : hl_i386.so
 
 // Svencoop 1.9
 monster_chumtoad
@@ -42,3 +46,31 @@ monster_zombie_soldier
 weapon_medkit
 weapon_pipewrench
 weapon_uzi
+
+// Version 3.0
+//
+// Date: Sun, 14 Mar 2004 04:13:08 -0500 (EST)
+// From: David Anderson <bailopan@amxmodx.org>
+
+ammo_556
+ammo_762
+env_fog
+env_sentence
+env_spritetrain
+info_player_dm2
+monster_alien_babyvoltigore
+monster_alien_voltigore
+monster_blkop_ospray
+monster_cleansuit_scientist
+monster_human_grunt_ally
+monster_human_grunt_ally_dead
+monster_human_medic_ally
+monster_human_torch_ally
+monster_hwgrunt_repel
+monster_medic_ally_repel
+monster_torch_ally_repel
+player_respawn_zone
+trigger_random_unique
+weapon_grapple
+weapon_minigun
+weapon_sniperrifle
