@@ -1,0 +1,44 @@
+// vim: set ft=cpp :
+
+// Sven Coop
+//    http://www.svencoop.com/
+
+// Svencoop 1.9
+monster_chumtoad
+squadmaker
+trigger_random
+trigger_random_time
+weapon_uziakimbo
+
+// Svencoop 2.0
+//
+// From: Eric Gisse <jowr@sdf.lonestar.org>
+// Date: Sat, 22 Dec 2001 18:53:11 -0900
+
+monster_babygarg
+monster_hwgrunt
+trigger_respawn
+trigger_secret
+
+// Version 2.1
+//
+// From: Daisuke Takeda <f_91@yahoo.com>
+// Date: Wed, 9 Apr 2003 12:15:29 -0700 (PDT)
+
+custom_precache
+env_xenmaker
+monster_assassin_repel
+monster_gonome
+monster_male_assassin
+monster_otis
+monster_otis_dead
+monster_pitdrone
+monster_robogrunt
+monster_robogruntrepel
+monster_shockroach
+monster_shocktrooper
+monster_zombie_barney
+monster_zombie_soldier
+weapon_medkit
+weapon_pipewrench
+weapon_uzi

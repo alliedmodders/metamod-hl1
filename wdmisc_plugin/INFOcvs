@@ -1,0 +1,8 @@
+The following files are ususally linked from the ../metamod
+directory. Since CVS does not allow symbolic links, these
+files have been copied here. It is to be considered to create
+links via a makefile or similar mechanism in the future.
+
+Makefile
+res_meta.rc
+sdk_util.cpp

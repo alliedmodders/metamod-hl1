@@ -1,0 +1,6 @@
+debug.linux/engine_api.o debug.win32/engine_api.o:  engine_api.cpp
+debug.linux/meta_api.o debug.win32/meta_api.o:  meta_api.cpp
+debug.linux/sdk_util.o debug.win32/sdk_util.o:  sdk_util.cpp ../metamod/osdep.h ../metamod/types_meta.h \
+ ../metamod/mreg.h ../metamod/log_meta.h ../metamod/sdk_util.h
+debug.linux/dllapi.o debug.win32/dllapi.o:  dllapi.cpp
+debug.linux/h_export.o debug.win32/h_export.o:  h_export.cpp

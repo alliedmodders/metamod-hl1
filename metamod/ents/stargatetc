@@ -1,0 +1,38 @@
+// vim: set ft=cpp :
+
+// StargateTC
+//    http://www.stargatetc.com/
+
+// Version Beta 2.2
+//
+// From: "Julien Duponchelle" <noplay@djeyl.net>
+// Date: Mon, 7 Oct 2002 15:17:34 +0200
+
+env_particule
+env_rain
+func_tankgoauld
+info_flash
+info_player_goauld
+info_player_marine
+info_player_torri
+info_player_unas
+lance_proj
+monster_larve
+monster_replicateur
+reetou_proj
+trigger_goal
+trigger_section
+weapon_batsup
+weapon_coujaf
+weapon_couteau
+weapon_gacgoa
+weapon_invis
+weapon_lance
+weapon_larve
+weapon_m16
+weapon_m92s
+weapon_main
+weapon_psg1
+weapon_reetou
+weapon_zat
+weapon_zatarc

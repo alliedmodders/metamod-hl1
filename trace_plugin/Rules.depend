@@ -1,0 +1,27 @@
+debug.linux/engine_api_post.o debug.win32/engine_api_post.o:  engine_api_post.cpp ../metamod/engine_api.h \
+ ../metamod/meta_api.h ../metamod/dllapi.h ../metamod/sdk_util.h \
+ ../metamod/osdep.h ../metamod/types_meta.h ../metamod/mreg.h \
+ ../metamod/log_meta.h ../metamod/plinfo.h ../metamod/mutil.h \
+ ../metamod/mhook.h trace_api.h ../metamod/api_info.h log_plugin.h \
+ plugin.h
+debug.linux/engine_api.o debug.win32/engine_api.o:  engine_api.cpp ../metamod/engine_api.h \
+ ../metamod/meta_api.h ../metamod/dllapi.h ../metamod/sdk_util.h \
+ ../metamod/osdep.h ../metamod/types_meta.h ../metamod/mreg.h \
+ ../metamod/log_meta.h ../metamod/plinfo.h ../metamod/mutil.h \
+ ../metamod/mhook.h trace_api.h ../metamod/api_info.h \
+ ../metamod/support_meta.h log_plugin.h plugin.h
+debug.linux/meta_api.o debug.win32/meta_api.o:  meta_api.cpp plugin.h info_name.h ../metamod/vers_meta.h \
+ log_plugin.h
+debug.linux/trace_api.o debug.win32/trace_api.o:  trace_api.cpp trace_api.h log_plugin.h plugin.h \
+ ../metamod/vers_meta.h ../metamod/vdate.h
+debug.linux/dllapi_post.o debug.win32/dllapi_post.o:  dllapi_post.cpp dllapi_post.h trace_api.h \
+ ../metamod/api_info.h log_plugin.h plugin.h
+debug.linux/dllapi.o debug.win32/dllapi.o:  dllapi.cpp trace_api.h ../metamod/api_info.h log_plugin.h \
+ plugin.h
+debug.linux/vdate.o debug.win32/vdate.o:  vdate.cpp info_name.h ../metamod/vers_meta.h
+debug.linux/plugin.o debug.win32/plugin.o:  plugin.cpp plugin.h log_plugin.h trace_api.h
+debug.linux/log_plugin.o debug.win32/log_plugin.o:  log_plugin.cpp log_plugin.h plugin.h
+debug.linux/h_export.o debug.win32/h_export.o:  h_export.cpp
+debug.linux/api_info.o debug.win32/api_info.o:  api_info.cpp ../metamod/api_info.h ../metamod/types_meta.h
+debug.linux/sdk_util.o debug.win32/sdk_util.o:  sdk_util.cpp ../metamod/sdk_util.h ../metamod/osdep.h \
+ ../metamod/types_meta.h ../metamod/mreg.h ../metamod/log_meta.h

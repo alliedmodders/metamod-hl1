@@ -1,0 +1,73 @@
+debug.linux/linkgame.o debug.win32/linkgame.o:  linkgame.cpp linkent.h osdep.h types_meta.h mreg.h \
+ log_meta.h sdk_util.h metamod.h meta_api.h dllapi.h engine_api.h \
+ plinfo.h mutil.h mhook.h mlist.h mplugin.h api_info.h support_meta.h \
+ conf_meta.h
+debug.linux/engine_api.o debug.win32/engine_api.o:  engine_api.cpp engine_api.h metamod.h meta_api.h \
+ dllapi.h sdk_util.h osdep.h types_meta.h mreg.h log_meta.h plinfo.h \
+ mutil.h mhook.h mlist.h mplugin.h api_info.h support_meta.h \
+ conf_meta.h thread_logparse.h
+debug.linux/api_info.o debug.win32/api_info.o:  api_info.cpp api_info.h types_meta.h
+debug.linux/mlist.o debug.win32/mlist.o:  mlist.cpp mlist.h types_meta.h mplugin.h meta_api.h dllapi.h \
+ sdk_util.h osdep.h mreg.h log_meta.h engine_api.h plinfo.h mutil.h \
+ mhook.h api_info.h support_meta.h commands_meta.h metamod.h \
+ conf_meta.h
+debug.linux/conf_meta.o debug.win32/conf_meta.o:  conf_meta.cpp conf_meta.h types_meta.h support_meta.h \
+ osdep.h mreg.h log_meta.h sdk_util.h
+debug.linux/mplugin.o debug.win32/mplugin.o:  mplugin.cpp mplugin.h types_meta.h meta_api.h dllapi.h \
+ sdk_util.h osdep.h mreg.h log_meta.h engine_api.h plinfo.h mutil.h \
+ mhook.h api_info.h support_meta.h metamod.h mlist.h conf_meta.h \
+ h_export.h
+debug.linux/osdep.o debug.win32/osdep.o:  osdep.cpp osdep.h types_meta.h mreg.h log_meta.h sdk_util.h \
+ support_meta.h
+debug.linux/metamod.o debug.win32/metamod.o:  metamod.cpp metamod.h meta_api.h dllapi.h sdk_util.h \
+ osdep.h types_meta.h mreg.h log_meta.h engine_api.h plinfo.h mutil.h \
+ mhook.h mlist.h mplugin.h api_info.h support_meta.h conf_meta.h \
+ h_export.h reg_support.h game_support.h commands_meta.h \
+ thread_logparse.h info_name.h vers_meta.h vdate.h
+debug.linux/commands_meta.o debug.win32/commands_meta.o:  commands_meta.cpp commands_meta.h types_meta.h \
+ metamod.h meta_api.h dllapi.h sdk_util.h osdep.h mreg.h log_meta.h \
+ engine_api.h plinfo.h mutil.h mhook.h mlist.h mplugin.h api_info.h \
+ support_meta.h conf_meta.h info_name.h vers_meta.h vdate.h
+debug.linux/game_support.o debug.win32/game_support.o:  game_support.cpp game_support.h types_meta.h metamod.h \
+ meta_api.h dllapi.h sdk_util.h osdep.h mreg.h log_meta.h engine_api.h \
+ plinfo.h mutil.h mhook.h mlist.h mplugin.h api_info.h support_meta.h \
+ conf_meta.h games.h
+debug.linux/dllapi.o debug.win32/dllapi.o:  dllapi.cpp dllapi.h sdk_util.h osdep.h types_meta.h mreg.h \
+ log_meta.h metamod.h meta_api.h engine_api.h plinfo.h mutil.h mhook.h \
+ mlist.h mplugin.h api_info.h support_meta.h conf_meta.h \
+ commands_meta.h
+debug.linux/log_meta.o debug.win32/log_meta.o:  log_meta.cpp log_meta.h sdk_util.h osdep.h types_meta.h \
+ mreg.h
+debug.linux/support_meta.o debug.win32/support_meta.o:  support_meta.cpp
+debug.linux/studioapi.o debug.win32/studioapi.o:  studioapi.cpp studioapi.h metamod.h meta_api.h dllapi.h \
+ sdk_util.h osdep.h types_meta.h mreg.h log_meta.h engine_api.h \
+ plinfo.h mutil.h mhook.h mlist.h mplugin.h api_info.h support_meta.h \
+ conf_meta.h
+debug.linux/mutil.o debug.win32/mutil.o:  mutil.cpp mutil.h plinfo.h mhook.h sdk_util.h linkent.h \
+ osdep.h types_meta.h mreg.h log_meta.h metamod.h meta_api.h dllapi.h \
+ engine_api.h mlist.h mplugin.h api_info.h support_meta.h conf_meta.h
+debug.linux/h_export.o debug.win32/h_export.o:  h_export.cpp h_export.h osdep.h types_meta.h mreg.h \
+ log_meta.h sdk_util.h metamod.h meta_api.h dllapi.h engine_api.h \
+ plinfo.h mutil.h mhook.h mlist.h mplugin.h api_info.h support_meta.h \
+ conf_meta.h
+debug.linux/reg_support.o debug.win32/reg_support.o:  reg_support.cpp sdk_util.h reg_support.h mreg.h \
+ types_meta.h metamod.h meta_api.h dllapi.h osdep.h log_meta.h \
+ engine_api.h plinfo.h mutil.h mhook.h mlist.h mplugin.h api_info.h \
+ support_meta.h conf_meta.h
+debug.linux/mreg.o debug.win32/mreg.o:  mreg.cpp mreg.h types_meta.h metamod.h meta_api.h dllapi.h \
+ sdk_util.h osdep.h log_meta.h engine_api.h plinfo.h mutil.h mhook.h \
+ mlist.h mplugin.h api_info.h support_meta.h conf_meta.h
+debug.linux/vdate.o debug.win32/vdate.o:  vdate.cpp info_name.h vers_meta.h
+debug.linux/sdk_util.o debug.win32/sdk_util.o:  sdk_util.cpp sdk_util.h osdep.h types_meta.h mreg.h \
+ log_meta.h
+debug.linux/linkent.o debug.win32/linkent.o:  linkent.cpp linkent.h osdep.h types_meta.h mreg.h \
+ log_meta.h sdk_util.h metamod.h meta_api.h dllapi.h engine_api.h \
+ plinfo.h mutil.h mhook.h mlist.h mplugin.h api_info.h support_meta.h \
+ conf_meta.h
+debug.linux/linkplug.o debug.win32/linkplug.o:  linkplug.cpp linkent.h osdep.h types_meta.h mreg.h \
+ log_meta.h sdk_util.h metamod.h meta_api.h dllapi.h engine_api.h \
+ plinfo.h mutil.h mhook.h mlist.h mplugin.h api_info.h support_meta.h \
+ conf_meta.h
+debug.linux/mhook.o debug.win32/mhook.o:  mhook.cpp
+debug.linux/mqueue.o debug.win32/mqueue.o:  mqueue.cpp
+debug.linux/thread_logparse.o debug.win32/thread_logparse.o:  thread_logparse.cpp

@@ -1,0 +1,15 @@
+debug.linux/meta_api.o debug.win32/meta_api.o:  meta_api.cpp plugin.h info_name.h ../metamod/vers_meta.h \
+ log_plugin.h
+debug.linux/vdate.o debug.win32/vdate.o:  vdate.cpp info_name.h ../metamod/vers_meta.h
+debug.linux/wdmisc.o debug.win32/wdmisc.o:  wdmisc.cpp wdmisc.h plugin.h log_plugin.h
+debug.linux/log_plugin.o debug.win32/log_plugin.o:  log_plugin.cpp log_plugin.h plugin.h
+debug.linux/dll_plugin.o debug.win32/dll_plugin.o:  dll_plugin.cpp wdmisc.h dll_plugin.h log_plugin.h \
+ plugin.h
+debug.linux/engine_api.o debug.win32/engine_api.o:  engine_api.cpp ../metamod/engine_api.h \
+ ../metamod/meta_api.h ../metamod/dllapi.h ../metamod/sdk_util.h \
+ ../metamod/osdep.h ../metamod/types_meta.h ../metamod/mreg.h \
+ ../metamod/log_meta.h ../metamod/plinfo.h ../metamod/mutil.h \
+ ../metamod/mhook.h log_plugin.h plugin.h
+debug.linux/sdk_util.o debug.win32/sdk_util.o:  sdk_util.cpp ../metamod/sdk_util.h ../metamod/osdep.h \
+ ../metamod/types_meta.h ../metamod/mreg.h ../metamod/log_meta.h
+debug.linux/h_export.o debug.win32/h_export.o:  h_export.cpp

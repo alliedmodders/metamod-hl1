@@ -1,0 +1,24 @@
+// vim: set ft=cpp :
+
+// Snow-War
+//    http://www.planethalflife.com/snowwar/
+
+// Version 1.0
+//
+// From: <rhobot@gamershomepage.com>
+// Date: Sat, 29 Dec 2001 12:04:43 -0500
+
+ctf_flag
+ctf_flagzone
+grapple_hook
+info_player_blue
+info_player_observer
+info_player_red
+power_ballbag
+power_coco
+power_gloves
+power_shield
+power_shoes
+snowball
+trip_beam
+weapon_snowball
