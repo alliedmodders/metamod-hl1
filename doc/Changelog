@@ -1,5 +1,16 @@
 # vim: set tw=75 ft=none :
 
+2005/02/20 1.17.4
+ - Added Mod recognition and entities for Brain Bread 1.2
+ - Changed Mod recognition and added entities for Snow-War 2.0
+ - Added additional entity for Science & Industry 1.0.
+ - Mod recognition and entities for Gangsta Wars 2.7. This update removes
+   support for Gangsta Wars 2.6 since 2.7 is incompatible with 2.6.
+ - Added entities for Rival Species 1.2.
+ - Fixed a potential memory leak on plugins loading.
+ - Fixed a memory initialization issue.
+ - Fixed an indexing bug that could cause errors in meta list.
+
 2004/11/10 1.17.3
  - Added Mod recognition and entities for Zombie Panic Beta 0.91c.
  - Added Mod recognition and entities for Out Break 1.0.

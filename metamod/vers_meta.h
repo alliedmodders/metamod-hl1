@@ -5,7 +5,7 @@
 // with metamod.
 
 /*
- * Copyright (c) 2001-2003 Will Day <willday@hpgx.net>
+ * Copyright (c) 2001-2005 Will Day <willday@hpgx.net>
  *
  *    This file is part of Metamod.
  *
@@ -48,8 +48,8 @@
 # endif /* _MSC_VER */
 #endif /* not OPT_TYPE */
 
-#define VDATE			"2004/11/12"
-#define VVERSION		"1.17.3"
-#define RC_VERS_DWORD	1,17,3,0	// Version Windows DLL Resources in res_meta.rc
+#define VDATE			"2005/02/20"
+#define VVERSION		"1.17.4"
+#define RC_VERS_DWORD	1,17,4,0	// Version Windows DLL Resources in res_meta.rc
 
 #endif /* VERS_META_H */

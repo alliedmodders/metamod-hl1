@@ -83,3 +83,28 @@ weapon_st_special
 weapon_st_throw
 world_artefact
 world_capturelocation
+
+// Version 1.2
+//
+// From: "Stuart Thayn" <sthayn@sfcn.org>
+// Date: Mon, 7 Feb 2005 15:20:53 -0700
+//
+ammo_rs_grenade
+followbot
+hlight
+info_player_team_at
+info_player_team_bt
+info_player_team_gf
+info_player_team_iw
+info_player_team_st
+info_player_team_we
+model_entity
+rs_fog
+rs_if
+rs_message
+rs_particle_emitter
+rs_timer
+rs_val
+vehicle
+weapon_rs_meta
+world_areacontrol

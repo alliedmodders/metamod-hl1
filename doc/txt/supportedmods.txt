@@ -39,6 +39,9 @@ see Adding game support.
 | Bot                          | -        | 2001   |                     |
 |                              |          | /../.. |                     |
 |------------------------------+----------+--------+---------------------|
+| Brain Bread                  | v1.2     | 2005/  |                     |
+| (www.ironoak.de/BB)          |          | 02/04  |                     |
+|------------------------------+----------+--------+---------------------|
 | Bumper Cars                  |          | 2003/  |                     |
 | (www.planethalflife.com/     | Alpha    | 05/02  |                     |
 | bumpercars)                  |          |        |                     |
@@ -92,8 +95,8 @@ see Adding game support.
 | Frontline Force              | v1.3     | 2001/  |                     |
 | (www.frontlineforce.com)     |          | 06/10  |                     |
 |------------------------------+----------+--------+---------------------|
-| GangstaWars                  | v2.6     | 2001   |                     |
-|                              |          | /../.. |                     |
+| Gangsta Wars                 | v2.7     | 2005/  |                     |
+|                              |          | 02/14  |                     |
 |------------------------------+----------+--------+---------------------|
 | Gangwars                     | Beta 1.0 | 2002/  |                     |
 | (www.gangwars.net)           |          | 04/21  |                     |
@@ -197,8 +200,8 @@ see Adding game support.
 | (www.planethalflife.com/     | v1.9     | 11/26  |                     |
 | rocketcrowbar)               |          |        |                     |
 |------------------------------+----------+--------+---------------------|
-| Rival Species                | v1.0     | 2003/  |                     |
-| (www.rivalspecies.com)       |          | 05/02  |                     |
+| Rival Species                | v1.2     | 2005/  |                     |
+| (www.rivalspecies.com)       |          | 02/17  |                     |
 |------------------------------+----------+--------+---------------------|
 | Scientist Hunt               |          | 2001/  |                     |
 | (www.telefragged.com/        | v1.2     | 09/19  |                     |
@@ -210,9 +213,8 @@ see Adding game support.
 | Science & Industry           | v1.0     | 2004/  |                     |
 | (www.planethalflife.com/si)  |          | 07/24  |                     |
 |------------------------------+----------+--------+---------------------|
-| Snow-War                     |          | 2001/  |                     |
-| (www.planethalflife.com/     | v1.0     | 12/29  |                     |
-| snowwar)                     |          |        |                     |
+| Snow-War                     | 2.0      | 2005/  |                     |
+| (snowwar.hlgaming.com)       |          | 02/04  |                     |
 |------------------------------+----------+--------+---------------------|
 | StargateTC                   | Beta 1.1 | 2004/  |                     |
 | (www.stargatetc.com)         |          | 07/01  |                     |

@@ -4,7 +4,7 @@
 // games.h - list of supported game mods and their data
  
 /*
- * Copyright (c) 2001-2004 Will Day <willday@hpgx.net>
+ * Copyright (c) 2001-2005 Will Day <willday@hpgx.net>
  *
  *    This file is part of Metamod.
  *
@@ -51,6 +51,7 @@
 	{"asheep",            "hl"MODARCH".so",           "hl.dll",            "Azure Sheep"},
 	{"bg",                "bg"MODARCH".so",           "bg.dll",            "The Battle Grounds"},
 	{"bot",               "bot"MODARCH".so",          "bot.dll",           "Bot"},
+	{"brainbread",        "bb"MODARCH".so",           "bb.dll",            "Brain Bread"},
 	{"bumpercars",        "hl"MODARCH".so",           "hl.dll",            "Bumper Cars"},
 	{"buzzybots",         "bb"MODARCH".so",           "bb.dll",            "BuzzyBots"},
 	{"cs13",              "cs"MODARCH".so",           "mp.dll",            "Counter-Strike 1.3"},
@@ -68,7 +69,7 @@
 	{"firearms25",        "fa"MODARCH".so",           "firearms.dll",      "Retro Firearms"},
 	{"freeze",            "mp"MODARCH".so",           "mp.dll",            "Freeze"},
 	{"frontline",         "front"MODARCH".so",        "frontline.dll",     "Frontline Force"},
-	{"gangstawars",       "gansta"MODARCH".so",       "hl.dll",            "GangstaWars"},
+	{"gangstawars",       "gangsta"MODARCH".so",      "gwars27.dll",       "Gangsta Wars"},
 	{"gangwars",          "mp"MODARCH".so",           "mp.dll",            "Gangwars"},
 	{"gearbox",           "opfor"MODARCH".so",        "opfor.dll",         "Opposing Force"},
 	{"globalwarfare",     "gw"MODARCH".so",           "mp.dll",            "Global Warfare"},
@@ -104,7 +105,7 @@
 	{"scihunt",           "shunt.so",                 "shunt.dll",         "Scientist Hunt"},
 	{"Ship",              "ship"MODARCH".so",         "ship.dll",          "The Ship"},
 	{"si",                "si"MODARCH".so",           "si.dll",            "Science & Industry"},
-	{"snow",              "hl"MODARCH".so",           "snow.dll",          "Snow-War"},
+	{"snow",              "snow"MODARCH".so",         "snow.dll",          "Snow-War"},
 	{"stargatetc",        "hl"MODARCH".so",           "hl.dll",            "StargateTC"},
 	{"svencoop",          "hl"MODARCH".so",           "hl.dll",            "Sven Coop"},
 	{"swarm",             "swarm"MODARCH".so",        "swarm.dll",         "Swarm"},
