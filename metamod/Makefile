@@ -37,10 +37,7 @@ else	## windows
 	INST_DIR=/hlserver/tfc/dlls
 endif
 
-#default HL online platform is Steam
-HLPF=steam
-
-DLLS_DIR=../dlls/$(HLPF)
+DLLS_DIR=../dlls
 METADIR=../metamod
 
 # set compiler to use
@@ -48,7 +45,7 @@ CC=gcc-2.95
 
 
 
-COMPILE_TZ=UTC
+COMPILE_TZ=
 ## Developer overrrides
 ifeq "$(USER)" "willday"
     ifeq "$(OS)" "linux"
@@ -66,7 +63,7 @@ ifeq "$(USER)" "flori"
     PATH_WIN=/usr/local/cross-tools/i386-mingw32msvc/bin
     TEST_DIR=/data/hlds_l/Admin/dlls
     CC = gcc
-	COMPILE_TZ=$(shell date +%Z)
+	COMPILE_TZ=$(shell date +%z)
 endif
 
 SDKSRC=$(SDKTOP)/multiplayer
@@ -178,20 +175,14 @@ endif
 ifeq "$(OPT)" "opt"
 	ODEF = -DOPT_TYPE=\"optimized\"
 	CFLAGS := $(CCOPT) $(CFLAGS) $(ODEF)
-	OBJDIR_LINUX = $(OBJDIR_LINUX_OPT).$(HLPF)
-	OBJDIR_WIN = $(OBJDIR_WIN_OPT).$(HLPF)
+	OBJDIR_LINUX = $(OBJDIR_LINUX_OPT)
+	OBJDIR_WIN = $(OBJDIR_WIN_OPT)
 else	# debug
 	ODEF = -DOPT_TYPE=\"debugging\"
 	CFLAGS := $(CCDEBUG) $(CFLAGS) $(ODEF)
-	OBJDIR_LINUX = $(OBJDIR_LINUX_DBG).$(HLPF)
-	OBJDIR_WIN = $(OBJDIR_WIN_DBG).$(HLPF)
+	OBJDIR_LINUX = $(OBJDIR_LINUX_DBG)
+	OBJDIR_WIN = $(OBJDIR_WIN_DBG)
 	DLLS_DIR := $(DLLS_DIR)/debug
-endif
-
-
-
-ifeq "$(HLPF)" "won"
-	CFLAGS += -DHLSDK_3_2_OLD_EIFACE
 endif
 
 include Config.mak
@@ -296,11 +287,7 @@ ifeq "$(USER)" "willday"
 include ../priv/metamod.mak
 endif
 
-all: do_dll_linux do_dll_win32 won
-
-won:
-	$(MAKE) do_dll_linux HLPF=won
-	$(MAKE) do_dll_win32 HLPF=won
+all: do_dll_linux do_dll_win32
 
 opt:
 	$(MAKE) default OPT=opt
@@ -312,16 +299,6 @@ linux_opt:
 	$(MAKE) linux OPT=opt
 win32_opt: 
 	$(MAKE) win32 OPT=opt
-
-linux_won: 
-	$(MAKE) linux HLPF=won
-win32_won: 
-	$(MAKE) win32 HLPF=won
-
-linux_won_opt: 
-	$(MAKE) linux OPT=opt HLPF=won
-win32_won_opt: 
-	$(MAKE) win32 OPT=opt HLPF=won
 
 $(TARGET_LINUX): msgs/debug msgs/log msgs/error $(OBJDIR_LINUX) $(OBJ_LINUX)
 	$(LINK_LINUX)
@@ -390,35 +367,17 @@ clean_win32:
 #	-rm -f $(OBJDIR_WIN)/*
 	-rm -rf $(OBJDIR_WIN)
 
-cleanall_linux: cleansteam_linux cleanwon_linux
-
-cleansteam_linux:
+cleanall_linux:
 	$(MAKE) clean_linux
 	$(MAKE) clean_linux OPT=opt
 
-cleanwon_linux:
-	$(MAKE) clean_linux HLPF=won
-	$(MAKE) clean_linux OPT=opt HLPF=won
-
-cleanall_win32: cleansteam_win32 cleanwon_win32
-
-cleanwon_win32:
-	$(MAKE) clean_win32 HLPF=won
-	$(MAKE) clean_win32 OPT=opt HLPF=won
-
-cleansteam_win32:
+cleanall_win32:
 	$(MAKE) clean_win32
 	$(MAKE) clean_win32 OPT=opt
 
 cleanall: cleanall_linux cleanall_win32
 
-dll_linux dll_win32: dll_linux_steam dll_linux_won
-
-dll_linux_won dll_win32_won: 
-	$(MAKE) do_$@ HLPF=won
-	$(MAKE) do_$@ OPT=opt HLPF=won
-
-dll_linux_steam dll_win32_steam: 
+dll_linux dll_win32: 
 	$(MAKE) do_$@
 	$(MAKE) do_$@ OPT=opt
 
@@ -436,8 +395,7 @@ $(DLLS_DIR)/$(LIBFILE_WIN): $(TARGET_WIN)
 
 dlls: dll_linux dll_win32
 rmdlls:
-	-rm -f ../dlls/won/*.* ../dlls/won/debug/*.*
-	-rm -f ../dlls/steam/*.* ../dlls/steam/debug/*.*
+	-rm -f ../dlls/*.* ../dlls/debug/*.*
 
 spotless: cleanall
 	-rmdir $(OBJDIR_LINUX) $(OBJDIR_WIN)
