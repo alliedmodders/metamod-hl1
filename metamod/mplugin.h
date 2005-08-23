@@ -75,6 +75,7 @@ typedef enum {
 typedef enum {
 	PS_INI = 0,			// was loaded from the plugins.ini
 	PS_CMD,				// was loaded via a server command
+	PS_PLUGIN,			// was loaded via a plugin
 } PLOAD_SOURCE;
 
 // Flags for how to word description of plugin loadtime.
@@ -126,6 +127,9 @@ class MPlugin {
 		DLHANDLE handle;					// handle for dlopen, dlsym, etc
 		plugin_info_t *info;				// information plugin provides about itself
 		time_t time_loaded;					// when plugin was loaded
+		int source_plugin_index;			// who loaded this plugin
+		int unloader_index;
+		mBOOL is_unloader;				// fix to prevent other plugins unload active unloader.
 
 		DLL_FUNCTIONS *dllapi_table;
 		DLL_FUNCTIONS *dllapi_post_table;
@@ -135,8 +139,10 @@ class MPlugin {
 		enginefuncs_t *engine_post_table;
 
 	// functions:
+		
 		mBOOL ini_parseline(char *line);	// parse line from inifile
 		mBOOL cmd_parseline(const char *line);	// parse from console command
+		mBOOL plugin_parseline(const char *fname, int loader_index); // parse from plugin
 		mBOOL check_input(void);
 
 		mBOOL resolve(void);				// find a matching file on disk
@@ -147,12 +153,13 @@ class MPlugin {
 		mBOOL platform_match(MPlugin* plugin);
 		
 		mBOOL load(PLUG_LOADTIME now);
-		mBOOL unload(PLUG_LOADTIME now, PL_UNLOAD_REASON reason);
+		mBOOL unload(PLUG_LOADTIME now, PL_UNLOAD_REASON reason, PL_UNLOAD_REASON real_reason);
 		mBOOL reload(PLUG_LOADTIME now, PL_UNLOAD_REASON reason);
 		mBOOL pause(void);
 		mBOOL unpause(void);
 		mBOOL retry(PLUG_LOADTIME now, PL_UNLOAD_REASON reason);	// if previously failed
 		mBOOL clear(void);
+		mBOOL plugin_unload(plid_t plid, PLUG_LOADTIME now, PL_UNLOAD_REASON reason); // other plugin unloading
 		void show(void);					// print info about plugin to console
 
 		mBOOL newer_file(void);				// check for newer file on disk
@@ -162,7 +169,7 @@ class MPlugin {
 		char *str_action(STR_ACTION fmt);
 		char *str_source(STR_SOURCE fmt);
 
-		char *str_reason(PL_UNLOAD_REASON preason);
+		char *str_reason(PL_UNLOAD_REASON preason, PL_UNLOAD_REASON preal_reason);
 		char *str_loadtime(PLUG_LOADTIME pallow, STR_LOADTIME fmt);
 
 		char *str_status(void)		{ return(str_status(ST_SIMPLE)); };
@@ -249,7 +256,8 @@ class MPlugin {
 	n=0; \
 	SHOW_IFDEF(api_table, newapi_info, pfnOnFreeEntPrivateData,	pre_str, post_str); \
 	SHOW_IFDEF(api_table, newapi_info, pfnGameShutdown,		pre_str, post_str); \
-	SHOW_IFDEF(api_table, newapi_info, pfnShouldCollide,	pre_str, post_str)
+	SHOW_IFDEF(api_table, newapi_info, pfnShouldCollide,	pre_str, post_str); \
+	SHOW_IFDEF(api_table, newapi_info, pfnCvarValue,		pre_str, post_str);
 
 #define SHOW_DEF_ENGINE(api_table, pre_str, post_str) \
 	n=0; \
@@ -408,6 +416,7 @@ class MPlugin {
 	SHOW_IFDEF(api_table, engine_info, pfnProcessTutorMessageDecayBuffer,	pre_str, post_str); \
 	SHOW_IFDEF(api_table, engine_info, pfnConstructTutorMessageDecayBuffer,	pre_str, post_str); \
 	SHOW_IFDEF(api_table, engine_info, pfnResetTutorMessageDecayData,		pre_str, post_str); \
+	SHOW_IFDEF(api_table, engine_info, pfnQueryClientCvarValue,				pre_str, post_str);
 
 
 #endif /* MPLUGIN_H */

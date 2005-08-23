@@ -81,6 +81,10 @@ MRegCmdList *RegCmds;
 MRegCvarList *RegCvars;
 MRegMsgList *RegMsgs;
 
+MPlayerList g_Players;
+
+unsigned int CALL_API_count = 0;
+
 #ifdef UNFINISHED
 MHookList *Hooks;
 #endif /* UNFINISHED */
@@ -187,6 +191,7 @@ void metamod_startup(void) {
 	Engine.pl_funcs->pfnCVarRegister = meta_CVarRegister;
 	Engine.pl_funcs->pfnCvar_RegisterVariable = meta_CVarRegister;
 	Engine.pl_funcs->pfnRegUserMsg = meta_RegUserMsg;
+	Engine.pl_funcs->pfnQueryClientCvarValue = meta_QueryClientCvarValue;
 
 #ifdef UNFINISHED
 	// Init the list of event/logline hooks.
@@ -361,8 +366,7 @@ mBOOL meta_load_gamedll(void) {
 	// Yes...another macro.
 #define GET_FUNC_TABLE_FROM_GAME(gamedll, pfnGetFuncs, STR_GetFuncs, struct_field, API_TYPE, TABLE_TYPE, vers_pass, vers_int, vers_want, gotit) \
 		if((pfnGetFuncs = (API_TYPE) DLSYM(gamedll.handle, STR_GetFuncs))) { \
-			gamedll.funcs.struct_field = (TABLE_TYPE*) malloc(sizeof(TABLE_TYPE)); \
-			memset(gamedll.funcs.struct_field, 0, sizeof(gamedll.funcs.struct_field)); \
+			gamedll.funcs.struct_field = (TABLE_TYPE*) calloc(1, sizeof(TABLE_TYPE)); \
 			if(!gamedll.funcs.struct_field) {\
 				META_ERROR("malloc failed for gamedll struct_field: %s", STR_GetFuncs); \
 			} \
@@ -425,3 +429,4 @@ mBOOL meta_load_gamedll(void) {
 	META_LOG("Game DLL for '%s' loaded successfully", GameDLL.desc);
 	return(mTRUE);
 }
+

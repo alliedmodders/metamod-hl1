@@ -35,6 +35,7 @@
  */
 
 #include <ctype.h>		// isdigit()
+#include <stdlib.h>		// strtol()
 
 #include <extdll.h>		// always
 
@@ -159,7 +160,7 @@ void cmd_meta_version(void) {
 		META_CONS("usage: meta version");
 		return;
 	}
-	META_CONS("%s v%s  %s", VNAME, VVERSION, VDATE);
+	META_CONS("%s v%s  %s (%s)", VNAME, VVERSION, VDATE, META_INTERFACE_VERSION);
 	META_CONS("by %s", VAUTHOR);
 	META_CONS("   %s", VURL);
 	META_CONS("compiled: %s %s (%s)", COMPILE_TIME, COMPILE_TZONE, OPT_TYPE);
@@ -171,10 +172,11 @@ void client_meta_version(edict_t *pEntity) {
 		META_CLIENT(pEntity, "usage: meta version");
 		return;
 	}
-	META_CLIENT(pEntity, "%s v%s  %s", VNAME, VVERSION, VDATE);
+	META_CLIENT(pEntity, "%s v%s  %s (%s)", VNAME, VVERSION, VDATE, META_INTERFACE_VERSION);
 	META_CLIENT(pEntity, "by %s", VAUTHOR);
 	META_CLIENT(pEntity, "   %s", VURL);
 	META_CLIENT(pEntity, "compiled: %s %s (%s)", COMPILE_TIME, COMPILE_TZONE, OPT_TYPE);
+	META_CLIENT(pEntity, "ifvers: %s", META_INTERFACE_VERSION);
 }
 
 // "meta gpl" console command.
@@ -243,7 +245,7 @@ void cmd_meta_pluginlist(void) {
 		META_CONS("usage: meta list");
 		return;
 	}
-	Plugins->show();
+	Plugins->show(0);
 }
 
 // "meta list" client command.
@@ -343,11 +345,14 @@ void cmd_doplug(PLUG_CMD pcmd) {
 	}
 	// i=2 to skip first arg, as that's the "cmd"
 	for(i=2; i < argc; i++) {
+		int pindex;
+		char *endptr;
 		arg=CMD_ARGV(i);
 
 		// try to match plugin id first
-		if(isdigit(arg[0]))
-			findp=Plugins->find(atoi(arg));
+		pindex = strtol(arg, &endptr, 10);
+		if (*arg != '\0' && *endptr == '\0')
+			findp=Plugins->find(pindex);
 		// else try to match some string (prefix)
 		else
 			findp=Plugins->find_match(arg);
@@ -414,9 +419,9 @@ void cmd_doplug(PLUG_CMD pcmd) {
 		}
 		else if(pcmd==PC_UNLOAD) {
 			findp->action=PA_UNLOAD;
-			if(findp->unload(PT_ANYTIME, PNL_COMMAND)) {
+			if(findp->unload(PT_ANYTIME, PNL_COMMAND, PNL_COMMAND)) {
 				META_CONS("Unloaded plugin '%s'", findp->desc);
-				Plugins->show();
+				Plugins->show(0);
 			}
 			else if(meta_errno == ME_DELAYED)
 				META_CONS("Unload delayed for plugin '%s'", findp->desc);
@@ -425,9 +430,9 @@ void cmd_doplug(PLUG_CMD pcmd) {
 		}
 		else if(pcmd==PC_FORCE_UNLOAD) {
 			findp->action=PA_UNLOAD;
-			if(findp->unload(PT_ANYTIME, PNL_CMD_FORCED)) {
+			if(findp->unload(PT_ANYTIME, PNL_CMD_FORCED, PNL_CMD_FORCED)) {
 				META_CONS("Forced unload plugin '%s'", findp->desc);
-				Plugins->show();
+				Plugins->show(0);
 			}
 			else
 				META_CONS("Forced unload failed for plugin '%s'", findp->desc);
@@ -452,7 +457,7 @@ void cmd_doplug(PLUG_CMD pcmd) {
 		else if(pcmd==PC_CLEAR) {
 			if(findp->clear()) {
 				META_CONS("Cleared failed plugin '%s' from list", findp->desc);
-				Plugins->show();
+				Plugins->show(0);
 			}
 			else
 				META_CONS("Clear failed for plugin '%s'", findp->desc);

@@ -284,6 +284,10 @@ int ShouldCollide(edict_t *pentTouched, edict_t *pentOther) {
 	NEWDLL_TRACE(pfnShouldCollide, P_PRE, (""));
 	RETURN_META_VALUE(MRES_IGNORED, 1);
 }
+void CvarValue(const edict_t *pEdict, const char *szValue) {
+	NEWDLL_TRACE(pfnCvarValue, P_PRE, ("player=%s, value=%s", STRING(pEdict->v.netname), szValue?szValue:"nil"));
+	RETURN_META(MRES_IGNORED);
+}
 
 
 // from SDK dlls/cbase.cpp:
@@ -406,6 +410,7 @@ static NEW_DLL_FUNCTIONS gNewFunctionTable =
 	OnFreeEntPrivateData,		//! pfnOnFreeEntPrivateData()	Called right before the object's memory is freed.  Calls its destructor.
 	GameShutdown,				//! pfnGameShutdown()
 	ShouldCollide,				//! pfnShouldCollide()
+	CvarValue,					//! pfnCvarValue()
 };
 
 C_DLLEXPORT int GetNewDLLFunctions(NEW_DLL_FUNCTIONS *pNewFunctionTable, 

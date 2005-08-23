@@ -15,6 +15,7 @@
    <li><a href=#OnFreeEntPrivateData>OnFreeEntPrivateData</a>
    <li><a href=#GameShutdown>GameShutdown</a>
    <li><a href=#ShouldCollide>ShouldCollide</a>
+   <li><a href=#CvarValue>CvarValue</a>
 </ul>
 
 <b>NOTE</b>: No examples of these found in SDK...
@@ -53,6 +54,20 @@
 <blockquote>
 	Mugsy from DoD indicates that the return value for normal operation is 1.
 	<br>Added in SDK 2.0.  
+</blockquote>
+
+<hr><h3><tt><a name="CvarValue">CvarValue</a></tt></h3>
+<dd><tt>void (*pfnCvarValue)( const edict_t *pEnt, const char *value );</tt><p>
+<i>from alfred@valvesoftware.com, via HLCoders:</i><br>
+<blockquote><tt>
+When the client responds to the cvar request you will get a callback to pfnCvarValue() 
+with the edict of the player who is responding and the cvars values.
+</tt></blockquote>
+<p><i>comments:</i><br>
+<blockquote>
+	This API can lead to conflicts when you query more than one cvar from a player 
+	at a time.  Use IS_QUERYING_CLIENT_CVAR to check if another plugin is querying before
+	you do so.
 </blockquote>
 
 <p>

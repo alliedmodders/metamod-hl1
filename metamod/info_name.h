@@ -43,13 +43,14 @@
 #define VAUTHOR		"Will Day <willday@metamod.org>"
 #define VURL		"http://www.metamod.org/"
 
-#define COPYRIGHT_YEAR "2004"
+#define COPYRIGHT_YEAR "2005"
 
 // Various strings for the Windows DLL Resources in res_meta.rc
 #define RC_COMMENTS		"Metamod allows running multiple mod-like plugin DLLs, to add functionality or change the behavior of the running HLDS game mod.  See " VURL
 #define RC_DESC			"Metamod Half-Life MOD DLL"
 #define RC_FILENAME		"METAMOD.DLL"
 #define RC_INTERNAL		"METAMOD"
-#define RC_COPYRIGHT	"Copyright© 2001-" COPYRIGHT_YEAR  "Will Day; licensed under the GPL"
+#define RC_COPYRIGHT	"Copyright© 2001-" COPYRIGHT_YEAR  " Will Day; GPL licensed"
+#define RC_LICENSE      "Licensed under the GNU General Public License"
 
 #endif /* INFO_NAME_H */

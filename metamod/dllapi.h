@@ -119,6 +119,7 @@ extern int mm_AllowLagCompensation( void );
 extern void mm_OnFreeEntPrivateData(edict_t pEnt);
 extern void mm_GameShutdown(void);
 extern int mm_ShouldCollide(edict_t *pentTouched, edict_t *pentOther);
+extern void mm_CvarValue(const edict_t *pEnt, const char *value);
 
 
 // Typedefs for the above functions:
@@ -180,5 +181,7 @@ typedef int (*FN_ALLOWLAGCOMPENSATION) ( void );
 typedef void (*FN_ONFREEENTPRIVATEDATA) (edict_t *pEnt);
 typedef void (*FN_GAMESHUTDOWN) (void);
 typedef int (*FN_SHOULDCOLLIDE) (edict_t *pentTouched, edict_t *pentOther);
+//Added 2005/08/11 (no SDK update)
+typedef void (*FN_CVARVALUE)(const edict_t *pEnt, const char *value);
 
 #endif /* DLLAPI_H */

@@ -52,8 +52,8 @@ see Adding game support.
 | Day of Defeat                  | v1.0     | 2003/  | [ents] |          |
 | (www.dayofdefeatmod.com/)      |          | 05/03  |        |          |
 |--------------------------------+----------+--------+--------+----------|
-| Digital Paintball              | v1.0     | 2002/  | [ents] |          |
-| (www.digitalpaintball.net/)    |          | 10/06  |        |          |
+| Digital Paintball              | v2.2     | 2005/  | [ents] |          |
+| (www.digitalpaintball.net/)    |          | 06/12  |        |          |
 |--------------------------------+----------+--------+--------+----------|
 | Dragon Mod Z (dmz.flagrun.net  | v1.7     | 2002/  | [ents] |          |
 | /)                             |          | 10/06  |        |          |
@@ -64,8 +64,8 @@ see Adding game support.
 | Existence                      | Beta 1.3 | 2001/  | [ents] |          |
 | (www.whatisexistence.com/)     |          | 09/19  |        |          |
 |--------------------------------+----------+--------+--------+----------|
-| Firearms (www.firearmsmod.com  | v2.7     | 2003/  | [ents] |          |
-| /)                             |          | 03/24  |        |          |
+| Firearms (www.firearmsmod.com  | v3.0     | 2005/  | [ents] |          |
+| /)                             |          | 05/09  |        |          |
 |--------------------------------+----------+--------+--------+----------|
 | Retro Firearms                 | v2.5     | 2002/  | [ents] |          |
 | (www.firearms25mod.tk/)        |          | 01/11  |        |          |

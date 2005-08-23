@@ -269,6 +269,8 @@ extern int mm_GetTimesTutorMessageShown(int mid);
 extern void mm_ProcessTutorMessageDecayBuffer(int *buffer, int bufferLength);
 extern void mm_ConstructTutorMessageDecayBuffer(int *buffer, int bufferLength);
 extern void mm_ResetTutorMessageDecayData(void);
+//Added 2005/08/11 (no SDK update)
+extern void mm_QueryClientCvarValue(const edict_t *pEdict, const char *cvarName);
 
 
 // Typedefs for the above functions:
@@ -445,5 +447,7 @@ typedef int (*FN_GETTIMESTUTORMESSAGESHOWN) (int mid);
 typedef void (*FN_PROCESSTUTORMESSAGEDECAYBUFFER) (int *buffer, int bufferLength);
 typedef void (*FN_CONSTRUCTTUTORMESSAGEDECAYBUFFER) (int *buffer, int bufferLength);
 typedef void (*FN_RESETTUTORMESSAGEDECAYDATA) (void);
+//Added 2005/08/11 (no SDK update)
+typedef void (*FN_QUERYCLIENTCVARVALUE)(const edict_t *pEdict, const char *cvarName);
 
 #endif /* ENGINE_API_H */

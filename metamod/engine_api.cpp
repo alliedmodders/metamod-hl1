@@ -452,6 +452,9 @@ int mm_RegUserMsg(const char *pszName, int iSize) {
 	META_ENGINE_HANDLE(int, 0, FN_REGUSERMSG, pfnRegUserMsg, (pszName, iSize));
 	// Expand the macro, since we need to do extra work.
 	/// RETURN_API()
+	if (--CALL_API_count>0)
+		/*Restore backup*/
+		PublicMetaGlobals = backup_meta_globals;
 	if(status==MRES_OVERRIDE) {
 		META_DEBUG(loglevel, ("Returning (override) %s()", pfn_string));
 		imsgid=override_ret;
@@ -860,6 +863,19 @@ void mm_ResetTutorMessageDecayData(void) {
 	RETURN_API_void()
 }
 
+//Added 2005/08/11 (no SDK update)
+void mm_QueryClientCvarValue(const edict_t *pEdict, const char *cvarName)
+{
+	//Engine version didn't change when this API was added.  Check if pointer is valid.
+	if (g_engfuncs.pfnQueryClientCvarValue && 
+		!IS_VALID_PTR((void *)g_engfuncs.pfnQueryClientCvarValue))
+		g_engfuncs.pfnQueryClientCvarValue = 0;
+
+	g_Players.set_player_cvar_query(pEdict, cvarName);
+
+	META_ENGINE_HANDLE_void(FN_QUERYCLIENTCVARVALUE, pfnQueryClientCvarValue, (pEdict, cvarName));
+	RETURN_API_void();
+}
 
 enginefuncs_t meta_engfuncs = {
 	mm_PrecacheModel,			// pfnPrecacheModel()
@@ -1064,4 +1080,9 @@ enginefuncs_t meta_engfuncs = {
 	mm_ProcessTutorMessageDecayBuffer,	// pfnProcessTutorMessageDecayBuffer()
 	mm_ConstructTutorMessageDecayBuffer,	// pfnConstructTutorMessageDecayBuffer()
 	mm_ResetTutorMessageDecayData,		// pfnResetTutorMessageDecayData()
+
+	//Added 2005/08/11 (no SDK update)
+	mm_QueryClientCvarValue,		// pfnQueryClientCvarValue()
 };
+
+

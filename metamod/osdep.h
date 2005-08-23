@@ -47,6 +47,8 @@
 #include "mreg.h"			// REG_CMD_FN, etc
 #include "log_meta.h"		// LOG_ERROR, etc
 
+extern mBOOL dlclose_handle_invalid;
+
 // String describing platform/DLL-type, for matching lines in plugins.ini.
 #ifdef linux
 	#define PLATFORM		"linux"
@@ -127,9 +129,16 @@
 		return(dlsym(handle, string));
 	}
 	inline int DLCLOSE(DLHANDLE handle) {
+		if (!handle) {
+			dlclose_handle_invalid = mTRUE;
+			return(1);
+		}
+		dlclose_handle_invalid = mFALSE;
 		return(dlclose(handle));
 	}
 	inline char* DLERROR(void) {
+		if (dlclose_handle_invalid)
+			return("Invalid handle.");
 		return(dlerror());
 	}
 #elif defined(_WIN32)
@@ -142,6 +151,11 @@
 		return(GetProcAddress(handle, string));
 	}
 	inline int DLCLOSE(DLHANDLE handle) {
+		if (!handle) {
+			dlclose_handle_invalid = mTRUE;
+			return(1);
+		}
+		dlclose_handle_invalid = mFALSE;
 		// NOTE: Windows FreeLibrary returns success=nonzero, fail=zero,
 		// which is the opposite of the unix convention, thus the '!'.
 		return(!FreeLibrary(handle));
@@ -150,6 +164,8 @@
 	// we make our own.
 	char *str_GetLastError(void);
 	inline char* DLERROR(void) {
+		if (dlclose_handle_invalid)
+			return("Invalid handle.");
 		return(str_GetLastError());
 	}
 #endif /* _WIN32 */

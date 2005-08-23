@@ -167,6 +167,7 @@
    <li><a href=#ProcessTutorMessageDecayBuffer>ProcessTutorMessageDecayBuffer</a>
    <li><a href=#ConstructTutorMessageDecayBuffer>ConstructTutorMessageDecayBuffer</a>
    <li><a href=#ResetTutorMessageDecayData>ResetTutorMessageDecayData</a>
+   <li><a href=#QueryClientCvar>QueryClientCvar</a>
 </ul>
 
 <hr><h3><tt><a name="PrecacheModel">PrecacheModel</a></tt></h3>
@@ -1695,6 +1696,18 @@ int *picked);</tt>
 <p><i>comments:</i><br>
 <blockquote>
 	Added for HL 1xxx; no SDK update.  
+</blockquote>
+
+<hr><h3><tt><a name="QueryClientCvar">QueryClientCvar</a></tt></h3>
+<dd><tt>void (*pfnQueryClientCvarValue)( const edict_t *player, const char *cvarName );</tt><p>
+<i>from alfred@valvesoftware.com, via HLCoders</i><br>
+<blockquote><tt>
+Calling this function requests the value of cvarName from player. The
+result is returned via a callback from NEW_DLL_FUNCTIONS.
+</tt></blockquote>
+<p><i>comments:</i><br>
+<blockquote>
+	Added 2005/08/11, no SDK update.
 </blockquote>
 
 

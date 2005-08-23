@@ -43,6 +43,7 @@
 #include "conf_meta.h"			// MConfig
 #include "osdep.h"				// NAME_MAX, etc
 #include "types_meta.h"			// mBOOL
+#include "mplayer.h"			// MPlayerList
 
 // file that lists plugins to load at startup
 #define PLUGINS_INI			"addons/metamod/plugins.ini"
@@ -57,6 +58,7 @@
 
 // generic config file
 #define CONFIG_INI			"addons/metamod/config.ini"
+
 
 // cvar to contain version
 extern cvar_t meta_version;
@@ -114,6 +116,20 @@ extern MHookList *Hooks;
 // See meta_api.h for meta_globals_t structure.
 extern meta_globals_t PublicMetaGlobals;
 extern meta_globals_t PrivateMetaGlobals;
+
+// (patch by hullu)
+// Safety check for metamod-bot-plugin bugfix.
+//  engine_api->pfnRunPlayerMove calls dllapi-functions before it returns.
+//  This causes problems with bots running as metamod plugins, because
+//  metamod assumed that PublicMetaGlobals is free to be used.
+//  With call_count we can fix this by backuping up PublicMetaGlobals if 
+//  it's already being used.
+extern unsigned int CALL_API_count;
+
+// (patch by BAILOPAN)
+// Holds cached player info, right now only things for querying cvars
+// Max players is always 32, small enough that we can use a static array
+extern MPlayerList g_Players;
 
 void metamod_startup(void);
 
@@ -185,7 +201,11 @@ mBOOL meta_load_gamedll(void);
 	FN_TYPE pfn_routine=NULL; \
 	int loglevel=api_info_table.pfnName.loglevel; \
 	char *pfn_string=api_info_table.pfnName.name; \
-	memset(&PublicMetaGlobals, 0, sizeof(PublicMetaGlobals));
+	meta_globals_t backup_meta_globals; \
+	/* fix bug with metamod-bot-plugins (hullu)*/ \
+	if (CALL_API_count++>0) \
+		/* backup publicmetaglobals */ \
+		backup_meta_globals = PublicMetaGlobals;
 
 // call each plugin
 #define CALL_PLUGIN_API_void(post, pfnName, pfn_args, api_table) \
@@ -219,6 +239,7 @@ mBOOL meta_load_gamedll(void);
 
 // call "real" function, from gamedll
 #define CALL_GAME_API_void(pfnName, pfn_args, api_table) \
+	CALL_API_count--; \
 	if(status==MRES_SUPERCEDE) { \
 		META_DEBUG(loglevel, ("Skipped (supercede) %s:%s()", GameDLL.file, pfn_string)); \
 		/* don't return here; superceded game routine, but still allow \
@@ -226,8 +247,7 @@ mBOOL meta_load_gamedll(void);
 		 */ \
 	} \
 	else if(GameDLL.funcs.api_table) { \
-		pfn_routine=NULL; \
-		if(GameDLL.funcs.api_table && (pfn_routine=GameDLL.funcs.api_table->pfnName)); \
+		pfn_routine=GameDLL.funcs.api_table->pfnName; \
 		if(pfn_routine) { \
 			META_DEBUG(loglevel, ("Calling %s:%s()", GameDLL.file, pfn_string)); \
 			pfn_routine pfn_args; \
@@ -240,10 +260,12 @@ mBOOL meta_load_gamedll(void);
 	} \
 	else { \
 		META_DEBUG(loglevel, ("No api table defined for api call: %s:%s", GameDLL.file, pfn_string)); \
-	}
+	} \
+	CALL_API_count++;
 
 // call "real" function, from engine
 #define CALL_ENGINE_API_void(pfnName, pfn_args) \
+	CALL_API_count--; \
 	if(status==MRES_SUPERCEDE) { \
 		META_DEBUG(loglevel, ("Skipped (supercede) engine:%s()", pfn_string)); \
 		/* don't return here; superceded game routine, but still allow \
@@ -251,7 +273,6 @@ mBOOL meta_load_gamedll(void);
 		 */ \
 	} \
 	else { \
-		pfn_routine=NULL; \
 		pfn_routine=Engine.funcs->pfnName; \
 		if(pfn_routine) { \
 			META_DEBUG(loglevel, ("Calling engine:%s()", pfn_string)); \
@@ -261,10 +282,14 @@ mBOOL meta_load_gamedll(void);
 			META_ERROR("Couldn't find api call: engine:%s", pfn_string); \
 			status=MRES_UNSET; \
 		} \
-	}
+	} \
+	CALL_API_count++;
 
 // return (void)
 #define RETURN_API_void() \
+	if (--CALL_API_count>0) \
+		/*restore backup*/ \
+		PublicMetaGlobals = backup_meta_globals; \
 	return;
 
 
@@ -283,7 +308,11 @@ mBOOL meta_load_gamedll(void);
 	FN_TYPE pfn_routine=NULL; \
 	int loglevel=api_info_table.pfnName.loglevel; \
 	char *pfn_string=api_info_table.pfnName.name; \
-	memset(&PublicMetaGlobals, 0, sizeof(PublicMetaGlobals));
+	meta_globals_t backup_meta_globals; \
+	/*Fix bug with metamod-bot-plugins*/ \
+	if (CALL_API_count++>0) \
+		/*Backup PublicMetaGlobals*/ \
+		backup_meta_globals = PublicMetaGlobals;
 
 // call each plugin
 #define CALL_PLUGIN_API(post, ret_init, pfnName, pfn_args, MRES_TYPE, api_table) \
@@ -326,6 +355,7 @@ mBOOL meta_load_gamedll(void);
 
 // call "real" function, from gamedll
 #define CALL_GAME_API(pfnName, pfn_args, api_table) \
+	CALL_API_count--; \
 	if(status==MRES_SUPERCEDE) { \
 		META_DEBUG(loglevel, ("Skipped (supercede) %s:%s()", GameDLL.file, pfn_string)); \
 		orig_ret = pub_orig_ret = override_ret; \
@@ -335,8 +365,7 @@ mBOOL meta_load_gamedll(void);
 		 */ \
 	} \
 	else if(GameDLL.funcs.api_table) { \
-		pfn_routine=NULL; \
-		if(GameDLL.funcs.api_table && (pfn_routine=GameDLL.funcs.api_table->pfnName)); \
+		pfn_routine=GameDLL.funcs.api_table->pfnName; \
 		if(pfn_routine) { \
 			META_DEBUG(loglevel, ("Calling %s:%s()", GameDLL.file, pfn_string)); \
 			dllret=pfn_routine pfn_args; \
@@ -350,10 +379,12 @@ mBOOL meta_load_gamedll(void);
 	} \
 	else { \
 		META_DEBUG(loglevel, ("No api table defined for api call: %s:%s", GameDLL.file, pfn_string)); \
-	}
+	} \
+	CALL_API_count++;
 
 // call "real" function, from engine
 #define CALL_ENGINE_API(pfnName, pfn_args) \
+	CALL_API_count--; \
 	if(status==MRES_SUPERCEDE) { \
 		META_DEBUG(loglevel, ("Skipped (supercede) engine:%s()", pfn_string)); \
 		orig_ret = pub_orig_ret = override_ret; \
@@ -363,7 +394,6 @@ mBOOL meta_load_gamedll(void);
 		 */ \
 	} \
 	else { \
-		pfn_routine=NULL; \
 		pfn_routine=Engine.funcs->pfnName; \
 		if(pfn_routine) { \
 			META_DEBUG(loglevel, ("Calling engine:%s()", pfn_string)); \
@@ -374,10 +404,14 @@ mBOOL meta_load_gamedll(void);
 			META_ERROR("Couldn't find api call: engine:%s", pfn_string); \
 			status=MRES_UNSET; \
 		} \
-	}
+	} \
+	CALL_API_count++;
 
 // return a value
 #define RETURN_API() \
+	if (--CALL_API_count>0) \
+		/*Restore backup*/ \
+		PublicMetaGlobals = backup_meta_globals; \
 	if(status==MRES_OVERRIDE) { \
 		META_DEBUG(loglevel, ("Returning (override) %s()", pfn_string)); \
 		return(override_ret); \

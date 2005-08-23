@@ -61,6 +61,8 @@
 #include "types_meta.h"		// mBOOL
 #include "support_meta.h"	// MAX_STRBUF_LEN
 
+mBOOL dlclose_handle_invalid;
+
 // To keep the rest of the sources clean and keep not only OS but also
 // compiler dependant differences in this file, we define a local function
 // to set the new handler.
@@ -72,9 +74,6 @@ void mm_set_new_handler( void )
     std::set_new_handler(meta_new_handler);
 #endif
 }
-
-
-
 
 #ifdef _WIN32
 // Since windows doesn't provide a verison of strtok_r(), we include one

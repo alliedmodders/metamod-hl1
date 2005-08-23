@@ -48,7 +48,7 @@
 #include "sdk_util.h"		// REG_SVR_COMMAND, etc
 
 #include "reg_support.h"	// me
-#include "metamod.h"		// RegCmds, etc
+#include "metamod.h"		// RegCmds, g_Players, etc
 #include "log_meta.h"		// META_ERROR, etc
 
 // "Register" support.
@@ -237,3 +237,13 @@ int meta_RegUserMsg(const char *pszName, int iSize) {
 	cp=strdup(pszName);
 	return(REG_USER_MSG(cp, iSize));
 }
+
+// Intercept and record queries
+void meta_QueryClientCvarValue(const edict_t *player, const char *cvarName)
+{
+	g_Players.set_player_cvar_query(player, cvarName);
+
+	(*g_engfuncs.pfnQueryClientCvarValue)(player, cvarName);
+}
+
+

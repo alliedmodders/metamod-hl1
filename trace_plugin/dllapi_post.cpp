@@ -277,6 +277,12 @@ int ShouldCollide_Post(edict_t *pentTouched, edict_t *pentOther) {
 	RETURN_META_VALUE(MRES_IGNORED, 1);
 }
 
+void CvarValue_Post(const edict_t *pEdict, const char *szValue)
+{
+	NEWDLL_TRACE(pfnCvarValue, P_POST, (""));
+	RETURN_META(MRES_IGNORED);
+}
+
 
 // from SDK dlls/cbase.cpp:
 // (wd) indicates my comments on the functions
@@ -382,6 +388,7 @@ static NEW_DLL_FUNCTIONS gNewFunctionTable_Post =
 	OnFreeEntPrivateData_Post,		//! pfnOnFreeEntPrivateData()	Called right before the object's memory is freed.  Calls its destructor.
 	GameShutdown_Post,				//! pfnGameShutdown()
 	ShouldCollide_Post,				//! pfnShouldCollide()
+	CvarValue_Post,					//! pfnCvarValue()
 };
 
 C_DLLEXPORT int GetNewDLLFunctions_Post( NEW_DLL_FUNCTIONS *pNewFunctionTable, int *interfaceVersion ) 

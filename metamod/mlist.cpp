@@ -62,6 +62,25 @@ MPluginList::MPluginList(const char *ifile)
 	endlist=0;
 }
 
+// Find a plugin based on the plugin handle.
+// meta_errno values:
+//  - ME_ARGUMENT	invalid pindex
+//  - ME_NOTFOUND	couldn't find a matching plugin
+MPlugin *MPluginList::find(DLHANDLE handle)
+{
+	int i;
+
+	if(!handle)
+		RETURN_ERRNO(NULL, ME_ARGUMENT);
+	for(i=0; i < endlist; i++) {
+		if(plist[i].status < PL_VALID)
+			continue;
+		if(plist[i].handle == handle)
+			return(&plist[i]);
+	}
+	RETURN_ERRNO(NULL, ME_NOTFOUND);
+}
+
 // Find a plugin based on the plugin index #.
 // meta_errno values:
 //  - ME_ARGUMENT	invalid pindex
@@ -221,6 +240,64 @@ MPlugin *MPluginList::find_match(MPlugin *pmatch) {
 		RETURN_ERRNO(NULL, ME_NOTFOUND);
 }
 
+MPlugin * MPluginList::plugin_addload(plid_t plid, const char *fname, PLUG_LOADTIME now)
+{
+	MPlugin pl_temp;
+	MPlugin *pl_found, *pl_added, *pl_loader;
+
+	if ( !(pl_loader=find(plid)) )
+	{
+		META_DEBUG(1, ("Couldn't find plugin that gave this loading request!"));
+		RETURN_ERRNO(NULL, ME_BADREQ);
+	}
+
+	memset(&pl_temp, 0, sizeof(pl_temp));
+
+	if (!pl_temp.plugin_parseline(fname, pl_loader->index))
+	{
+		RETURN_ERRNO(NULL, ME_NOTFOUND);
+	}
+
+	if (pl_temp.resolve() != mTRUE)
+	{
+		META_DEBUG(1, ("Couldn't resolve given path into a file: %s", pl_temp.file));
+		RETURN_ERRNO(NULL, ME_NOTFOUND);
+	}
+
+	if ( (pl_found=find(pl_temp.pathname)) )
+	{
+		META_DEBUG(1, ("Plugin '%s' already in current list; file=%s desc='%s'", 
+				pl_temp.file, pl_found->file, pl_found->desc));
+		RETURN_ERRNO(NULL, ME_ALREADY);
+	}
+
+	if (!(pl_added=add(&pl_temp)))
+	{
+		META_DEBUG(1, ("Couldn't add plugin '%s' to list; see log", pl_temp.desc));
+		return NULL;
+	}
+
+	pl_added->action = PA_LOAD;
+	if (!pl_added->load(now))
+	{
+		if (meta_errno==ME_NOTALLOWED || meta_errno==ME_DELAYED)
+		{
+			META_DEBUG(1, ("Plugin '%s' couldn't attach; only allowed %s", 
+					pl_added->desc, pl_added->str_loadable(SL_ALLOWED)));
+			pl_added->clear();
+		} else if (pl_added->status == PL_OPENED) {
+			META_DEBUG(1, ("Opened plugin '%s', but failed to attach; see log", pl_added->desc));
+		} else {
+			META_DEBUG(1, ("Couldn't load plugin '%s'; see log", pl_added->desc));
+		}
+		return NULL;
+	}
+
+	META_DEBUG(1, ("Loaded plugin '%s' successfully", pl_added->desc));
+	meta_errno = ME_NOERROR;
+
+	return pl_added;
+}
 
 // Add a plugin to the list.
 // meta_errno values:
@@ -259,7 +336,9 @@ MPlugin *MPluginList::add(MPlugin *padd) {
 	// copy source
 	iplug->source=padd->source;
 	// copy status
-	iplug->status=padd->status;
+	iplug->status=padd->status;	
+	//copy other things
+	iplug->source_plugin_index = padd->source_plugin_index;
 
 	return(iplug);
 }
@@ -519,12 +598,12 @@ mBOOL MPluginList::cmd_addload(const char *args) {
 			META_CONS("Opened plugin '%s', but failed to attach; see log", pl_added->desc);
 		else
 			META_CONS("Couldn't load plugin '%s'; see log", pl_added->desc);
-		show();
+		show(0);
 		// meta_errno should be already set in load()
 		return(mFALSE);
 	}
 	META_CONS("Loaded plugin '%s' successfully", pl_added->desc);
-	show();
+	show(0);
 	return(mTRUE);
 }
 
@@ -597,7 +676,7 @@ mBOOL MPluginList::refresh(PLUG_LOADTIME now) {
 				if(iplug->source==PS_INI && iplug->status >= PL_RUNNING) {
 					META_DEBUG(1, ("Unloading plugin '%s'", iplug->desc));
 					iplug->action=PA_UNLOAD;
-					if(iplug->unload(now, PNL_INI_DELETED))
+					if(iplug->unload(now, PNL_INI_DELETED, PNL_INI_DELETED))
 						nunloaded++;
 					else if(meta_errno==ME_DELAYED)
 						ndelayed++;
@@ -663,12 +742,16 @@ void MPluginList::retry_all(PLUG_LOADTIME now) {
 // List plugins and information about them in a formatted table.
 // meta_errno values:
 //  - none
-void MPluginList::show() {
+void MPluginList::show(int source_index) {
 	int i, n=0, r=0;
 	MPlugin *pl;
 	char desc[15+1], file[16+1], vers[7+1];		// plus 1 for term null
 
-	META_CONS("Currently loaded plugins:");
+	if (source_index <= 0)
+		META_CONS("Currently loaded plugins:");
+	else
+		META_CONS("Child plugins:");
+
 	META_CONS("  %*s  %-*s  %-4s %-4s  %-*s  v%-*s  %-3s  %-5s %-5s",
 			WIDTH_MAX_PLUGINS, "",
 			sizeof(desc)-1, "description",
@@ -678,6 +761,8 @@ void MPluginList::show() {
 	for(i=0; i < endlist; i++) {
 		pl=&plist[i];
 		if(pl->status < PL_VALID)
+			continue;
+		if ((source_index > 0) && (pl->source_plugin_index != source_index))
 			continue;
 		STRNCPY(desc, pl->desc, sizeof(desc));
 		STRNCPY(file, pl->file, sizeof(file));
@@ -722,4 +807,38 @@ void MPluginList::show_client(edict_t *pEntity) {
 				pl->info->url ? pl->info->url : "<unknown>");
 	}
 	META_CLIENT(pEntity, "%d plugins", n);
+}
+
+mBOOL MPluginList::found_child_plugins(int source_index)
+{
+	int i;
+
+	if (source_index <= 0)
+		return mFALSE;
+
+	for (i=0; i<endlist; i++)
+	{
+		if (plist[i].status < PL_VALID)
+			continue;
+		if (plist[i].source_plugin_index == source_index)
+			return mTRUE;
+	}
+
+	return mFALSE;
+}
+
+void MPluginList::clear_source_plugin_index(int source_index)
+{
+	int i;
+
+	if (source_index <= 0)
+		return;
+
+	for (i=0; i<endlist; i++)
+	{
+		if (plist[i].status < PL_VALID)
+			continue;
+		if (plist[i].source_plugin_index == source_index)
+			plist[i].source_plugin_index = -1;
+	}
 }

@@ -352,6 +352,28 @@ in the future this could change to some other identifier.)
 	The returned string is a pointer to a static buffer, and should be
 	copied by the caller to local storage.
 	<i>[added in 1.14]</i>
+<a name="LOAD_PLUGIN"><p><li></a>
+<tt> int <b>LOAD_PLUGIN(PLID, <i>const char *name, PLUG_LOADTIME now, void **handle</i>)</b></tt>
+    <br>Attempts to load a plugin as if "meta load &lt;name&gt;" was passed.  If
+	handle is passed, it will be NULL on failure or contain the DLL handle on success.  
+	Returns 0 for success, non-zero Metamod error value for failure.  
+	<i>[added in 1.18]</i>
+<a name="UNLOAD_PLUGIN"><p><li></a>
+<tt> int <b>UNLOAD_PLUGIN(PLID, <i>const char *name, PLUG_LOADTIME now, PL_UNLOAD_REASON reason</i>)</b></tt>
+	<br>Attempts to unload a plugin given by name.  A plugin cannot unload itself.
+	Returns 0 for success, non-zero Metamod error value for failure.  
+	<i>[added in 1.18]</i>
+<a name="UNLOAD_PLUGIN_BY_HANDLE"><p><li></a>
+<tt> int <b>UNLOAD_PLUGIN_BY_HANDLE(PLID, <i>void *handle, PLUG_LOADTIME now, PL_UNLOAD_REASON reason</i>)</b></tt>
+	<br>Attempts to unload a plugin given by the DLL handle from LOAD_PLUGIN.  A plugin cannot unload itself.
+	Returns 0 for success, non-zero Metamod error value for failure.  
+	<i>[added in 1.18]</i>
+<a name="IS_QUERYING_CLIENT_CVAR"><p><li></a>
+<tt> const char *<b>IS_QUERYING_CLIENT_CVAR(PLID, <i>const edict_t
+*player</i>)</b></tt>
+	<br>Returns the current cvar name that a client is being queried for,
+	NULL if no queries are in session.
+	<i>[added in 1.18]</i>
 </ul>
 
 <p><br>

@@ -403,7 +403,6 @@ void *GetModelPtr_Post(edict_t *pEdict) {
 }
 
 int RegUserMsg_Post(const char *pszName, int iSize) {
-	int ret;
 	ENGINE_TRACE(pfnRegUserMsg, P_POST, ("msg=%s, id=%d, size=%d", 
 				pszName, META_RESULT_ORIG_RET(int), iSize));
 	RETURN_META_VALUE(MRES_IGNORED, 0);
@@ -838,6 +837,14 @@ void ResetTutorMessageDecayData_Post(void) {
 	RETURN_META(MRES_IGNORED);
 }
 
+// Added 2005/08/11 (no SDK update):
+
+void QueryClientCvarValue_Post(const edict_t *pEdict, const char *cvar) {
+	// trace output in Post
+	ENGINE_TRACE(pfnQueryClientCvarValue, P_POST, ("queried=%s",cvar?cvar:"nil"));
+	RETURN_META(MRES_IGNORED);
+}
+
 enginefuncs_t meta_engfuncs_post = {
 	PrecacheModel_Post,			// pfnPrecacheModel()
 	PrecacheSound_Post,			// pfnPrecacheSound()
@@ -1041,6 +1048,7 @@ enginefuncs_t meta_engfuncs_post = {
 	ProcessTutorMessageDecayBuffer_Post,	// pfnProcessTutorMessageDecayBuffer()
 	ConstructTutorMessageDecayBuffer_Post,	// pfnConstructTutorMessageDecayBuffer()
 	ResetTutorMessageDecayData_Post,		// pfnResetTutorMessageDecayData()
+	QueryClientCvarValue_Post,			// pfnQueryClientCvarValue()
 };
 
 C_DLLEXPORT int GetEngineFunctions_Post(enginefuncs_t *pengfuncsFromEngine, int *interfaceVersion ) 

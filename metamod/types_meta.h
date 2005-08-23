@@ -68,6 +68,8 @@ typedef enum {
 	ME_DLMISSING,		// symbol missing in lib/dll
 	ME_DLERROR,			// some other error encountered calling functions from dll
 	ME_IFVERSION,		// incompatible interface version
+	ME_UNLOAD_UNLOADER,	// tried to unload unloader
+	ME_UNLOAD_SELF,		// tried to unload self
 } META_ERRNO;
 extern META_ERRNO meta_errno;
 

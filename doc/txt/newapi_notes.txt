@@ -6,6 +6,7 @@ HLSDK NEWAPI Notes
   - OnFreeEntPrivateData
   - GameShutdown
   - ShouldCollide
+  - CvarValue
 
 NOTE: No examples of these found in SDK...
 
@@ -51,5 +52,23 @@ comments:
     Mugsy from DoD indicates that the return value for normal operation is
     1.
     Added in SDK 2.0.
+
+--------------------------------------------------------------------------
+
+CvarValue
+
+void (*pfnCvarValue)( const edict_t *pEnt, const char *value );
+
+from alfred@valvesoftware.com, via HLCoders:
+
+    When the client responds to the cvar request you will get a callback
+    to pfnCvarValue() with the edict of the player who is responding and
+    the cvars values.
+
+comments:
+
+    This API can lead to conflicts when you query more than one cvar from
+    a player at a time. Use IS_QUERYING_CLIENT_CVAR to check if another
+    plugin is querying before you do so.
 
 --------------------------------------------------------------------------

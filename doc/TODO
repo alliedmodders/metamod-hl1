@@ -24,6 +24,14 @@
 	- is_ingame
  - find some way to generally allow plugins to use LINK_ENTITY_TO_CLASS,
    without requiring explicit support in metamod
+ - plugin reloading on mapchange may not work properly in all situations.
+   recheck the state machine.
+ - replace macros with templates?
+ - advanced handling of QueryClientCvarValue API, serializing queries in
+   a queue and using a timeout to account for dropped packets.
+ - fix unloading gamedll when we get unloaded.
+ - add lin32/64 description and examples to plugins.ini as well as
+   "require" description and example to config.ini.
 
  x fix stat()-related code for linux only
  x remake MSVC project

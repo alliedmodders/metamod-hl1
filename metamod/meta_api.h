@@ -59,22 +59,14 @@
 // Version 5:8	added GetPluginPath [v1.11]
 // Version 5:9	added GetGameInfo [v1.14]
 // Version 5:10 added GINFO_REALDLL_FULLPATH for GetGameInfo [v1.17]
-#define META_INTERFACE_VERSION "5:10"
+// Version 5:11 added plugin loading and unloading API [v1.18]
+// Version 5:12 added util code for checking player query status [v1.18]
+#define META_INTERFACE_VERSION "5:12"
 
 #ifdef UNFINISHED
 // Version 5:99	added event hook utility functions [v.???]
 #define META_INTERFACE_VERSION "5:99"
 #endif /* UNFINISHED */
-
-// Flags to indicate why the plugin is being unloaded.
-typedef enum {
-	PNL_NULL = 0,
-	PNL_INI_DELETED,		// was deleted from plugins.ini
-	PNL_FILE_NEWER,			// file on disk is newer than last load
-	PNL_COMMAND,			// requested by server/console command
-	PNL_CMD_FORCED,			// forced by server/console command
-	PNL_DELAYED,			// delayed from previous request; can't tell origin
-} PL_UNLOAD_REASON;
 
 // Flags returned by a plugin's api function.
 // NOTE: order is crucial, as greater/less comparisons are made.
@@ -238,5 +230,6 @@ C_DLLEXPORT int GetEngineFunctions_Post(enginefuncs_t *pengfuncsFromEngine,
 #define MNEW_OnFreeEntPrivateData		MNEW_FUNC->pfnOnFreeEntPrivateData
 #define MNEW_GameShutdown				MNEW_FUNC->pfnGameShutdown
 #define MNEW_ShouldCollide				MNEW_FUNC->pfnShouldCollide
+#define MNEW_CvarValue					MNEW_FUNC->pfnCvarValue
 
 #endif /* META_API_H */

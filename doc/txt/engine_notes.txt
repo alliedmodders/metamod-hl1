@@ -158,6 +158,7 @@ HLSDK Engine Notes
   - ProcessTutorMessageDecayBuffer
   - ConstructTutorMessageDecayBuffer
   - ResetTutorMessageDecayData
+  - QueryClientCvar
 
 --------------------------------------------------------------------------
 
@@ -333,8 +334,8 @@ comments:
 FindEntityByString
 
 from engine/eiface.h:
-edict_t *FindEntityByString(edict_t *pEdictStartSearchAfter, const char *
-pszField, const char *pszValue);
+edict_t *FindEntityByString(edict_t *pEdictStartSearchAfter, const char
+*pszField, const char *pszValue);
 FIND_ENTITY_BY_STRING()
 
 comments:
@@ -358,8 +359,8 @@ comments:
 FindEntityInSphere
 
 from engine/eiface.h:
-edict_t *FindEntityInSphere(edict_t *pEdictStartSearchAfter, const float *
-org, float rad);
+edict_t *FindEntityInSphere(edict_t *pEdictStartSearchAfter, const float
+*org, float rad);
 FIND_ENTITY_IN_SPHERE()
 
 comments:
@@ -975,8 +976,10 @@ comments:
 
     Returns a pointer to the base class type of the given edict. For
     instance:
+
         CBaseEntity *pPlayer=(CBaseEntity *)GET_PRIVATE(pEntity);
-        
+
+
 
 --------------------------------------------------------------------------
 
@@ -1156,7 +1159,7 @@ comments:
     GameDLL, and returns a pointer to said function (much like unix dlsym
     or win32 GetProcAddress?). This appears to be used in GameDLL code for
     loading savegames, as the savegames contain names of exported
-    functions in the GameDLL. Basically, this is the opposite of 
+    functions in the GameDLL. Basically, this is the opposite of
     NameForFunction.
 
 --------------------------------------------------------------------------
@@ -1216,7 +1219,7 @@ comments:
 
     Returns the arguments for a command, as a single string. The command
     string itself is not included, and must be queried with CMD_ARGV(0).
-    For use in DLLAPI ClientCommand, or in the function provided to 
+    For use in DLLAPI ClientCommand, or in the function provided to
     AddServerCommand.
 
 --------------------------------------------------------------------------
@@ -1249,8 +1252,8 @@ comments:
 GetAttachment
 
 from engine/eiface.h:
-void GetAttachment(const edict_t *pEdict, int iAttachment, float *
-rgflOrigin, float *rgflAngles);
+void GetAttachment(const edict_t *pEdict, int iAttachment, float
+*rgflOrigin, float *rgflAngles);
 GET_ATTACHMENT()
 
 comments:
@@ -1390,7 +1393,7 @@ FREE_FILE()
 
 comments:
 
-    Free the byte array of the given buffer which was returned by 
+    Free the byte array of the given buffer which was returned by
     LoadFileForMe.
 
 --------------------------------------------------------------------------
@@ -1431,7 +1434,7 @@ comments:
     Copies the pathname of the game directory into the given buffer. Note
     that there's no way to inform the engine how big the buffer is, so be
     forewarned.
-   
+
     Prior to HL 1.1.1.1 (CS 1.6), this gave the full pathname of the game
     directory, ie "/usr/local/half-life/cstrike" or "C:\Games\Half-Life\
     cstrike". Now, it is only the string passed to hlds as the argument to
@@ -1524,12 +1527,12 @@ comments:
     Returns the InfoKeyBuffer for the given edict. This is basically the
     fields from "setinfo" at the client console, and includes things like
     the player name.
-   
+
     The sourcecode comment ("passing in NULL gets the serverinfo") isn't
     entirely accurate. There appear to be two server-side info buffers
     available, "serverinfo" and "localinfo", both accessible from the
     console by those two commands, respectively.
-   
+
     Calling GetInfoKeyBuffer(NULL) will return the localinfo buffer.
     Calling GetInfoKeyBuffer(PEntityOfEntIndex(0)), ie passing the entity
     of slot 0, will return the serverinfo buffer.
@@ -1555,7 +1558,7 @@ void SetKeyValue(char *infobuffer, char *key, char *value);
 comments:
 
     Adds or sets a key/value pair in the given InfoKeyBuffer. Appears to
-    work for only server info, and not client info. For clients, use 
+    work for only server info, and not client info. For clients, use
     SetClientKeyValue.
 
 --------------------------------------------------------------------------
@@ -1633,9 +1636,9 @@ comments:
 BuildSoundMsg
 
 from engine/eiface.h:
-void BuildSoundMsg(edict_t *entity, int channel, const char *sample, /*int
-*/float volume, float attenuation, int fFlags, int pitch, int msg_dest,
-int msg_type, const float *pOrigin, edict_t *ed);
+void BuildSoundMsg(edict_t *entity, int channel, const char *sample, /
+*int*/float volume, float attenuation, int fFlags, int pitch, int
+msg_dest, int msg_type, const float *pOrigin, edict_t *ed);
 BUILD_SOUND_MSG()
 
 comments:
@@ -1911,8 +1914,8 @@ comments:
 CreateInstancedBaseline
 
 from engine/eiface.h:
-int CreateInstancedBaseline(int classname, struct entity_state_s *
-baseline);
+int CreateInstancedBaseline(int classname, struct entity_state_s
+*baseline);
 ENGINE_INSTANCE_BASELINE()
 
 comments:
@@ -1970,7 +1973,7 @@ comments:
 
     Registers a new server console command. When the given command string
     is typed at the console, the given function will be called. Arguments
-    for the command can be retrieved in the function with Cmd_Args, 
+    for the command can be retrieved in the function with Cmd_Args,
     Cmd_Argv, and Cmd_Argc.
 
 --------------------------------------------------------------------------
@@ -2014,7 +2017,7 @@ From Eric Smith <EricS@valvesoftware.com> on hlcoders
 
     The AuthID is a way for applications/mods to get the Authentication ID
     (uniqueID) for a player. The AuthID can be a WonID or a SteamID. The
-    function I've written returns the AuthID as a string. Calling 
+    function I've written returns the AuthID as a string. Calling
     GetPlayerWONId will still work for Non-Steam players just like it
     always has. If applications/mods want to get a jump start on getting
     ready to support Steam players, then they can start using
@@ -2028,8 +2031,8 @@ From Eric Smith <EricS@valvesoftware.com> on servertest:
     using Steam will still have WonIDs (just like they always have). The
     server now supports WonIDs\SteamIDs and banning using either of them.
     WonIDs have not changed. SteamIDs use the format: STEAM_<#>:<#> where
-    <#> is replaced by numbers. An example SteamID would be "STEAM_0:
-    94534".
+    <#> is replaced by numbers. An example SteamID would be
+    "STEAM_0:94534".
 
 From Eric Smith <EricS@valvesoftware.com> on hlcoders:
 (list.valvesoftware.com/pipermail/hlcoders/2002-April/002925.html)
@@ -2057,8 +2060,8 @@ comments:
 SequencePickSentence
 
 from engine/eiface.h:
-void *SequencePickSentence(const char *groupName, int pickMethod, int *
-picked);
+void *SequencePickSentence(const char *groupName, int pickMethod, int
+*picked);
 
 comments:
 
@@ -2162,5 +2165,21 @@ void ResetTutorMessageDecayData(void);
 comments:
 
     Added for HL 1xxx; no SDK update.
+
+--------------------------------------------------------------------------
+
+QueryClientCvar
+
+void (*pfnQueryClientCvarValue)( const edict_t *player, const char
+*cvarName );
+
+from alfred@valvesoftware.com, via HLCoders
+
+    Calling this function requests the value of cvarName from player. The
+    result is returned via a callback from NEW_DLL_FUNCTIONS.
+
+comments:
+
+    Added 2005/08/11, no SDK update.
 
 --------------------------------------------------------------------------

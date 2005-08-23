@@ -1,5 +1,21 @@
 # vim: set tw=75 ft=none :
 
+2005/08/24 1.18
+ - Added new API for loading/unloading plugins.
+ - Added IS_QUERYING_CLIENT_cVAR for new client cvar engine API.
+ - Added support for new HLSDK-API functions QueryClientCvarValue() and 
+   ClientCvar().
+ - Changed cmd_doplug() to make sure a complete string was not misinterpreted
+   as a number.
+ - Fixed DLCLOSE() to not accept NULL handles.
+ - Fixed a bug where API call wrappers were not saving global states.
+   (This caused problems mainly with bot plugins.)
+ - Fixed reloading failed plugins with "meta reload".
+ - Bumped internal API version to 5:12 (old plugins might ask to be updated).
+ - Commands "meta version" and "meta info" show ifvers for metamod/plugins.
+ - Added mod recognition for Digital Paintball 2.2.
+ - Added mod recognition for Firearms 3.0.
+
 2005/02/20 1.17.4
  - Added Mod recognition and entities for Brain Bread 1.2
  - Changed Mod recognition and added entities for Snow-War 2.0

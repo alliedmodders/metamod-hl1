@@ -239,6 +239,9 @@ enginefuncs_t meta_engfuncs =
 	NULL,						// pfnProcessTutorMessageDecayBuffer()
 	NULL,						// pfnConstructTutorMessageDecayBuffer()
 	NULL,						// pfnResetTutorMessageDecayData()
+
+	// Added Added 2005/08/11 (no SDK update)
+	NULL,						// pfnQueryClientCvarValue()
 };
 
 C_DLLEXPORT int GetEngineFunctions(enginefuncs_t *pengfuncsFromEngine, 

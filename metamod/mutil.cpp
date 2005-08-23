@@ -36,6 +36,7 @@
 
 #include <stdio.h>			// vsnprintf(), etc
 #include <stdarg.h>			// vs_start(), etc
+#include <stdlib.h>			// strtol()
 
 #include <extdll.h>			// always
 
@@ -287,6 +288,82 @@ const char *mutil_GetGameInfo(plid_t plid, ginfo_t type) {
 	return(buf);
 }
 
+int mutil_LoadMetaPlugin(plid_t plid, const char *fname, PLUG_LOADTIME now, void **plugin_handle)
+{
+	MPlugin *pl_loaded;
+	
+	if (NULL == fname)
+	{
+		return ME_ARGUMENT;
+	}
+
+	meta_errno = ME_NOERROR;
+	if (! (pl_loaded=Plugins->plugin_addload(plid, fname, now)) )
+	{
+		if (plugin_handle)
+			*plugin_handle = NULL;
+		return meta_errno;
+	} else {
+		if (plugin_handle)
+			*plugin_handle = (void *)pl_loaded->handle;
+		return 0;
+	}
+}
+
+int mutil_UnloadMetaPlugin(plid_t plid, const char *fname, PLUG_LOADTIME now, PL_UNLOAD_REASON reason)
+{
+	MPlugin *findp = NULL;
+	int pindex;
+	char* endptr;
+
+	if (NULL == fname)
+	{
+		return ME_ARGUMENT;
+	}
+
+	pindex = strtol(fname, &endptr, 10);
+	if (*fname != '\0' && *endptr == '\0')
+		findp = Plugins->find(pindex);
+	else
+		findp = Plugins->find_match(fname);
+
+	if (!findp)
+		return meta_errno;
+
+	meta_errno = ME_NOERROR;
+
+	if (findp->plugin_unload(plid, now, reason))
+		return 0;
+	
+	return meta_errno;
+}
+
+int mutil_UnloadMetaPluginByHandle(plid_t plid, void *plugin_handle, PLUG_LOADTIME now, PL_UNLOAD_REASON reason)
+{
+	MPlugin *findp;
+
+	if (NULL == plugin_handle)
+	{
+		return ME_ARGUMENT;
+	}
+
+	if (!(findp=Plugins->find((DLHANDLE)plugin_handle)))
+		return ME_NOTFOUND;
+	
+	meta_errno = ME_NOERROR;
+
+	if (findp->plugin_unload(plid, now, reason))
+		return 0;
+
+	return meta_errno;
+}
+
+const char *mutil_IsQueryingClientCvar(plid_t /*plid*/, const edict_t *pEdict)
+{
+	return g_Players.is_querying_cvar(pEdict);
+}
+
+
 #ifdef UNFINISHED
 int mutil_HookGameEvent(plid_t plid, game_event_t event, 
 		event_func_t pfnHandle) 
@@ -338,6 +415,10 @@ mutil_funcs_t MetaUtilFunctions = {
 	mutil_GetUserMsgName,	// pfnGetUserMsgName
 	mutil_GetPluginPath,	// pfnGetPluginPath
 	mutil_GetGameInfo,		// pfnGetGameInfo
+	mutil_LoadMetaPlugin,	// pfnLoadPlugin
+	mutil_UnloadMetaPlugin, // pfnUnloadPlugin
+	mutil_UnloadMetaPluginByHandle, //pfnUnloadPluginByHandle
+	mutil_IsQueryingClientCvar, //pfnIsQueryingClientCvar
 #ifdef UNFINISHED
 	mutil_HookGameEvent,	// pfnGameEvent
 	mutil_HookLogTrigger,	// pfnLogTrigger

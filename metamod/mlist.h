@@ -68,18 +68,23 @@ class MPluginList {
 		MPlugin *find_memloc(void *memptr);	// find by memory location
 		MPlugin *find_match(const char *prefix);	// find by partial prefix match
 		MPlugin *find_match(MPlugin *pmatch);	// find by platform_match()
+		MPlugin * find(DLHANDLE handle);		// find by handle
 		MPlugin *add(MPlugin *padd);
+
+		mBOOL found_child_plugins(int source_index);
 
 		mBOOL ini_startup(void);			// read inifile at startup
 		mBOOL ini_refresh(void);			// re-read inifile
 		mBOOL cmd_addload(const char *args);	// load from console command
+		MPlugin *plugin_addload(plid_t plid, const char *fname, PLUG_LOADTIME now); //load from plugin
 
 		mBOOL load(void);					// load the list, at startup
 		mBOOL refresh(PLUG_LOADTIME now);	// update from re-read inifile
 		void unpause_all(void);				// unpause any paused plugins
 		void retry_all(PLUG_LOADTIME now);	// retry any pending plugin actions
-		void show(void);					// list plugins to console
+		void show(int source_index);		// list plugins to console
 		void show_client(edict_t *pEntity);	// list plugins to player client
+		void clear_source_plugin_index(int source_index);
 };
 
 #endif /* MLIST_H */

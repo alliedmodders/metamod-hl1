@@ -416,6 +416,9 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath="..\mplayer.cpp">
+			</File>
+			<File
 				RelativePath="..\mplugin.cpp">
 				<FileConfiguration
 					Name="Debug|Win32">
@@ -653,9 +656,6 @@
 				RelativePath="..\h_export.h">
 			</File>
 			<File
-				RelativePath="..\info_name.h">
-			</File>
-			<File
 				RelativePath="..\linkent.h">
 			</File>
 			<File
@@ -672,6 +672,9 @@
 			</File>
 			<File
 				RelativePath="..\mlist.h">
+			</File>
+			<File
+				RelativePath="..\mplayer.h">
 			</File>
 			<File
 				RelativePath="..\mplugin.h">

@@ -130,6 +130,85 @@ mBOOL MPlugin::ini_parseline(char *line) {
 	return(mTRUE);
 }
 
+// Unload a plugin from plugin request
+// meta_errno values:
+//  - errno's from unload()
+mBOOL MPlugin::plugin_unload(plid_t plid, PLUG_LOADTIME now, PL_UNLOAD_REASON reason)
+{
+	PLUG_ACTION old_action;
+	MPlugin *pl_unloader;
+
+	if ( !(pl_unloader=Plugins->find(plid)) )
+	{
+		META_WARNING("dll: Not unloading plugin '%s'; plugin that requested unload is not found.", desc);
+		RETURN_ERRNO(mFALSE, ME_BADREQ);
+	} else if (pl_unloader->index == index) {
+		META_WARNING("dll: Not unloading plugin '%s'; Plugin tried to unload itself.", desc);
+		RETURN_ERRNO(mFALSE, ME_UNLOAD_SELF);
+	} else if (is_unloader) {
+		META_WARNING("dll: Not unloading plugin '%s'; Plugin is unloading plugin that tried to unload it.", desc);
+		RETURN_ERRNO(mFALSE, ME_UNLOAD_UNLOADER);
+	} else {
+		unloader_index = pl_unloader->index;
+	}
+
+	//block unloader from being unloaded by other plugin
+	pl_unloader->is_unloader = mTRUE;
+
+	//try unload
+	old_action = action;
+	action = PA_UNLOAD;
+	if (unload(now, reason, PNL_PLG_FORCED))
+	{
+		META_DEBUG(1,("Unloaded plugin '%s'", desc));
+		pl_unloader->is_unloader = mFALSE;
+		return mTRUE;
+	}
+
+	pl_unloader->is_unloader = mFALSE;
+
+	//can't unload plugin now, set delayed
+	if (meta_errno==ME_DELAYED)
+	{
+		action = old_action;
+		meta_errno = ME_NOTALLOWED;
+		META_DEBUG(2, ("dll: Failed unload plugin '%s'; can't detach now: allowed=%s; now=%s", desc, str_unloadable(), str_loadtime(PT_ANYTIME, SL_SIMPLE)));
+	}
+
+	return mFALSE;
+}
+
+// Parse a filename string from PEXT_LOAD_PLUGIN_BY_* function into a plugin.
+// meta_errno values:
+mBOOL MPlugin::plugin_parseline(const char *fname, int loader_index)
+{
+	char *cp;
+
+	source_plugin_index = loader_index;
+
+	STRNCPY(filename, fname, sizeof(filename));
+	normalize_pathname(filename);
+
+	//store just name of the actual _file, without path
+	cp = strrchr(filename, '/');
+	if (cp)
+		file = cp+1;
+	else
+		file = filename;
+
+	//grab description
+	//temporarily use plugin file until plugin can be queried
+	snprintf(desc, sizeof(desc), "<%s>", file);
+
+	//make full pathname
+	full_gamedir_path(filename, pathname);
+
+	source = PS_PLUGIN;
+	status = PL_VALID;
+
+	return mTRUE;
+}
+
 // Parse a line from console "load" command into a plugin.
 // meta_errno values:
 //  - ME_FORMAT		invalid line format
@@ -479,7 +558,7 @@ mBOOL MPlugin::load(PLUG_LOADTIME now) {
 		RETURN_ERRNO(mFALSE, ME_BADREQ);
 	}
 
-	if(status != PL_OPENED) {
+	if(status < PL_OPENED) {
 		// query plugin; open file and get info about it
 		if(!query()) {
 			META_ERROR("dll: Skipping plugin '%s'; couldn't query", desc);
@@ -856,23 +935,25 @@ mBOOL MPlugin::attach(PLUG_LOADTIME now) {
 //  - ME_DELAYED	unload request is delayed (till changelevel?)
 //  - ME_NOTALLOWED	plugin not unloadable after startup
 //  - errno's from check_input()
-mBOOL MPlugin::unload(PLUG_LOADTIME now, PL_UNLOAD_REASON reason) {
+mBOOL MPlugin::unload(PLUG_LOADTIME now, PL_UNLOAD_REASON reason, PL_UNLOAD_REASON real_reason) {
 	if(!check_input()) {
 		// details logged, meta_errno set in check_input()
 		RETURN_ERRNO(mFALSE, ME_ARGUMENT);
 	}
 	if(status < PL_RUNNING) {
-		META_ERROR("dll: Not unloading plugin '%s'; already unloaded (status=%s)", desc, str_status());
-		RETURN_ERRNO(mFALSE, ME_ALREADY);
+		if (reason != PNL_CMD_FORCED && reason != PNL_RELOAD) {
+			META_ERROR("dll: Not unloading plugin '%s'; already unloaded (status=%s)", desc, str_status());
+			RETURN_ERRNO(mFALSE, ME_ALREADY);
+		}
 	}
 	if(action != PA_UNLOAD && action != PA_RELOAD) {
-		META_ERROR("dll: Not unloading plugin '%s'; not marked for unload (action=%s)", desc, str_action());
+		META_WARNING("dll: Not unloading plugin '%s'; not marked for unload (action=%s)", desc, str_action());
 		RETURN_ERRNO(mFALSE, ME_BADREQ);
 	}
 
 	// Are we allowed to detach this plugin at this time?
 	// If forcing unload, we disregard when plugin wants to be unloaded.
-	if(info->unloadable < now) {
+	if(info && info->unloadable < now) {
 		if(reason == PNL_CMD_FORCED) {
 			META_DEBUG(2, ("dll: Forced unload plugin '%s' overriding allowed times: allowed=%s; now=%s", desc, str_unloadable(), str_loadtime(now, SL_SIMPLE)));
 		}
@@ -899,15 +980,19 @@ mBOOL MPlugin::unload(PLUG_LOADTIME now, PL_UNLOAD_REASON reason) {
 
 	// detach plugin
 	if(!detach(now, reason)) {
-		if(reason == PNL_CMD_FORCED) {
+		if (reason == PNL_RELOAD){
+			META_DEBUG(2, ("dll: Reload plugin '%s' overriding failed detach", desc));
+		} else if(reason == PNL_CMD_FORCED) {
 			META_DEBUG(2, ("dll: Forced unload plugin '%s' overriding failed detach"));
 		}
 		else {
-			META_ERROR("dll: Failed to detach plugin '%s'; ", desc);
+			META_WARNING("dll: Failed to detach plugin '%s'; ", desc);
 			// meta_errno should be already set in detach()
 			return(mFALSE);
 		}
 	}
+
+	Plugins->clear_source_plugin_index(index);
 
 	// successful detach, or forced unload
 
@@ -924,9 +1009,9 @@ mBOOL MPlugin::unload(PLUG_LOADTIME now, PL_UNLOAD_REASON reason) {
 	// Close the file.  Note: after this, attempts to reference any memory
 	// locations in the file will produce a segfault.
 	if(DLCLOSE(handle) != 0) {
-		META_ERROR("dll: Couldn't close plugin file '%s': %s", file, DLERROR());
-		status=PL_FAILED;
-		RETURN_ERRNO(mFALSE, ME_DLERROR);
+		// If DLL cannot be closed, OS is badly broken or we are giving invalid handle.
+		// So we don't return here but instead remove plugin from our listings.
+		META_WARNING("dll: Couldn't close plugin file '%s': %s", file, DLERROR());
 	}
 	handle=NULL;
 
@@ -939,7 +1024,7 @@ mBOOL MPlugin::unload(PLUG_LOADTIME now, PL_UNLOAD_REASON reason) {
 		action=PA_LOAD;
 		clear();
 	}
-	META_LOG("dll: Unloaded plugin '%s' for reason '%s'", desc, str_reason(reason));
+	META_LOG("dll: Unloaded plugin '%s' for reason '%s'", desc, str_reason(reason, real_reason));
 	return(mTRUE);
 }
 
@@ -950,6 +1035,12 @@ mBOOL MPlugin::unload(PLUG_LOADTIME now, PL_UNLOAD_REASON reason) {
 mBOOL MPlugin::detach(PLUG_LOADTIME now, PL_UNLOAD_REASON reason) {
 	int ret;
 	META_DETACH_FN pfn_detach;
+
+	// If we have no handle, i.e. no dll loaded, we return true because the
+	// dll is obviously detached. We shouldn't call DLSYM() with a NULL
+	// handle since this will DLSYM() ourself.
+	if(!handle)
+		return mTRUE;
 
 	if(!(pfn_detach = (META_DETACH_FN) DLSYM(handle, "Meta_Detach"))) {
 		META_ERROR("dll: Error detach plugin '%s': Couldn't find Meta_detach(): %s", desc, DLERROR());
@@ -979,7 +1070,8 @@ mBOOL MPlugin::reload(PLUG_LOADTIME now, PL_UNLOAD_REASON reason) {
 	}
 	// Are we allowed to load this plugin at this time?
 	// If we cannot load the plugin after unloading it, we keep it.
-	if(info->loadable < now) {
+	if (info && info->loadable < now)
+	{
 		if(info->loadable > PT_STARTUP) {
 			META_DEBUG(2, ("dll: Delaying reload plugin '%s'; would not be able to reattach now: allowed=%s; now=%s", desc, str_loadable(), str_loadtime(now, SL_SIMPLE)));
 			// caller should give message to user
@@ -994,13 +1086,18 @@ mBOOL MPlugin::reload(PLUG_LOADTIME now, PL_UNLOAD_REASON reason) {
 		}
 	}
 
-	if(!unload(now, reason)) {
-		META_ERROR("dll: Failed to unload plugin '%s' for reloading", desc);
+	if (status < PL_RUNNING)
+	{
+		META_WARNING("dll: Plugin '%s' isn't running; Forcing unload plugin for reloading", desc);
+		reason = PNL_RELOAD;
+	}
+	if (!unload(now, reason, reason)) {
+		META_WARNING("dll: Failed to unload plugin '%s' for reloading", desc);
 		// meta_errno should be set already in unload()
 		return(mFALSE);
 	}
 	if(!load(now)) {
-		META_ERROR("dll: Failed to reload plugin '%s' after unloading", desc);
+		META_WARNING("dll: Failed to reload plugin '%s' after unloading", desc);
 		// meta_errno should be set already in load()
 		return(mFALSE);
 	}
@@ -1059,7 +1156,7 @@ mBOOL MPlugin::retry(PLUG_LOADTIME now, PL_UNLOAD_REASON reason) {
 	else if(action==PA_ATTACH)
 		return(load(now));
 	else if(action==PA_UNLOAD)
-		return(unload(now, reason));
+		return(unload(now, reason, reason));
 	else if(action==PA_RELOAD)
 		return(reload(now, reason));
 	else {
@@ -1110,6 +1207,9 @@ mBOOL MPlugin::clear(void) {
 	engine_post_table=NULL;
 	gamedll_funcs.dllapi_table = NULL;
 	gamedll_funcs.newapi_table = NULL;
+	source_plugin_index = 0;
+	unloader_index = 0;
+	is_unloader = mFALSE;
 	return(mTRUE);
 }
 
@@ -1134,6 +1234,7 @@ void MPlugin::show(void) {
 	META_CONS("%*s: %s", width, "author", info ? info->author : "(nil)");
 	META_CONS("%*s: %s", width, "url", info ? info->url : "(nil)");
 	META_CONS("%*s: %s", width, "logtag", info ? info->logtag : "(nil)");
+	META_CONS("%*s: %s", width, "ifvers", info ? info->ifvers : "(nil)");
 	// ctime() includes newline at EOL
 	tstr=ctime(&time_loaded);
 	if((cp=strchr(tstr, '\n')))
@@ -1187,6 +1288,10 @@ void MPlugin::show(void) {
 		META_CONS("No Engine-Post functions.");
 	RegCmds->show(index);
 	RegCvars->show(index);
+	if (Plugins->found_child_plugins(index))
+		Plugins->show(index);
+	else
+		META_CONS("No child plugins.");
 }
 
 // Check whether the file on disk looks like it's been updated since we
@@ -1318,8 +1423,15 @@ char *MPlugin::str_loadtime(PLUG_LOADTIME ptime, STR_LOADTIME fmt) {
 // Return a string describing why a plugin is to be unloaded.
 // meta_errno values:
 //  - none
-char *MPlugin::str_reason(PL_UNLOAD_REASON preason) {
-	switch(preason) {
+char *MPlugin::str_reason(PL_UNLOAD_REASON preason, PL_UNLOAD_REASON preal_reason) {
+	char buf[128];
+	
+	if(preason == PNL_PLUGIN)
+		preason = PNL_NULL;
+	if(preason == PNL_PLG_FORCED)
+		preason = PNL_NULL;
+
+	switch(preal_reason) {
 		case PNL_NULL:
 			return("null");
 		case PNL_INI_DELETED:
@@ -1330,8 +1442,16 @@ char *MPlugin::str_reason(PL_UNLOAD_REASON preason) {
 			return("server command");
 		case PNL_CMD_FORCED:
 			return("forced by server command");
+		case PNL_PLUGIN:
+			STRNCPY(buf, str_reason(PNL_NULL, preason), sizeof(buf));
+			return(UTIL_VarArgs("%s (request from plugin[%d])", buf, unloader_index));
+		case PNL_PLG_FORCED:
+			STRNCPY(buf, str_reason(PNL_NULL, preason), sizeof(buf));
+			return(UTIL_VarArgs("%s (forced request from plugin[%d])", buf, unloader_index));
+		case PNL_RELOAD:
+			return("reloading");
 		default:
-			return(UTIL_VarArgs("unknown (%d)", preason));
+			return(UTIL_VarArgs("unknown (%d)", preal_reason));
 	}
 }
 
@@ -1346,6 +1466,16 @@ char *MPlugin::str_source(STR_SOURCE fmt) {
 		case PS_CMD:
 			if(fmt==SO_SHOW) return("cmd");
 			else return("console command");
+		case PS_PLUGIN:
+			if (source_plugin_index <= 0) {
+				if (fmt==SO_SHOW) 
+					return("plUN");
+				else 
+					return("unloaded plugin");
+			} else {
+				if(fmt==SO_SHOW) return(UTIL_VarArgs("pl%d", source_plugin_index));
+				else return(UTIL_VarArgs("plugin [%d]", source_plugin_index));
+			}
 		default:
 			if(fmt==SO_SHOW) return(UTIL_VarArgs("UNK%d", source));
 			else return(UTIL_VarArgs("unknown (%d)", source));

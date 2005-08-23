@@ -7,8 +7,10 @@ Compiling
 
 You'll need the Half-Life SDK, of course. In particular you'll need HL SDK
 version 2.3. You can find the original SDK 2.3 at the Valve Editing
-Resource Center (VERC) (www.valve-erc.com/), and a modified version of SDK
-2.3 at metmod.org/files/sdk (metamod.org/files/sdk/).
+Resource Center (VERC)
+(www.valve-erc.com), and a modified version of SDK 2.3 at metmod.org/files
+/sdk
+(metamod.org/files/sdk).
 
 
 Operation
@@ -32,7 +34,7 @@ real routine, in two ways:
 
 Thus after each plugin is called, its META_RESULT flag is checked, and
 action taken appropriately. Note that supercede/override only affects the
-_real_ routine; other plugins will still be called. In addition to the 
+_real_ routine; other plugins will still be called. In addition to the
 SUPERCEDE and OVERRIDE flags, there are two additional flags a plugin can
 return:
 
@@ -106,7 +108,7 @@ These are the valid META_RESULT values a plugin routine can specify:
     special for this situation. Unless otherwise specified by a later
     plugin, execution of routine in the gameDLL will take place. This is
     valid in both normal and post routines.
-   
+
   - MRES_HANDLED
     The plugin handled the situation, or did something with the
     information. Again, this could be used to tell a subsequent plugin
@@ -114,7 +116,7 @@ These are the valid META_RESULT values a plugin routine can specify:
     recognized specially by Metamod. Unless otherwise specified by a later
     plugin, execution of routine in the gameDLL will take place. This is
     valid in both normal and post routines.
-   
+
   - MRES_OVERRIDE
     The plugin is providing a return value for the routine, which should
     be used in place of the return value from the gameDLL's routine (the
@@ -122,7 +124,7 @@ These are the valid META_RESULT values a plugin routine can specify:
     specified by a later plugin, the gameDLL routine will still be called.
     Note this only makes sense for non-void routines. This is valid in
     both normal and post routines.
-   
+
   - MRES_SUPERCEDE
     The plugin has performed sufficient actions for the routine, and the
     gameDLL's routine should NOT be called (the plugin "supercedes" the
@@ -158,44 +160,44 @@ plugin.
    
   - SET_META_RESULT(result)
     Sets the META_RESULT for the plugin.
-   
+
   - RETURN_META(result)
     Sets the META_RESULT for the plugin, and then calls return. This
     assumes a void function.
-   
+
   - RETURN_META_VALUE(result, value)
     Sets the META_RESULT for the plugin, and then returns the given value.
     This assumes a non-void function, and it doesn't matter the particular
     type of the return value.
-   
+
   - META_RESULT_STATUS
     Gives the current status of META_RESULT for this routine from plugins
     so far. It will return the "highest" result so far, in the order of
     lesser to greater: IGNORED, HANDLED, OVERRIDE, SUPERCEDE (see also
     above Operation Details)
-   
+
   - META_RESULT_PREVIOUS
     Gives the META_RESULT of the previous plugin.
-   
+
   - META_RESULT_ORIG_RET(type)
     Gives the "original" return value for the routine, ie the return value
     of the routine from gameDLL. The type for the routine's return value
     must be specified in the macro; this is used as a cast for assignment.
     Note this is only valid in a "post" routine.
-   
+
   - META_RESULT_OVERRIDE_RET(type)
-    Gives the return value from any previous plugin that specified 
+    Gives the return value from any previous plugin that specified
     META_OVERRIDE or META_SUPERCEDE. The type for the routine's return
     value must be specified in the macro; this is used as a cast for
     assignment. This should only be used after checking the META_RESULT to
     see if there's actually an override value available.
-   
+
   - MDLL_*(args)
-    Calls a given DLLAPI routine in the gameDLL. For instance, 
+    Calls a given DLLAPI routine in the gameDLL. For instance,
     MDLL_GameDLLInit(args), MDLL_Spawn(args), etc.
-   
+
   - MNEW_*(args)
-    Calls a given NEWAPI routine in the gameDLL. For instance, 
+    Calls a given NEWAPI routine in the gameDLL. For instance,
     MNEW_GameShutdown(args), etc.
 
 
@@ -222,54 +224,54 @@ some other identifier.)
     style format string and arguments. A trailing newline is provided by
     the routine and should not be specified in the string (unless you want
     two newlines).
-   
+
   - void LOG_MESSAGE(PLID, char *fmt, ...)
     Print a message line in the server logs. Message is specified as a
     printf style format string and arguments. A trailing newline is
     provided by the routine and should not be specified in the string. Log
     message is prefixed by the logtag string in the plugin's "info"
     struct, surrounded by brackets. For instance:
-   
+
     L 04/17/2001 - 18:00:35: [TraceAPI] Tracing Engine routine
     'RegUserMsg'
-   
+
   - void LOG_ERROR(PLID, char *fmt, ...)
     As in LOG_MESSAGE above, only marked as well with the string "ERROR:".
     For example:
-   
+
     L 04/17/2001 - 18:03:13: [TraceAPI] ERROR: malloc failed
-   
+
   - void LOG_DEVELOPER(PLID, char *fmt, ...)
     As in LOG_MESSAGE above, only message will be logged only if cvar
-    developer is set to 1; message is marked as well with the string "dev:
-    ". For example:
-   
+    developer is set to 1; message is marked as well with the string
+    "dev:". For example:
+
     L 04/17/2001 - 18:03:13: [TraceAPI] dev: called: GiveFnptrsToDll
-   
+
   - void CENTER_SAY(PLID, char *fmt, ...)
     Prints a message on the center of all players' screens. This is like
     the "centersay" of AdminMod, with pretty_say enabled, with the same
     defaults (green, and a 10 second fade-in). A message is logged as
     well, ie: [added in 1.06]
-   
+
     L 04/17/2001 - 15:44:52: [WDMISC] (centersay) random set up us the
     bomb!
-   
+
   - void CENTER_SAY_PARMS(PLID, hudtextparms_t tparms, char *fmt, ...)
     As in CENTER_SAY above, but allows specifying all the parameters. (see
     SDK dlls/util.h for the struct hudtextparms_t). [added in 1.06]
-   
+
   - void CENTER_SAY_VARARGS(PLID, hudtextparms_t tparms, char *fmt,
     va_list ap)
     As in CENTER_SAY_PARMS above, only the message is passed as a
     vsnprintf style varargs format string and args list. This is included
     merely because both the previous CENTER_SAY functions actually call
     this, and it was convenient to include it as well. [added in 1.06]
-   
+
   - qboolean CALL_GAME_ENTITY(PLID, char *entStr, entvars_t *pev)
     Calls an entity function in the gameDLL. For instance, a bot usually
     needs to call the player entity function. [added in 1.09]
-   
+
   - int GET_USER_MSG_ID(PLID, const char *name, int *size)
     Returns the id number corresponding to the given message name, of
     those messages registered by the gamedll with RegUserMsg, optionally
@@ -277,7 +279,7 @@ some other identifier.)
     things like bots to access the name/id mapping without having to catch
     RegUserMsg themselves, and thus have to be loaded at startup. [added
     in 1.11]
-   
+
   - const char * GET_USER_MSG_NAME(PLID, int msgid, int *size)
     Returns the name corresponding to the given msgid number, of those
     messages registered by the gamedll with RegUserMsg, optionally
@@ -286,12 +288,12 @@ some other identifier.)
     (SVC_TEMPENTITY, etc). The returned string is presumed to be a
     compile-time constant string, stored in the text segment of the
     gamedll. [added in 1.11]
-   
+
   - const char * GET_PLUGIN_PATH(PLID)
     Returns the full pathname of the loaded dll/so file for the calling
     plugin. The returned string is a pointer to a static buffer, and
     should be copied by the caller to local storage. [added in 1.12]
-   
+
   - const char * GET_GAME_INFO(PLID, ginfo_t type)
     Returns various string-based information about the running game/MOD/
     gamedll. The given type can be one of:
@@ -308,6 +310,29 @@ some other identifier.)
     The returned string is a pointer to a static buffer, and should be
     copied by the caller to local storage. [added in 1.14]
 
+  - int LOAD_PLUGIN(PLID, const char *name, PLUG_LOADTIME now, void
+    **handle)
+    Attempts to load a plugin as if "meta load <name>" was passed. If
+    handle is passed, it will be NULL on failure or contain the DLL handle
+    on success. Returns 0 for success, non-zero Metamod error value for
+    failure. [added in 1.18]
+
+  - int UNLOAD_PLUGIN(PLID, const char *name, PLUG_LOADTIME now,
+    PL_UNLOAD_REASON reason)
+    Attempts to unload a plugin given by name. A plugin cannot unload
+    itself. Returns 0 for success, non-zero Metamod error value for
+    failure. [added in 1.18]
+
+  - int UNLOAD_PLUGIN_BY_HANDLE(PLID, void *handle, PLUG_LOADTIME now,
+    PL_UNLOAD_REASON reason)
+    Attempts to unload a plugin given by the DLL handle from LOAD_PLUGIN.
+    A plugin cannot unload itself. Returns 0 for success, non-zero Metamod
+    error value for failure. [added in 1.18]
+
+  - const char *IS_QUERYING_CLIENT_CVAR(PLID, const edict_t *player)
+    Returns the current cvar name that a client is being queried for, NULL
+    if no queries are in session. [added in 1.18]
+
 
 Plugin Loading
 ==============
@@ -320,21 +345,25 @@ relevant), the operation is:
 
   - dlopen() the file, store the handle
   - dlsym() and call:
+
        Meta_Init (if present)
        GiveFnptrsToDll
        Meta_Query
        Meta_Attach
+
   - if present, call function pointers, and store resulting function
     table:
+
        GetEntityAPI
        GetEntityAPI2
        GetNewDLLFunctions
-    
+
        GetEntityAPI_Post
        GetEntityAPI2_Post
        GetNewDLLFunctions_Post
-    
+
        GetEngineFunctions
        GetEngineFunctions_Post
+
 
 --------------------------------------------------------------------------

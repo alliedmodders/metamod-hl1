@@ -152,6 +152,11 @@ weapon_remington
 // Date: Mon, 12 Apr 2004 15:33:56 -0400
 //
 env_precip
-trigger_noclaymore
 trigger_reinforcements
 weapon_m14
+
+// Version 3.0
+//
+// From: "[FFM2D1]Tyler_Durden" <tylerdurden@ffm2d1-clan.de>
+// Date: Thu, 05 May 2005 23:21:15 +0100
+trigger_noclaymores

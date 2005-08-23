@@ -39,6 +39,8 @@
 
 #include "vers_meta.h"		// VDATE, VVERSION, etc
 
+#define COPYRIGHT_YEAR "2003"
+
 #define VNAME		"WD Misc Functions"
 #define VAUTHOR		"Will Day <willday@metamod.org>"
 #define VURL		"http://www.metamod.org/"
@@ -49,6 +51,7 @@
 #define RC_DESC			"WDMisc Metamod Plugin DLL"
 #define RC_FILENAME		"WDMISC_MM.DLL"
 #define RC_INTERNAL		"WDMISC_MM"
-#define RC_COPYRIGHT	"Copyright© 2001-2003 Will Day; licensed under the GPL"
+#define RC_COPYRIGHT	"Copyright© 2001-" COPYRIGHT_YEAR  " Will Day; GPL licensed"
+#define RC_LICENSE      "Licensed under the GNU General Public License"
 
 #endif /* INFO_NAME_H */

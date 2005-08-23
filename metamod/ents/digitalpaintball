@@ -5,7 +5,7 @@
 //
 // Gamedir: dpb
 // Win32  : pb.dll
-// Linux  : pg_i686.so
+// Linux  : pb.i386.so
 
 // Version 1.0
 //
@@ -45,3 +45,14 @@ weapon_impulse
 weapon_matrix
 weapon_orracle
 weapon_timmy
+
+// Version 2.2
+//
+// Linux DSO name changed from pg_i686.so to pb.i386.so
+// 
+// Date: Jun 15, 2005 2:24 PM
+// From: From: Ken Jimenez <goldeneagle68@_at_gmail.com>
+weapon_a5
+weapon_blazer
+weapon_dm4
+weapon_omen
