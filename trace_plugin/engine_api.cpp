@@ -850,6 +850,13 @@ void QueryClientCvarValue(const edict_t *pEdict, const char *cvarName)
 	RETURN_META(MRES_IGNORED);
 }
 
+void QueryClientCvarValue2(const edict_t *pEdict, const char *cvarName, int requestID)
+{
+	ENGINE_TRACE(pfnQueryClientCvarValue2, P_PRE, ("queried=%s, requestID=%d",cvarName?cvarName:"nil",requestID));
+	RETURN_META(MRES_IGNORED);
+}
+
+
 enginefuncs_t meta_engfuncs = {
 	PrecacheModel,			// pfnPrecacheModel()
 	PrecacheSound,			// pfnPrecacheSound()
@@ -1054,6 +1061,7 @@ enginefuncs_t meta_engfuncs = {
 	ConstructTutorMessageDecayBuffer,	// pfnConstructTutorMessageDecayBuffer()
 	ResetTutorMessageDecayData,		// pfnResetTutorMessageDecayData()
 	QueryClientCvarValue,			// pfnQueryClientCvarValue()
+	QueryClientCvarValue2,			// pfnQueryClientCvarValue2()
 };
 
 C_DLLEXPORT int GetEngineFunctions(enginefuncs_t *pengfuncsFromEngine, 

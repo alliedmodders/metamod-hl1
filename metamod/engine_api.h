@@ -257,7 +257,7 @@ extern qboolean mm_Voice_GetClientListening(int iReceiver, int iSender);
 extern qboolean mm_Voice_SetClientListening(int iReceiver, int iSender, qboolean bListen);
 // Added for HL 1109 (no SDK update):
 extern const char *mm_pfnGetPlayerAuthId(edict_t *e);
-// Added 2003/11/10 (no SDK update):
+// Added 2003-11-10 (no SDK update):
 extern sequenceEntry_s * mm_SequenceGet(const char* fileName, const char* entryName);
 extern sentenceEntry_s * mm_SequencePickSentence(const char* groupName, int pickMethod, int *picked);
 extern int mm_GetFileSize(char *filename);
@@ -269,8 +269,10 @@ extern int mm_GetTimesTutorMessageShown(int mid);
 extern void mm_ProcessTutorMessageDecayBuffer(int *buffer, int bufferLength);
 extern void mm_ConstructTutorMessageDecayBuffer(int *buffer, int bufferLength);
 extern void mm_ResetTutorMessageDecayData(void);
-//Added 2005/08/11 (no SDK update)
-extern void mm_QueryClientCvarValue(const edict_t *pEdict, const char *cvarName);
+//Added 2005-08-11 (no SDK update)
+extern void mm_QueryClientCvarValue(const edict_t *pEdict, const char *cvarName);    //! Obsolete! Use mm_QueryClientCvarValue2 instead
+//Added 2005-11-22 (no SDK update)
+extern void mm_QueryClientCvarValue2(const edict_t *pEdict, const char *cvarName, int requestID);
 
 
 // Typedefs for the above functions:
@@ -435,7 +437,7 @@ typedef qboolean (*FN_VOICE_GETCLIENTLISTENING) (int iReceiver, int iSender);
 typedef qboolean (*FN_VOICE_SETCLIENTLISTENING) (int iReceiver, int iSender, qboolean bListen);
 // Added for HL 1109 (no SDK update):
 typedef const char * (*FN_GETPLAYERAUTHID) (edict_t *e);
-// Added 2003/11/10 (no SDK update):
+// Added 2003-11-10 (no SDK update):
 typedef sequenceEntry_s * (*FN_SEQUENCEGET) (const char* fileName, const char* entryName);
 typedef sentenceEntry_s * (*FN_SEQUENCEPICKSENTENCE) (const char* groupName, int pickMethod, int *picked);
 typedef int (*FN_GETFILESIZE) (char *filename);
@@ -447,7 +449,9 @@ typedef int (*FN_GETTIMESTUTORMESSAGESHOWN) (int mid);
 typedef void (*FN_PROCESSTUTORMESSAGEDECAYBUFFER) (int *buffer, int bufferLength);
 typedef void (*FN_CONSTRUCTTUTORMESSAGEDECAYBUFFER) (int *buffer, int bufferLength);
 typedef void (*FN_RESETTUTORMESSAGEDECAYDATA) (void);
-//Added 2005/08/11 (no SDK update)
-typedef void (*FN_QUERYCLIENTCVARVALUE)(const edict_t *pEdict, const char *cvarName);
+//Added 2005-08-11 (no SDK update)
+typedef void (*FN_QUERYCLIENTCVARVALUE)(const edict_t *pEdict, const char *cvarName);  //! Obsolete! Use FN_QUERYCLIENTCVARVALUE2 instead
+//Added 2005-11-22 (no SDK update)
+typedef void (*FN_QUERYCLIENTCVARVALUE2)(const edict_t *pEdict, const char *cvarName, int requestID);
 
 #endif /* ENGINE_API_H */

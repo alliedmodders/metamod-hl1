@@ -277,9 +277,17 @@ int ShouldCollide_Post(edict_t *pentTouched, edict_t *pentOther) {
 	RETURN_META_VALUE(MRES_IGNORED, 1);
 }
 
+// Added 2005-08-11 (no SDK update)
 void CvarValue_Post(const edict_t *pEdict, const char *szValue)
 {
 	NEWDLL_TRACE(pfnCvarValue, P_POST, (""));
+	RETURN_META(MRES_IGNORED);
+}
+
+// Added 2005-11-22 (no SDK update)
+void CvarValue2_Post(const edict_t *pEdict, int requestID, const char *cvarName, const char *value) {
+	NEWDLL_TRACE(pfnCvarValue2, P_POST, ("player=%s, requestID=%d, cvar=%s, value=%s", 
+										STRING(pEdict->v.netname), requestID, cvarName?cvarName:"nil", value?value:"nil"));
 	RETURN_META(MRES_IGNORED);
 }
 
@@ -389,6 +397,7 @@ static NEW_DLL_FUNCTIONS gNewFunctionTable_Post =
 	GameShutdown_Post,				//! pfnGameShutdown()
 	ShouldCollide_Post,				//! pfnShouldCollide()
 	CvarValue_Post,					//! pfnCvarValue()
+	CvarValue2_Post,				//! pfnCvarValue2()
 };
 
 C_DLLEXPORT int GetNewDLLFunctions_Post( NEW_DLL_FUNCTIONS *pNewFunctionTable, int *interfaceVersion ) 

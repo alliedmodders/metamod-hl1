@@ -6,12 +6,12 @@ other things I need to try from a plugin.
 
 It currently provides two features:
 
-   
+
   - a cvar "bounce" that, if set to 1, will exit the server at map change.
     I use this when I need to shutdown or the server, and don't want to
     kill it in the middle of a map, nor watch the server constantly until
     the timelimit expires.
-   
+
   - it prints a centersay to all the players whenever someone in
     Counter-Strike plants the bomb. This was done basically as a
     proof-of-concept for catching certain game-events that aren't
@@ -19,7 +19,7 @@ It currently provides two features:
     log message that the server generates, and checking to see if it
     includes the string indicating the particular event in question (in
     this case "Planted_The_Bomb").
-   
+
     Although this works, it is really a rather POOR solution to the
     problem, as it assumes a LOT of string-compares, which can seriously
     degrade the performance of the server. I did try to take as many

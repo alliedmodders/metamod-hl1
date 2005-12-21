@@ -97,8 +97,10 @@ newapi_info_t newapi_info = {
 	{ mFALSE,  16,	"OnFreeEntPrivateData" },	// pfnOnFreeEntPrivateData
 	{ mFALSE,  3,	"GameShutdown" },			// pfnGameShutdown
 	{ mFALSE,  14,	"ShouldCollide" },			// pfnShouldCollide
-	// Added 2005/08/11 (no SDK update)
+	// Added 2005-08-11 (no SDK update)
 	{ mFALSE,  3,   "CvarValue" },				// pfnCvarValue
+	// Added 2005-11-22 (no SDK update)
+	{ mFALSE,  3,   "CvarValue2" },				// pfnCvarValue2
 	{ mFALSE,  0,	NULL },
 };
 
@@ -249,7 +251,7 @@ engine_info_t engine_info = {
 	{ mFALSE,  9,	"Voice_SetClientListening" },	// Voice_SetClientListening
 	// Added for HL 1109 (no SDK update):
 	{ mFALSE,  9,	"GetPlayerAuthId" },	// pfnGetPlayerAuthId
-	// Added 2003/11/10 (no SDK update):
+	// Added 2003-11-10 (no SDK update):
 	{ mFALSE,  30,	"SequenceGet" },	// pfnSequenceGet
 	{ mFALSE,  30,	"SequencePickSentence" },	// pfnSequencePickSentence
 	{ mFALSE,  30,	"GetFileSize" },	// pfnGetFileSize
@@ -261,8 +263,10 @@ engine_info_t engine_info = {
 	{ mFALSE,  30,	"ProcessTutorMessageDecayBuffer" },	// pfnProcessTutorMessageDecayBuffer
 	{ mFALSE,  30,	"ConstructTutorMessageDecayBuffer" },	// pfnConstructTutorMessageDecayBuffer
 	{ mFALSE,  9,	"ResetTutorMessageDecayData" },	// pfnResetTutorMessageDecayData
-	// Added 2005/08/11 (no SDK update)
+	// Added 2005-08-11 (no SDK update)
 	{ mFALSE,  3,   "QueryClientCvarValue" }, //pfnQueryClientCvarValue
+	// Added 2005-11-22 (no SDK update)
+	{ mFALSE,  3,   "QueryClientCvarValue2" }, //pfnQueryClientCvarValue2
 	// end
 	{ mFALSE,  0,	NULL },
 };

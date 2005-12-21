@@ -1,8 +1,16 @@
 # vim: set tw=75 ft=none :
 
+2005/12/20 1.18.1
+ - Added support for new HLSDK API functions QueryClientCvarValue2() and 
+   ClientCvar2(). The helper function IS_QUERYING_CLIENT_CVAR() is now
+   deprecated as the old functions QueryClientCvarValue() and CvarValue()
+   are considered obsolete and their use is strongly advised against.
+   The helper function IS_QUERYING_CLIENT_CVAR() cannot be used in
+   conjunction with the new API function QueryClientCvarValue2().
+
 2005/08/24 1.18
  - Added new API for loading/unloading plugins.
- - Added IS_QUERYING_CLIENT_cVAR for new client cvar engine API.
+ - Added IS_QUERYING_CLIENT_CVAR() for new client cvar engine API.
  - Added support for new HLSDK-API functions QueryClientCvarValue() and 
    ClientCvar().
  - Changed cmd_doplug() to make sure a complete string was not misinterpreted

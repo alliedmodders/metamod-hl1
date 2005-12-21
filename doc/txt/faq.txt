@@ -30,12 +30,12 @@ How do I install Metamod?
 
     This is covered briefly in the Metamod docs. Typically, though,
     Metamod is installed as part of some major plugin, like AdminMod
-    (www.adminmod.org/). There is also some discussion of installing
+    (www.adminmod.org). There is also some discussion of installing
     Metamod by hand in the AdminMod docs (www.adminmod.org/help/online/
     Installing/Manual_Installation_-_Walk-Through.htm). If you already
     have Metamod installed and merely want to update it, this requires
     only replacing the .so/.dll with the latest version from the webpage
-    (metamod.org/).
+    (metamod.org).
 
 I'm having trouble with AdminMod.
 
@@ -53,7 +53,7 @@ How do I do (something) in a Metamod plugin?
     /botman/MOD_FAQ.shtml)). Once you figure out how it would normally be
     done in a Game Mod, figuring out how to do it in Metamod is relatively
     straightforward.
-   
+
     However, if you have questions on how to convert a piece of code from
     HLmod to Metamod plugin, then I can provide some pointers, or you can
     ask on the Metamod mailing list (groups.yahoo.com/group/metamod/). And
@@ -69,7 +69,7 @@ Is there a tutorial or example of how to write a Metamod plugin?
     function. The "wdmisc" plugin provides a couple of basic useful
     features. You can also look at several of the other plugins out there
     for more examples.
-   
+
     Note that the example plugins in the Metamod sourcecode show how to
     use Metamod to interface with Half-Life code, but they mostly assume
     you already know how to write Half-Life code. If you need examples or
@@ -86,7 +86,7 @@ I'm having trouble compiling under MSVC.
 
     Please note that I do not use MSVC, so I can't help a lot with using
     that compiler. I do all my development under linux, using gcc for
-    linux binaries and mingw32 (www.mingw.org/) for windows binaries. The
+    linux binaries and mingw32 (www.mingw.org) for windows binaries. The
     sourcecode does include an MSVC project file for Metamod, as well as a
     project file for the stub plugin, both mostly as examples. They should
     work, and indeed did work the last time I dug up MSVC to test them.
@@ -112,9 +112,9 @@ How about a port of Metamod to other engines like Q3, Unreal, etc?
     engines, although I believe most modern engines are now providing
     their own method for extensions or plugins, so that a third-party
     solution like Metamod wouldn't be necessary.
-   
+
     If Half-Life 2 ever sees the light of day, I expect I'd look seriously
-    at porting to that - unless, of course, Valve ends up providing their 
+    at porting to that - unless, of course, Valve ends up providing their
     own plugin framework themselves. :)
 
 --------------------------------------------------------------------------

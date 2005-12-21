@@ -227,7 +227,7 @@ enginefuncs_t meta_engfuncs =
 	// Added for HL 1109 (no SDK update):
 	NULL,						// pfnGetPlayerAuthId()
 
-	// Added 2003/11/10 (no SDK update):
+	// Added 2003-11-10 (no SDK update):
 	NULL,						// pfnSequenceGet()
 	NULL,						// pfnSequencePickSentence()
 	NULL,						// pfnGetFileSize()
@@ -240,8 +240,10 @@ enginefuncs_t meta_engfuncs =
 	NULL,						// pfnConstructTutorMessageDecayBuffer()
 	NULL,						// pfnResetTutorMessageDecayData()
 
-	// Added Added 2005/08/11 (no SDK update)
+	// Added Added 2005-08-11 (no SDK update)
 	NULL,						// pfnQueryClientCvarValue()
+	// Added Added 2005-11-22 (no SDK update)
+	NULL,						// pfnQueryClientCvarValue2()
 };
 
 C_DLLEXPORT int GetEngineFunctions(enginefuncs_t *pengfuncsFromEngine, 

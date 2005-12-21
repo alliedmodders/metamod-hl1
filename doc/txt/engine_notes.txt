@@ -158,7 +158,8 @@ HLSDK Engine Notes
   - ProcessTutorMessageDecayBuffer
   - ConstructTutorMessageDecayBuffer
   - ResetTutorMessageDecayData
-  - QueryClientCvar
+  - QueryClientCvarValue
+  - QueryClientCvarValue2
 
 --------------------------------------------------------------------------
 
@@ -2042,7 +2043,8 @@ From Eric Smith <EricS@valvesoftware.com> on hlcoders:
 
 comments:
 
-    Added for HL 1109; no SDK update.
+    Added for HL 1109; no SDK update. (Available in patched SDK as of
+    hlsdk-2.3-p1.)
 
 --------------------------------------------------------------------------
 
@@ -2053,7 +2055,8 @@ void *SequenceGet(const char *fileName, const char *entryName);
 
 comments:
 
-    Added for HL 1xxx; no SDK update.
+    Added for HL 1xxx; no SDK update. (Available in patched SDK as of
+    hlsdk-2.3-p1.)
 
 --------------------------------------------------------------------------
 
@@ -2065,7 +2068,8 @@ void *SequencePickSentence(const char *groupName, int pickMethod, int
 
 comments:
 
-    Added for HL 1xxx; no SDK update.
+    Added for HL 1xxx; no SDK update. (Available in patched SDK as of
+    hlsdk-2.3-p1.)
 
 --------------------------------------------------------------------------
 
@@ -2076,7 +2080,8 @@ int GetFileSize(char *filename);
 
 comments:
 
-    Added for HL 1xxx; no SDK update.
+    Added for HL 1xxx; no SDK update. (Available in patched SDK as of
+    hlsdk-2.3-p1.)
 
 --------------------------------------------------------------------------
 
@@ -2087,7 +2092,8 @@ unsigned int GetApproxWavePlayLen(const char *filepath);
 
 comments:
 
-    Added for HL 1xxx; no SDK update.
+    Added for HL 1xxx; no SDK update. (Available in patched SDK as of
+    hlsdk-2.3-p1.)
 
 --------------------------------------------------------------------------
 
@@ -2098,7 +2104,8 @@ int IsCareerMatch(void);
 
 comments:
 
-    Added for HL 1xxx; no SDK update.
+    Added for HL 1xxx; no SDK update. (Available in patched SDK as of
+    hlsdk-2.3-p1.)
 
 --------------------------------------------------------------------------
 
@@ -2109,7 +2116,8 @@ int GetLocalizedStringLength(const char *label);
 
 comments:
 
-    Added for HL 1xxx; no SDK update.
+    Added for HL 1xxx; no SDK update. (Available in patched SDK as of
+    hlsdk-2.3-p1.)
 
 --------------------------------------------------------------------------
 
@@ -2120,7 +2128,8 @@ void RegisterTutorMessageShown(int mid);
 
 comments:
 
-    Added for HL 1xxx; no SDK update.
+    Added for HL 1xxx; no SDK update. (Available in patched SDK as of
+    hlsdk-2.3-p1.)
 
 --------------------------------------------------------------------------
 
@@ -2131,7 +2140,8 @@ int GetTimesTutorMessageShown(int mid);
 
 comments:
 
-    Added for HL 1xxx; no SDK update.
+    Added for HL 1xxx; no SDK update. (Available in patched SDK as of
+    hlsdk-2.3-p1.)
 
 --------------------------------------------------------------------------
 
@@ -2142,7 +2152,8 @@ void ProcessTutorMessageDecayBuffer(int *buffer, int bufferLength);
 
 comments:
 
-    Added for HL 1xxx; no SDK update.
+    Added for HL 1xxx; no SDK update. (Available in patched SDK as of
+    hlsdk-2.3-p1.)
 
 --------------------------------------------------------------------------
 
@@ -2153,7 +2164,8 @@ void ConstructTutorMessageDecayBuffer(int *buffer, int bufferLength);
 
 comments:
 
-    Added for HL 1xxx; no SDK update.
+    Added for HL 1xxx; no SDK update. (Available in patched SDK as of
+    hlsdk-2.3-p1.)
 
 --------------------------------------------------------------------------
 
@@ -2164,11 +2176,12 @@ void ResetTutorMessageDecayData(void);
 
 comments:
 
-    Added for HL 1xxx; no SDK update.
+    Added for HL 1xxx; no SDK update. (Available in patched SDK as of
+    hlsdk-2.3-p1.)
 
 --------------------------------------------------------------------------
 
-QueryClientCvar
+QueryClientCvarValue
 
 void (*pfnQueryClientCvarValue)( const edict_t *player, const char
 *cvarName );
@@ -2180,6 +2193,35 @@ from alfred@valvesoftware.com, via HLCoders
 
 comments:
 
-    Added 2005/08/11, no SDK update.
+    Added 2005-08-11, no SDK update. (Available in patched SDK as of
+    hlsdk-2.3-p2.)
+
+    Use of this function is DEPRECATED. It has been obsoleted by the
+    pfnQueryClientCvarValue2() function. See below.
+
+    This API can lead to conflicts when you query more than one cvar from
+    a player at a time. When using this function, use
+    IS_QUERYING_CLIENT_CVAR to check if another plugin is querying before
+    you do so. Use of this function is strongly advised against. Instead
+    use the pfnQueryClientCvarValue2() function.
+
+--------------------------------------------------------------------------
+
+QueryClientCvarValue2
+
+void (*pfnQueryClientCvarValue2)( const edict_t *player, const char
+*cvarName, int requestID );
+
+from alfred@valvesoftware.com, via hlds_apps
+
+    Calling this function requests the value of cvarName from player and
+    returns to you the supplied requestID on success (or failure). The
+    response is sent to a pfnCvarValue2 callback in the NEW_DLL_FUNCTIONS
+    structure.
+
+comments:
+
+    Added 2005-11-23, no SDK update. (Available in patched SDK as of
+    hlsdk-2.3-p3.)
 
 --------------------------------------------------------------------------

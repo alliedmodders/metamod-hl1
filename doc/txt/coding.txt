@@ -7,10 +7,8 @@ Compiling
 
 You'll need the Half-Life SDK, of course. In particular you'll need HL SDK
 version 2.3. You can find the original SDK 2.3 at the Valve Editing
-Resource Center (VERC)
-(www.valve-erc.com), and a modified version of SDK 2.3 at metmod.org/files
-/sdk
-(metamod.org/files/sdk).
+Resource Center (VERC) (www.valve-erc.com), and a modified version of SDK
+2.3 at metamod.org/files/sdk (metamod.org/files/sdk/).
 
 
 Operation
@@ -329,9 +327,20 @@ some other identifier.)
     A plugin cannot unload itself. Returns 0 for success, non-zero Metamod
     error value for failure. [added in 1.18]
 
-  - const char *IS_QUERYING_CLIENT_CVAR(PLID, const edict_t *player)
+  - const char *IS_QUERYING_CLIENT_CVAR(PLID, const edict_t *player)    
+    OBSOLETE
     Returns the current cvar name that a client is being queried for, NULL
     if no queries are in session. [added in 1.18]
+    This function is considered obsolete as the new method of querying a
+    client's cvar (added in hlsdk-2.3-p3/MM 1.18.1) is much more reliable
+    than the old one and doesn't need this function anymore. It is
+    strongly recommended to not use this function and the old
+    QueryClientCvar() and CvarValue() functions anymore, but only use the
+    new QueryClientCvar2() and CvarValue2() functions.
+    Note: This function can only be used in conjunction with the old
+    QueryClientCvar() function. Use with the new QueryClientCvar2()
+    function is not needed and therefor undefined, i.e. it doesn't return
+    anything meaningful when used in conjunction with it.
 
 
 Plugin Loading

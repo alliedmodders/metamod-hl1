@@ -20,7 +20,7 @@ or _modify the functionality provided by the game dll, or by the engine
 itself - for instance, adding new server commands, or new client commands,
 or even disabling commands built into the game dll. Although the plugin
 isn't intended to provide full HL-game functionality, since it's receiving
-the same information given to the game DLL, it has the opportunity to do 
+the same information given to the game DLL, it has the opportunity to do
 _anything_ the game DLL can do (given enough coding effort of course).
 
 This is very similar to the way Alfred Reynolds' AdminMod

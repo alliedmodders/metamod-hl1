@@ -248,19 +248,26 @@ extern qboolean Voice_GetClientListening_Post(int iReceiver, int iSender);
 extern qboolean Voice_SetClientListening_Post(int iReceiver, int iSender, qboolean bListen);
 
 // Added for HL 1109 (no SDK update):
-extern const char *GetPlayerAuthId(edict_t *e);
+extern const char *GetPlayerAuthId_Post(edict_t *e);
 
-// Added 2003/11/10 (no SDK update):
-extern sequenceEntry_s *SequenceGet(const char* fileName, const char* entryName);
-extern sentenceEntry_s *SequencePickSentence(const char* groupName, int pickMethod, int *picked);
-extern int GetFileSize(char *filename);
-extern unsigned int GetApproxWavePlayLen(const char *filepath);
-extern int IsCareerMatch(void);
-extern int GetLocalizedStringLength(const char *label);
-extern void RegisterTutorMessageShown(int mid);
-extern int GetTimesTutorMessageShown(int mid);
-extern void ProcessTutorMessageDecayBuffer(int *buffer, int bufferLength);
-extern void ConstructTutorMessageDecayBuffer(int *buffer, int bufferLength);
-extern void ResetTutorMessageDecayData(void);
+// Added 2003-11-10 (no SDK update):
+extern sequenceEntry_s *SequenceGet_Post(const char* fileName, const char* entryName);
+extern sentenceEntry_s *SequencePickSentence_Post(const char* groupName, int pickMethod, int *picked);
+extern int GetFileSize_Post(char *filename);
+extern unsigned int GetApproxWavePlayLen_Post(const char *filepath);
+extern int IsCareerMatch_Post(void);
+extern int GetLocalizedStringLength_Post(const char *label);
+extern void RegisterTutorMessageShown_Post(int mid);
+extern int GetTimesTutorMessageShown_Post(int mid);
+extern void ProcessTutorMessageDecayBuffer_Post(int *buffer, int bufferLength);
+extern void ConstructTutorMessageDecayBuffer_Post(int *buffer, int bufferLength);
+extern void ResetTutorMessageDecayData_Post(void);
+
+
+// Added 2005-08-11 (no SDK update):
+void QueryClientCvarValue_Post(const edict_t *pEdict, const char *cvar);
+
+// Added 2005-11-22 (no SDK update):
+void QueryClientCvarValue2_Post(const edict_t *pEdict, const char *cvar, int requestID);
 
 #endif /* ENGINE_API_POST_H */

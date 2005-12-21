@@ -17,7 +17,7 @@
 
 You'll need the Half-Life SDK, of course.  In particular you'll need HL SDK
 version 2.3.  You can find the original SDK 2.3 at the <a href="http://www.valve-erc.com/">Valve Editing Resource Center (VERC)</a>, 
-and a modified version of SDK 2.3 at <a href="http://metamod.org/files/sdk/">metmod.org/files/sdk</a>.
+and a modified version of SDK 2.3 at <a href="http://metamod.org/files/sdk/">metamod.org/files/sdk</a>.
 
 <p><br>
 <a name=operation>
@@ -370,10 +370,20 @@ in the future this could change to some other identifier.)
 	<i>[added in 1.18]</i>
 <a name="IS_QUERYING_CLIENT_CVAR"><p><li></a>
 <tt> const char *<b>IS_QUERYING_CLIENT_CVAR(PLID, <i>const edict_t
-*player</i>)</b></tt>
+			*player</i>)</b></tt>&nbsp;&nbsp;&nbsp;&nbsp;<b>OBSOLETE</b>
 	<br>Returns the current cvar name that a client is being queried for,
 	NULL if no queries are in session.
 	<i>[added in 1.18]</i>
+	<br>This function is considered <b>obsolete</b> as the new method of
+	querying a client's cvar (added in hlsdk-2.3-p3/MM 1.18.1) is much more
+	reliable than the old one and doesn't need this function anymore. It is
+	strongly recommended to not use this function and the old
+	QueryClientCvar() and CvarValue() functions anymore, but only use the
+	new QueryClientCvar2() and CvarValue2() functions.
+	<br><i>Note:</i> This function can only be used in conjunction with the
+	old QueryClientCvar() function. Use with the new QueryClientCvar2()
+	function is not needed and therefor undefined, i.e. it doesn't return
+	anything meaningful when used in conjunction with it.
 </ul>
 
 <p><br>

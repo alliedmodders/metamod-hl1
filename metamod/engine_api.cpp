@@ -806,7 +806,7 @@ const char *mm_GetPlayerAuthId(edict_t *e) {
 	RETURN_API()
 }
 
-// Added 2003/11/10 (no SDK update):
+// Added 2003-11-10 (no SDK update):
 
 sequenceEntry_s *mm_SequenceGet(const char *fileName, const char *entryName) {
 	META_ENGINE_HANDLE(sequenceEntry_s *, NULL, FN_SEQUENCEGET, pfnSequenceGet, (fileName, entryName));
@@ -863,17 +863,29 @@ void mm_ResetTutorMessageDecayData(void) {
 	RETURN_API_void()
 }
 
-//Added 2005/08/11 (no SDK update)
+//Added 2005-08-11 (no SDK update)
 void mm_QueryClientCvarValue(const edict_t *pEdict, const char *cvarName)
 {
 	//Engine version didn't change when this API was added.  Check if pointer is valid.
 	if (g_engfuncs.pfnQueryClientCvarValue && 
 		!IS_VALID_PTR((void *)g_engfuncs.pfnQueryClientCvarValue))
-		g_engfuncs.pfnQueryClientCvarValue = 0;
+		g_engfuncs.pfnQueryClientCvarValue = NULL;
 
 	g_Players.set_player_cvar_query(pEdict, cvarName);
 
 	META_ENGINE_HANDLE_void(FN_QUERYCLIENTCVARVALUE, pfnQueryClientCvarValue, (pEdict, cvarName));
+	RETURN_API_void();
+}
+
+//Added 2005-11-22 (no SDK update)
+void mm_QueryClientCvarValue2(const edict_t *pEdict, const char *cvarName, int requestId)
+{
+	//Engine version didn't change when this API was added.  Check if the pointer is valid.
+	if (g_engfuncs.pfnQueryClientCvarValue2 &&
+		!IS_VALID_PTR((void * )g_engfuncs.pfnQueryClientCvarValue2))
+		g_engfuncs.pfnQueryClientCvarValue2 = NULL;
+
+	META_ENGINE_HANDLE_void(FN_QUERYCLIENTCVARVALUE2, pfnQueryClientCvarValue2, (pEdict, cvarName, requestId));
 	RETURN_API_void();
 }
 
@@ -1068,7 +1080,7 @@ enginefuncs_t meta_engfuncs = {
 	// Added for HL 1109 (no SDK update):
 	mm_GetPlayerAuthId,			// pfnGetPlayerAuthId()
 
-	// Added 2003/11/10 (no SDK update):
+	// Added 2003-11-10 (no SDK update):
 	mm_SequenceGet,					// pfnSequenceGet()
 	mm_SequencePickSentence,			// pfnSequencePickSentence()
 	mm_GetFileSize,					// pfnGetFileSize()
@@ -1081,8 +1093,11 @@ enginefuncs_t meta_engfuncs = {
 	mm_ConstructTutorMessageDecayBuffer,	// pfnConstructTutorMessageDecayBuffer()
 	mm_ResetTutorMessageDecayData,		// pfnResetTutorMessageDecayData()
 
-	//Added 2005/08/11 (no SDK update)
+	//Added 2005-08-11 (no SDK update)
 	mm_QueryClientCvarValue,		// pfnQueryClientCvarValue()
+
+	//Added 2005-11-22 (no SDK update)
+	mm_QueryClientCvarValue2,		// pfnQueryClientCvarValue2()
 };
 
 

@@ -7,18 +7,18 @@ working on Metamod:
   - AdminMod's DLL Forum (www.ozforums.com/forumdisplay.php?forumid=114)
   - AdminMod CVS at Sourceforge (cvs.sourceforge.net/cgi-bin/viewcvs.cgi/
     halflifeadmin/)
-   
-  - Valve Editing Resource Center (collective.valve-erc.com/), Valve's
+
+  - Valve Editing Resource Center (collective.valve-erc.com), Valve's
     official site
   - Botman's Bots (planethalflife.com/botman/)
-  - Half-Life Programming Planet (hlpp.valveworld.com/)
+  - Half-Life Programming Planet (hlpp.valveworld.com)
   - Shadowman's Half-Life SDK2 Site (planethalflife.com/hlsdk2)
   - Half-Life Coding Pages (www.planethalflife.com/botman/balfourroad/
     index.shtml)
   - Fixxxer's HL Coding page (planethalflife.com/fixxxer/)
   - The Handy Vandal's HL Coding Links (www.karljones.com/halflife/
     coding.asp)
-   
+
   - Half-Life SDK Forums (www.chatbear.com/cgi-bin/board.pl?boardid=942),
     at the VERC
   - Half-Life SDK Forums (www.chatbear.com/cgi-bin/board.pl?action=
@@ -35,7 +35,7 @@ working on Metamod:
     21807)
   - HL Programming Forum (forums.gamedesign.net/forums/wwwthreads.pl?
     action=list&Board=halflife_coding), at gamedesign.net
-   
+
   - C FAQ (www.eskimo.com/~scs/C-faq/top.html)
   - C++ FAQ Lite (www.parashift.com/cpp-faq-lite/)
   - C++ FAQ Index (www.calpoly.edu/~jfischer/c++faq/index.html)
@@ -52,16 +52,16 @@ working on Metamod:
     and other links
   - Thinking in C++ (www.mindview.net/Books/TICPP/ThinkingInCPP2e.html),
     free electronic book
-   
+
   - comp.programming.threads FAQ (www.serpentine.com/~bos/threads-faq/)
   - comp.programming.threads FAQ #2 (www.lambdacs.com/cpt/FAQ.html)
   - Implementing POSIX Condition Variables in Win32 (www.cs.wustl.edu/
     ~schmidt/win32-cv-1.html)
-   
-  - Microsoft Developer Network (msdn.microsoft.com/), online win32 API
+
+  - Microsoft Developer Network (msdn.microsoft.com), online win32 API
     docs
   - Win32 Programming FAQ (www.iseran.com/Win32/FAQ/)
-  - Minimal Gnu for Windows (mingw) (www.mingw.org/), gcc for win32
+  - Minimal Gnu for Windows (mingw) (www.mingw.org), gcc for win32
   - Creating DLLs w/mingw (www.geocities.com/Tokyo/Towers/6162/win32/dll/
     make.html)
   - Mingw binaries (www.devolution.com/~slouken/SDL/Xmingw32/)
@@ -80,7 +80,7 @@ And here are books I picked up that I found useful as well:
     Steve Summit (www.eskimo.com/~scs/) (at Bookpool (www.bookpool.com/.x/
     /sm/0201845199), at Amazon (www.amazon.com/exec/obidos/ASIN/
     0201845199))
-   
+
   - C++: The Core Language (www.oreilly.com/catalog/core/), by Gregory
     Satir & Doug Brown (at Bookpool (www.bookpool.com/.x//sm/156592116X),
     at Amazon (www.amazon.com/exec/obidos/ASIN/156592116X))
@@ -93,20 +93,20 @@ And here are books I picked up that I found useful as well:
     indexe.html) (at Bookpool (www.bookpool.com/.x//sm/0201379260), at
     Amazon (www.amazon.com/exec/obidos/ASIN/0201379260))
   - C++ FAQs (cseng.aw.com/book/0,3828,0201309831,00.html), by Marshall
-    Cline (www.parashift.com/), Greg Lomow, & Mike Girou (at Bookpool
+    Cline (www.parashift.com), Greg Lomow, & Mike Girou (at Bookpool
     (www.bookpool.com/.x//sm/0201309831), at Amazon (www.amazon.com/exec/
     obidos/ASIN/0201309831))
   - Effective C++ (cseng.aw.com/book/0,,0201924889,00.html), by Scott
-    Meyers (www.aristeia.com/) (at Bookpool (www.bookpool.com/.x//sm/
+    Meyers (www.aristeia.com) (at Bookpool (www.bookpool.com/.x//sm/
     0201924889), at Amazon (www.amazon.com/exec/obidos/ASIN/0201924889))
   - Algorithms in C++, Parts 1-4 (cseng.aw.com/book/
     0,,0201350882,00.html), by Robert Sedgewick (www.cs.princeton.edu/~rs
     /) (at Bookpool (www.bookpool.com/.x//sm/0201350882), at Amazon
     (www.amazon.com/exec/obidos/ASIN/0201350882))
-   
+
   - Advanced Programming in the UNIX Environment (cseng.aw.com/book/
-    0,3828,0201563177,00.html), by W. Richard Stevens (www.kohala.com/)
-    (at Bookpool (www.bookpool.com/.x//sm/0201563177), at Amazon
+    0,3828,0201563177,00.html), by W. Richard Stevens (www.kohala.com) (at
+    Bookpool (www.bookpool.com/.x//sm/0201563177), at Amazon
     (www.amazon.com/exec/obidos/ASIN/0201563177))
   - Win32 System Programming (cseng.aw.com/book/
     0,3828,0201703106,00.html), by Johnson Hart (world.std.com/~jmhart/)
@@ -116,7 +116,7 @@ And here are books I picked up that I found useful as well:
     Andrew Oram & Steve Talbott (www.oreilly.com/~stevet/) (at Bookpool
     (www.bookpool.com/.x//sm/0937175900), at Amazon (www.amazon.com/exec/
     obidos/ASIN/0937175900))
-   
+
   - Thread Time (vig.prenhall.com/catalog/academic/product/
     1,4096,0131900676,00.html), by Scott Norton & Mark DiPasquale (at
     Bookpool (www.bookpool.com/.x//sm/0131900676), at Amazon

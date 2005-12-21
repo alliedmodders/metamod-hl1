@@ -16,6 +16,7 @@
    <li><a href=#GameShutdown>GameShutdown</a>
    <li><a href=#ShouldCollide>ShouldCollide</a>
    <li><a href=#CvarValue>CvarValue</a>
+   <li><a href=#CvarValue2>CvarValue2</a>
 </ul>
 
 <b>NOTE</b>: No examples of these found in SDK...
@@ -65,9 +66,31 @@ with the edict of the player who is responding and the cvars values.
 </tt></blockquote>
 <p><i>comments:</i><br>
 <blockquote>
-	This API can lead to conflicts when you query more than one cvar from a player 
-	at a time.  Use IS_QUERYING_CLIENT_CVAR to check if another plugin is querying before
-	you do so.
+	Added 2005-08-11, no SDK update.  (Available in patched SDK as of hlsdk-2.3-p2.)
+</blockquote>
+<blockquote>
+	<b>Use of this function is DEPRECATED. It has been obsoleted by the
+		pfnCvarValue2() function. See below.</b>
+</blockquote>
+
+<hr><h3><tt><a name="CvarValue2">CvarValue2</a></tt></h3>
+<dd><tt>void (*pfnCvarValue2)( const edict_t *pEnt, int requestID, const char *cvarName, const char *value );</tt><p>
+<i>from alfred@valvesoftware.com, via HLCoders:</i><br>
+<blockquote><tt>
+		When the pfnQueryClientCvarValue2() completes it will call
+		pfnCvarValue2() with the request ID you supplied earlier, the name
+		of the cvar you requested and the value of that cvar. On failure (i.e
+		that user is not connected or the cvar does not exist) the value of the
+		returned cvar will be "Bad CVAR request". If you specify an invalid
+		player edict you will get "Bad Player" as the value response.<br>
+		If a client has a cvar value set to "Bad CVAR request" it cannot be
+		differentiated from a bad request for a cvar. This is considered
+		okay because that value is not considered to be useful as a valid
+		cvar value.
+</tt></blockquote>
+<p><i>comments:</i><br>
+<blockquote>
+	Added 2005-11-22, no SDK update.  (Available in patched SDK as of hlsdk-2.3-p3.)
 </blockquote>
 
 <p>

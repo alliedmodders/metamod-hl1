@@ -15,7 +15,7 @@ Basic Info
   - Game directory:
   - Win32 DLL name:
   - Linux SO name:
-   
+
   - also, List of game entities (see below)
 
 For instance, Counter-Strike would be:

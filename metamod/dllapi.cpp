@@ -324,10 +324,16 @@ int mm_ShouldCollide(edict_t *pentTouched, edict_t *pentOther) {
 	META_NEWAPI_HANDLE(int, 1, FN_SHOULDCOLLIDE, pfnShouldCollide, (pentTouched, pentOther));
 	RETURN_API();
 }
-// Added 2005/08/11 (no SDK update)
+// Added 2005-08-11 (no SDK update)
 void mm_CvarValue(const edict_t *pEdict, const char *value) {
 	g_Players.clear_player_cvar_query(pEdict);
 	META_NEWAPI_HANDLE_void(FN_CVARVALUE, pfnCvarValue, (pEdict, value));
+	RETURN_API_void();
+}
+
+//Added 2005-11-22 (no SDK update)
+void mm_CvarValue2(const edict_t *pEdict, int requestID, const char *cvarName, const char *value) {
+	META_NEWAPI_HANDLE_void(FN_CVARVALUE2, pfnCvarValue2, (pEdict, requestID, cvarName, value));
 	RETURN_API_void();
 }
 
@@ -462,8 +468,12 @@ static NEW_DLL_FUNCTIONS gNewFunctionTable =
 	mm_OnFreeEntPrivateData,		//! pfnOnFreeEntPrivateData()	Called right before the object's memory is freed.  Calls its destructor.
 	mm_GameShutdown,				//! pfnGameShutdown()
 	mm_ShouldCollide,				//! pfnShouldCollide()
-	// Added 2005/08/11 (no SDK update)
-	mm_CvarValue,					//! pfnCvarValue()
+	// Added 2005-08-11 (no SDK update)
+	mm_CvarValue,					//! pfnCvarValue()      (fz) Obsolete!  Use mm_CvarValue2 instead
+	// Added 2005-11-22 (no SDK update)
+	mm_CvarValue2,					//! pfnCvarValue2()     (fz) When pfnQueryClientCvarValue2() completes it will call
+									//!                     pfnCvarValue2() with the request ID supplied earlier, the name of
+									//!                     the cvar requested and the value of that cvar.
 };
 
 C_DLLEXPORT int GetNewDLLFunctions(NEW_DLL_FUNCTIONS *pNewFunctionTable, int *interfaceVersion) 
@@ -486,10 +496,16 @@ C_DLLEXPORT int GetNewDLLFunctions(NEW_DLL_FUNCTIONS *pNewFunctionTable, int *in
 		return(FALSE);
 	}
 	
-	// Detect old engine
-	if (!IS_VALID_PTR((void *)g_engfuncs.pfnQueryClientCvarValue))
-		memcpy(pNewFunctionTable, &gNewFunctionTable, sizeof(NEW_DLL_FUNCTIONS) - sizeof(FN_CVARVALUE));
-	else
+	// Detect old engines
+	if (!IS_VALID_PTR((void *)g_engfuncs.pfnQueryClientCvarValue2))
+	{
+		if (!IS_VALID_PTR((void *)g_engfuncs.pfnQueryClientCvarValue))
+			memcpy(pNewFunctionTable, &gNewFunctionTable, sizeof(NEW_DLL_FUNCTIONS) - sizeof(FN_CVARVALUE) - sizeof(FN_CVARVALUE2));
+		else
+			memcpy(pNewFunctionTable, &gNewFunctionTable, sizeof(NEW_DLL_FUNCTIONS) - sizeof(FN_CVARVALUE2));
+	} else {
         memcpy(pNewFunctionTable, &gNewFunctionTable, sizeof(NEW_DLL_FUNCTIONS));
+	}
+
 	return(TRUE);
 }

@@ -769,7 +769,7 @@ const char *GetPlayerAuthId_Post(edict_t *e) {
 	RETURN_META_VALUE(MRES_IGNORED, NULL);
 }
 
-// Added 2003/11/10 (no SDK update):
+// Added 2003-11-10 (no SDK update):
 
 sequenceEntry_s *SequenceGet_Post(const char* fileName, const char* entryName) {
 	// trace output in Post
@@ -837,11 +837,19 @@ void ResetTutorMessageDecayData_Post(void) {
 	RETURN_META(MRES_IGNORED);
 }
 
-// Added 2005/08/11 (no SDK update):
+// Added 2005-08-11 (no SDK update):
 
 void QueryClientCvarValue_Post(const edict_t *pEdict, const char *cvar) {
 	// trace output in Post
 	ENGINE_TRACE(pfnQueryClientCvarValue, P_POST, ("queried=%s",cvar?cvar:"nil"));
+	RETURN_META(MRES_IGNORED);
+}
+
+// Added 2005-11-22 (no SDK update):
+
+void QueryClientCvarValue2_Post(const edict_t *pEdict, const char *cvar, int requestID) {
+	// trace output in Post
+	ENGINE_TRACE(pfnQueryClientCvarValue2, P_POST, ("queried=%s, requestID=%d",cvar?cvar:"nil",requestID));
 	RETURN_META(MRES_IGNORED);
 }
 
@@ -1036,7 +1044,7 @@ enginefuncs_t meta_engfuncs_post = {
 	// Added for HL 1109 (no SDK update):
 	GetPlayerAuthId_Post,		// pfnGetPlayerAuthId()
 
-	// Added 2003/11/10 (no SDK update):
+	// Added 2003-11-10 (no SDK update):
 	SequenceGet_Post,					// pfnSequenceGet()
 	SequencePickSentence_Post,			// pfnSequencePickSentence()
 	GetFileSize_Post,					// pfnGetFileSize()
@@ -1048,7 +1056,10 @@ enginefuncs_t meta_engfuncs_post = {
 	ProcessTutorMessageDecayBuffer_Post,	// pfnProcessTutorMessageDecayBuffer()
 	ConstructTutorMessageDecayBuffer_Post,	// pfnConstructTutorMessageDecayBuffer()
 	ResetTutorMessageDecayData_Post,		// pfnResetTutorMessageDecayData()
+	// Added 2005-08-11 (no SDK update):
 	QueryClientCvarValue_Post,			// pfnQueryClientCvarValue()
+	// Added 2005-11-22 (no SDK update):
+	QueryClientCvarValue2_Post,			// pfnQueryClientCvarValue2()
 };
 
 C_DLLEXPORT int GetEngineFunctions_Post(enginefuncs_t *pengfuncsFromEngine, int *interfaceVersion ) 
@@ -1067,3 +1078,4 @@ C_DLLEXPORT int GetEngineFunctions_Post(enginefuncs_t *pengfuncsFromEngine, int 
 	memcpy(pengfuncsFromEngine, &meta_engfuncs_post, sizeof(enginefuncs_t));
 	return TRUE;
 }
+

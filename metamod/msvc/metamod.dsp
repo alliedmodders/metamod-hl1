@@ -151,6 +151,10 @@ SOURCE=..\mlist.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\mplayer.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\mplugin.cpp
 # End Source File
 # Begin Source File
@@ -256,6 +260,10 @@ SOURCE=..\mhook.h
 # Begin Source File
 
 SOURCE=..\mlist.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\mplayer.h
 # End Source File
 # Begin Source File
 
