@@ -1,6 +1,6 @@
 # vim: set tw=75 ft=none :
 
-2006/02/19 1.19
+2006/04/17 1.19
  - Added support for new HLSDK API functions QueryClientCvarValue2() and 
    ClientCvar2(). The helper function IS_QUERYING_CLIENT_CVAR() is now
    deprecated as the old functions QueryClientCvarValue() and CvarValue()
