@@ -384,6 +384,19 @@ in the future this could change to some other identifier.)
 	old QueryClientCvar() function. Use with the new QueryClientCvar2()
 	function is not needed and therefor undefined, i.e. it doesn't return
 	anything meaningful when used in conjunction with it.
+<a name="MAKE_REQUEST_ID"><p><li></a>
+<tt> int <b>MAKE_REQUEST_ID(PLID)</b></tt>
+	<br>Returns a unique integer that can be passed to the ClientCvarQuery2 
+    engine function.  The integer is designed to be identifiable from 
+	requests the GameDLL might make, and also unique among plugins. 
+	<i>[added in 1.19]</i>
+<a name="GET_HOOK_TABLES"><p><li></a>
+<tt> void *<b>GET_HOOK_TABLES(PLID, <i>enginefuncs_t **, DLL_FUNCTIONS **, NEW_DLL_FUNCTIONS **</i>)
+	</b></tt>
+  <br>Returns pointers to tables that contain the Metamod hook functions.  These can be used
+    to make engine or GameDLL calls that are interceptable by other plugins.  Use with caution,
+    as calling a hook from a hook can lead to infinite recursion in some scenarios.
+	<i>[added in 1.19]</i>
 </ul>
 
 <p><br>

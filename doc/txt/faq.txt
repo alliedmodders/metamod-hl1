@@ -101,6 +101,15 @@ If I create a Metamod plugin, does it have to be open source?
     site about plugins of a GPL program (www.gnu.org/licenses/gpl-faq.html
     #GPLAndPlugins).
 
+Does Metamod work with Half-Life 2 (Source engine)?
+
+    HL2 includes its own built-in functionality for loading and managing
+    server plugins.
+
+    Also, see SourceMM (aka Metamod:Source) (www.sourcemm.net), which is a
+    seperate project that was derived from Metamod but was written new
+    from scratch.
+
 How about a port of Metamod to other engines like Q3, Unreal, etc?
 
     I haven't looked into it myself, but several folks on the AdminMod
@@ -112,9 +121,5 @@ How about a port of Metamod to other engines like Q3, Unreal, etc?
     engines, although I believe most modern engines are now providing
     their own method for extensions or plugins, so that a third-party
     solution like Metamod wouldn't be necessary.
-
-    If Half-Life 2 ever sees the light of day, I expect I'd look seriously
-    at porting to that - unless, of course, Valve ends up providing their
-    own plugin framework themselves. :)
 
 --------------------------------------------------------------------------

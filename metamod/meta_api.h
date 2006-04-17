@@ -61,7 +61,8 @@
 // Version 5:10 added GINFO_REALDLL_FULLPATH for GetGameInfo [v1.17]
 // Version 5:11 added plugin loading and unloading API [v1.18]
 // Version 5:12 added util code for checking player query status [v1.18]
-#define META_INTERFACE_VERSION "5:12"
+// Version 5:13 added cvarquery2 support and api for calling hook tables [v1.19]
+#define META_INTERFACE_VERSION "5:13"
 
 #ifdef UNFINISHED
 // Version 5:99	added event hook utility functions [v.???]
@@ -231,5 +232,6 @@ C_DLLEXPORT int GetEngineFunctions_Post(enginefuncs_t *pengfuncsFromEngine,
 #define MNEW_GameShutdown				MNEW_FUNC->pfnGameShutdown
 #define MNEW_ShouldCollide				MNEW_FUNC->pfnShouldCollide
 #define MNEW_CvarValue					MNEW_FUNC->pfnCvarValue
+#define MNEW_CvarValue2					MNEW_FUNC->pfnCvarValue2
 
 #endif /* META_API_H */

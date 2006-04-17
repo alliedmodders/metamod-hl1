@@ -1,12 +1,23 @@
 # vim: set tw=75 ft=none :
 
-2005/12/20 1.18.1
+2006/02/19 1.19
  - Added support for new HLSDK API functions QueryClientCvarValue2() and 
    ClientCvar2(). The helper function IS_QUERYING_CLIENT_CVAR() is now
    deprecated as the old functions QueryClientCvarValue() and CvarValue()
    are considered obsolete and their use is strongly advised against.
    The helper function IS_QUERYING_CLIENT_CVAR() cannot be used in
    conjunction with the new API function QueryClientCvarValue2().
+ - Added GET_HOOK_TABLES() to let plugins make interceptable engine/dll 
+   calls.
+ - Added MAKE_REQUEST_ID() to assist plugins in generating request ids
+   for QueryClientCvarValue2().
+ - Added mod support for Move In! 1.0.
+ - Added mod support for Special Death Match Alpha 2.0.
+ - Fixed a bug where Windows DLL load failures produced an empty message.
+ - Fixed a bug where plugins could not catch NewDLL calls for GameDLLs that
+   do not provide NewDLL information.
+ - Fixed a bug corrupting memory when using Metamod with engines or game dlls
+   with a different interface than the one compiled against, e.g. older engines.
 
 2005/08/24 1.18
  - Added new API for loading/unloading plugins.

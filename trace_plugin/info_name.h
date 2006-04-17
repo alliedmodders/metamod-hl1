@@ -39,7 +39,7 @@
 
 #include "vers_meta.h"		// VDATE, VVERSION, etc
 
-#define COPYRIGHT_YEAR "2005"
+#define COPYRIGHT_YEAR "2006"
 
 #define VNAME		"Trace HLSDK API"
 #define VAUTHOR		"Will Day <willday@metamod.org>"

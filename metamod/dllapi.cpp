@@ -194,6 +194,7 @@ void mm_ServerDeactivate(void) {
 	Plugins->unpause_all();
 	// Plugins->retry_all(PT_CHANGELEVEL);
 	g_Players.clear_all_cvar_queries();
+	requestid_counter = 0;
 	RETURN_API_void();
 }
 void mm_PlayerPreThink(edict_t *pEntity) {
@@ -339,23 +340,23 @@ void mm_CvarValue2(const edict_t *pEdict, int requestID, const char *cvarName, c
 
 // From SDK dlls/cbase.cpp:
 // "(wd)" indicates my comments on the functions
-static DLL_FUNCTIONS gFunctionTable = 
+static DLL_FUNCTIONS sFunctionTable = 
 {
-	mm_GameDLLInit,				//! pfnGameInit()				Initialize the game (one-time call after loading of game .dll)
+	mm_GameDLLInit,					//! pfnGameInit()				Initialize the game (one-time call after loading of game .dll)
 	mm_DispatchSpawn,				//! pfnSpawn()
 	mm_DispatchThink,				//! pfnThink()
-	mm_DispatchUse,				//! pfnUse()
+	mm_DispatchUse,					//! pfnUse()
 	mm_DispatchTouch,				//! pfnTouch()
-	mm_DispatchBlocked,			//! pfnBlocked()
+	mm_DispatchBlocked,				//! pfnBlocked()
 	mm_DispatchKeyValue,			//! pfnKeyValue()
 	mm_DispatchSave,				//! pfnSave()
-	mm_DispatchRestore,			//! pfnRestore()
+	mm_DispatchRestore,				//! pfnRestore()
 	mm_DispatchObjectCollsionBox,	//! pfnSetAbsBox()
 
-	mm_SaveWriteFields,			//! pfnSaveWriteFields()
+	mm_SaveWriteFields,				//! pfnSaveWriteFields()
 	mm_SaveReadFields,				//! pfnSaveReadFields()
 
-	mm_SaveGlobalState,			//! pfnSaveGlobalState()
+	mm_SaveGlobalState,				//! pfnSaveGlobalState()
 	mm_RestoreGlobalState,			//! pfnRestoreGlobalState()
 	mm_ResetGlobalState,			//! pfnResetGlobalState()
 
@@ -369,26 +370,26 @@ static DLL_FUNCTIONS gFunctionTable =
 	mm_ServerDeactivate,			//! pfnServerDeactivate()		(wd) Server is leaving the map (shutdown, or changelevel); SDK2
 
 	mm_PlayerPreThink,				//! pfnPlayerPreThink()
-	mm_PlayerPostThink,			//! pfnPlayerPostThink()
+	mm_PlayerPostThink,				//! pfnPlayerPostThink()
 
 	mm_StartFrame,					//! pfnStartFrame()
 	mm_ParmsNewLevel,				//! pfnParmsNewLevel()
 	mm_ParmsChangeLevel,			//! pfnParmsChangeLevel()
 
 	mm_GetGameDescription,			//! pfnGetGameDescription()		Returns string describing current .dll.  E.g. "TeamFotrress 2", "Half-Life"
-	mm_PlayerCustomization,		//! pfnPlayerCustomization()	Notifies .dll of new customization for player.
+	mm_PlayerCustomization,			//! pfnPlayerCustomization()	Notifies .dll of new customization for player.
 
 	mm_SpectatorConnect,			//! pfnSpectatorConnect()		Called when spectator joins server
-	mm_SpectatorDisconnect,		//! pfnSpectatorDisconnect()	Called when spectator leaves the server
+	mm_SpectatorDisconnect,			//! pfnSpectatorDisconnect()	Called when spectator leaves the server
 	mm_SpectatorThink,				//! pfnSpectatorThink()			Called when spectator sends a command packet (usercmd_t)
 
 	mm_Sys_Error,					//! pfnSys_Error()				Notify game .dll that engine is going to shut down.  Allows mod authors to set a breakpoint.  SDK2
 
-	mm_PM_Move,					//! pfnPM_Move()				(wd) SDK2
-	mm_PM_Init,					//! pfnPM_Init()				Server version of player movement initialization; (wd) SDK2
+	mm_PM_Move,						//! pfnPM_Move()				(wd) SDK2
+	mm_PM_Init,						//! pfnPM_Init()				Server version of player movement initialization; (wd) SDK2
 	mm_PM_FindTextureType,			//! pfnPM_FindTextureType()		(wd) SDK2
 
-	mm_SetupVisibility,			//! pfnSetupVisibility()		Set up PVS and PAS for networking for this client; (wd) SDK2
+	mm_SetupVisibility,				//! pfnSetupVisibility()		Set up PVS and PAS for networking for this client; (wd) SDK2
 	mm_UpdateClientData,			//! pfnUpdateClientData()		Set up data sent only to specific client; (wd) SDK2
 	mm_AddToFullPack,				//! pfnAddToFullPack()			(wd) SDK2
 	mm_CreateBaseline,				//! pfnCreateBaseline()			Tweak entity baseline for network encoding, allows setup of player baselines, too.; (wd) SDK2
@@ -402,6 +403,8 @@ static DLL_FUNCTIONS gFunctionTable =
 	mm_InconsistentFile,			//! pfnInconsistentFile()		(wd) SDK2
 	mm_AllowLagCompensation,		//! pfnAllowLagCompensation()	(wd) SDK2
 };
+
+DLL_FUNCTIONS *pHookedDllFunctions = &sFunctionTable;
 
 // It's not clear what the difference is between GetAPI and GetAPI2; they
 // both appear to return the exact same function table.  
@@ -430,13 +433,18 @@ C_DLLEXPORT int GetEntityAPI(DLL_FUNCTIONS *pFunctionTable, int interfaceVersion
 		META_ERROR("GetEntityAPI version mismatch; requested=%d ours=%d", interfaceVersion, INTERFACE_VERSION);
 		return(FALSE);
 	}
-	memcpy(pFunctionTable, &gFunctionTable, sizeof(DLL_FUNCTIONS));
+
+	
+	memcpy(pFunctionTable, &sFunctionTable, sizeof(DLL_FUNCTIONS));
+
+
 	return(TRUE);
 }
 
 C_DLLEXPORT int GetEntityAPI2(DLL_FUNCTIONS *pFunctionTable, int *interfaceVersion)
 {
 	META_DEBUG(3, ("called: GetEntityAPI2; version=%d", *interfaceVersion));
+
 	if(!pFunctionTable) {
 		META_ERROR("GetEntityAPI2 called with null pFunctionTable");
 		return(FALSE);
@@ -447,7 +455,11 @@ C_DLLEXPORT int GetEntityAPI2(DLL_FUNCTIONS *pFunctionTable, int *interfaceVersi
 		*interfaceVersion = INTERFACE_VERSION;
 		return(FALSE);
 	}
-	memcpy(pFunctionTable, &gFunctionTable, sizeof(DLL_FUNCTIONS));
+
+	
+	memcpy(pFunctionTable, &sFunctionTable, sizeof(DLL_FUNCTIONS));
+
+
 	return(TRUE);
 }
 
@@ -463,27 +475,31 @@ C_DLLEXPORT int GetEntityAPI2(DLL_FUNCTIONS *pFunctionTable, int *interfaceVersi
 //
 // Interestingly, it appears to be called by the engine _before_ GetAPI.
 
-static NEW_DLL_FUNCTIONS gNewFunctionTable = 
-{
-	mm_OnFreeEntPrivateData,		//! pfnOnFreeEntPrivateData()	Called right before the object's memory is freed.  Calls its destructor.
-	mm_GameShutdown,				//! pfnGameShutdown()
-	mm_ShouldCollide,				//! pfnShouldCollide()
+static meta_new_dll_functions_t sNewFunctionTable (
+	&mm_OnFreeEntPrivateData,		//! pfnOnFreeEntPrivateData()	Called right before the object's memory is freed.  Calls its destructor.
+	&mm_GameShutdown,				//! pfnGameShutdown()
+	&mm_ShouldCollide,				//! pfnShouldCollide()
 	// Added 2005-08-11 (no SDK update)
-	mm_CvarValue,					//! pfnCvarValue()      (fz) Obsolete!  Use mm_CvarValue2 instead
+	&mm_CvarValue,					//! pfnCvarValue()      (fz) Obsolete!  Use mm_CvarValue2 instead
 	// Added 2005-11-22 (no SDK update)
-	mm_CvarValue2,					//! pfnCvarValue2()     (fz) When pfnQueryClientCvarValue2() completes it will call
+	&mm_CvarValue2					//! pfnCvarValue2()     (fz) When pfnQueryClientCvarValue2() completes it will call
 									//!                     pfnCvarValue2() with the request ID supplied earlier, the name of
 									//!                     the cvar requested and the value of that cvar.
-};
+);
+
+
+NEW_DLL_FUNCTIONS *pHookedNewDllFunctions = &sNewFunctionTable;
 
 C_DLLEXPORT int GetNewDLLFunctions(NEW_DLL_FUNCTIONS *pNewFunctionTable, int *interfaceVersion) 
 {
 	META_DEBUG(6, ("called: GetNewDLLFunctions; version=%d", *interfaceVersion));
+#if 0 // ~dvander - but then you can't use cvar querying on many mods...
 	// Don't provide these functions to engine if gamedll doesn't provide
 	// them.  Otherwise, we're in the position of having to provide answers
 	// we can't necessarily provide (for instance, ShouldCollide())...
 	if(!GameDLL.funcs.newapi_table)
 		return(FALSE);
+#endif
 
 	if(!pNewFunctionTable) {
 		META_ERROR("GetNewDLLFunctions called with null pNewFunctionTable");
@@ -495,17 +511,10 @@ C_DLLEXPORT int GetNewDLLFunctions(NEW_DLL_FUNCTIONS *pNewFunctionTable, int *in
 		*interfaceVersion = NEW_DLL_FUNCTIONS_VERSION;
 		return(FALSE);
 	}
-	
-	// Detect old engines
-	if (!IS_VALID_PTR((void *)g_engfuncs.pfnQueryClientCvarValue2))
-	{
-		if (!IS_VALID_PTR((void *)g_engfuncs.pfnQueryClientCvarValue))
-			memcpy(pNewFunctionTable, &gNewFunctionTable, sizeof(NEW_DLL_FUNCTIONS) - sizeof(FN_CVARVALUE) - sizeof(FN_CVARVALUE2));
-		else
-			memcpy(pNewFunctionTable, &gNewFunctionTable, sizeof(NEW_DLL_FUNCTIONS) - sizeof(FN_CVARVALUE2));
-	} else {
-        memcpy(pNewFunctionTable, &gNewFunctionTable, sizeof(NEW_DLL_FUNCTIONS));
-	}
+
+	sNewFunctionTable.copy_to(pNewFunctionTable);
+
 
 	return(TRUE);
 }
+

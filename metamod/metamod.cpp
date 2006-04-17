@@ -38,7 +38,7 @@
 #include <errno.h>				// errno, etc
 
 #include <extdll.h>				// always
-#include <enginecallback.h>		// GET_GAME_DIR, etc
+#include "enginecallbacks.h"	// GET_GAME_DIR, etc
 
 #include "metamod.h"			// me
 #include "h_export.h"			// GIVE_ENGINE_FUNCTIONS_FN, etc
@@ -74,7 +74,7 @@ gamedll_t GameDLL;
 meta_globals_t PublicMetaGlobals;
 meta_globals_t PrivateMetaGlobals;
 
-enginefuncs_t g_plugin_engfuncs;
+meta_enginefuncs_t g_plugin_engfuncs;
 
 MPluginList *Plugins;
 MRegCmdList *RegCmds;
@@ -84,6 +84,8 @@ MRegMsgList *RegMsgs;
 MPlayerList g_Players;
 
 unsigned int CALL_API_count = 0;
+
+int requestid_counter = 0;
 
 #ifdef UNFINISHED
 MHookList *Hooks;
@@ -105,6 +107,7 @@ void metamod_startup(void) {
 	META_LOG("by %s", VAUTHOR);
 	META_LOG("   %s", VURL);
 	META_LOG("compiled: %s %s (%s)", COMPILE_TIME, COMPILE_TZONE, OPT_TYPE);
+	META_LOG("engine: %s", Engine.info.type());
 
 	// If running with "+developer", allow an opportunity to break in with
 	// a debugger.
@@ -184,14 +187,15 @@ void metamod_startup(void) {
 	// Copy, and store pointer in Engine struct.  Yes, we could just store
 	// the actual engine_t struct in Engine, but then it wouldn't be a
 	// pointer to match the other g_engfuncs.
-	memcpy(&g_plugin_engfuncs, Engine.funcs, sizeof(g_plugin_engfuncs));
+	g_plugin_engfuncs.set_from(Engine.funcs);
 	Engine.pl_funcs=&g_plugin_engfuncs;
 	// substitute our special versions of various commands
 	Engine.pl_funcs->pfnAddServerCommand = meta_AddServerCommand;
 	Engine.pl_funcs->pfnCVarRegister = meta_CVarRegister;
 	Engine.pl_funcs->pfnCvar_RegisterVariable = meta_CVarRegister;
 	Engine.pl_funcs->pfnRegUserMsg = meta_RegUserMsg;
-	Engine.pl_funcs->pfnQueryClientCvarValue = meta_QueryClientCvarValue;
+	if (Engine.pl_funcs->pfnQueryClientCvarValue)
+		Engine.pl_funcs->pfnQueryClientCvarValue = meta_QueryClientCvarValue;
 
 #ifdef UNFINISHED
 	// Init the list of event/logline hooks.
@@ -402,7 +406,7 @@ mBOOL meta_load_gamedll(void) {
 	// that's what the engine appears to do..
 	iface_vers=NEW_DLL_FUNCTIONS_VERSION;
 	GET_FUNC_TABLE_FROM_GAME(GameDLL, pfn_getapinew, "GetNewDLLFunctions", newapi_table, 
-			GETNEWDLLFUNCTIONS_FN, NEW_DLL_FUNCTIONS,
+			GETNEWDLLFUNCTIONS_FN, meta_new_dll_functions_t,
 			&iface_vers, iface_vers, NEW_DLL_FUNCTIONS_VERSION, found);
 
 	// Look for API2 interface in plugin; preferred over API-1.

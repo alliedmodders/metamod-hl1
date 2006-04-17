@@ -32,9 +32,11 @@
 
 #include "h_export.h"		// me
 #include "metamod.h"		// engine_t, etc
+#include "meta_eiface.h"	// HL_enginefuncs_t
 #include "log_meta.h"		// META_DEV, etc
 
 // From SDK dlls/h_export.cpp:
+
 
 #ifdef _WIN32
 //! Required DLL entry point
@@ -57,6 +59,7 @@ BOOL WINAPI DllMain(HINSTANCE /* hinstDLL */, DWORD fdwReason,
 // aren't required by linux, but are included here for completeness, and
 // just in case we come across a need to do something at dll load or
 // unload.
+// NOTE: These aren't actually called. Needs investigation.
 void _init(void) {
 	// called before dlopen() returns
 }
@@ -66,9 +69,10 @@ void _fini(void) {
 #endif
 
 //! Holds engine functionality callbacks
-enginefuncs_t g_engfuncs;
+HL_enginefuncs_t g_engfuncs;
 globalvars_t  *gpGlobals;
 engine_t Engine;
+
 
 // Receive engine function table from engine.
 //
@@ -78,11 +82,14 @@ engine_t Engine;
 void WINAPI GiveFnptrsToDll(enginefuncs_t *pengfuncsFromEngine, 
 		globalvars_t *pGlobals)
 {
-	memcpy(&g_engfuncs, pengfuncsFromEngine, sizeof(g_engfuncs));
+
 	gpGlobals = pGlobals;
 	Engine.funcs = &g_engfuncs;
 	Engine.globals = pGlobals;
-	// NOTE!  Have to call logging function _after_ copying into g_engfuncs, so
+	Engine.info.initialise(pengfuncsFromEngine);
+
+	g_engfuncs.initialise_interface(pengfuncsFromEngine);
+	// NOTE!  Have to call logging function _after_ initialising g_engfuncs, so
 	// that g_engfuncs.pfnAlertMessage() can be resolved properly, heh. :)
 	META_DEV("called: GiveFnptrsToDll");
 
@@ -91,3 +98,4 @@ void WINAPI GiveFnptrsToDll(enginefuncs_t *pengfuncsFromEngine,
 
 	return;
 }
+

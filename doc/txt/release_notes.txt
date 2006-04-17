@@ -1,7 +1,16 @@
 Release Notes
 =-=-=-=-=-=-=
 
+Major changes with Metamod 1.19
+===============================
+
+  - New API version, with one new API function for client cvar querying
+    and another for calling hook functions.
+
+--------------------------------------------------------------------------
+
 Major changes with Metamod 1.18
+===============================
 
   - New API version, with three new API functions for loading and
     unloading plugins from other plugins, and one new function for

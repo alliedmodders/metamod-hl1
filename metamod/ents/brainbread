@@ -54,3 +54,19 @@ weapon_stoner
 weapon_tavor
 weapon_usp
 weapon_winchester
+
+
+// From: Florian Zschocke
+// Date: Fri, 20 Jan 2006 15:38:00 +0100
+//
+bb_objective_item
+mapobject_npc_bum
+mapobject_npc_bum1
+mapobject_npc_bum2
+mapobject_npc_bum3
+mapobject_npc_slavebot
+monster_hgrunt
+monster_hgrunt_shotgun
+monster_player
+pe_rain
+weapon_canister

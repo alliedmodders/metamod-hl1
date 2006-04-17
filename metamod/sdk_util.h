@@ -47,19 +47,13 @@
 #undef DEBUG
 #endif /* DEBUG */
 
+// Inlcude local enginecallbacks wrapper *first* so that the g_engfuncs
+// type is correct and the <enginecallback.h> header protection is already
+// defined.
+#include "enginecallbacks.h"
+
 #include <util.h>
 
-
-// Also, create some additional macros for engine callback functions, which
-// weren't in SDK dlls/enginecallbacks.h but probably should have been.
-
-#define GET_INFOKEYBUFFER		(*g_engfuncs.pfnGetInfoKeyBuffer)
-#define INFOKEY_VALUE			(*g_engfuncs.pfnInfoKeyValue)
-#define SET_CLIENT_KEYVALUE		(*g_engfuncs.pfnSetClientKeyValue)
-#define REG_SVR_COMMAND			(*g_engfuncs.pfnAddServerCommand)
-#define SERVER_PRINT			(*g_engfuncs.pfnServerPrint)
-#define SET_SERVER_KEYVALUE		(*g_engfuncs.pfnSetKeyValue)
-#define QUERY_CLIENT_CVAR_VALUE	(*g_engfuncs.pfnQueryClientCvarValue)
 
 
 // Add overloaded ENTINDEX() version for const edict_t pointer.

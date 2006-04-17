@@ -342,6 +342,20 @@ some other identifier.)
     function is not needed and therefor undefined, i.e. it doesn't return
     anything meaningful when used in conjunction with it.
 
+  - int MAKE_REQUEST_ID(PLID)
+    Returns a unique integer that can be passed to the ClientCvarQuery2
+    engine function. The integer is designed to be identifiable from
+    requests the GameDLL might make, and also unique among plugins. [added
+    in 1.19]
+
+  - void *GET_HOOK_TABLES(PLID, enginefuncs_t **, DLL_FUNCTIONS **,
+    NEW_DLL_FUNCTIONS **)
+    Returns pointers to tables that contain the Metamod hook functions.
+    These can be used to make engine or GameDLL calls that are
+    interceptable by other plugins. Use with caution, as calling a hook
+    from a hook can lead to infinite recursion in some scenarios. [added
+    in 1.19]
+
 
 Plugin Loading
 ==============

@@ -39,7 +39,7 @@
 
 #include "vers_meta.h"		// VDATE, VVERSION, etc
 
-#define COPYRIGHT_YEAR "2003"
+#define COPYRIGHT_YEAR "2006"
 
 #define VNAME		"WD Misc Functions"
 #define VAUTHOR		"Will Day <willday@metamod.org>"

@@ -363,6 +363,21 @@ const char *mutil_IsQueryingClientCvar(plid_t /*plid*/, const edict_t *pEdict)
 	return g_Players.is_querying_cvar(pEdict);
 }
 
+int mutil_MakeRequestId(plid_t /*plid*/)
+{
+	//the offset is to distinguish from gamedll requests, if any
+	return (abs(0xbeef<<16)+(++requestid_counter));
+}
+
+void mutil_GetHookTables(plid_t /*plid*/, enginefuncs_t **peng, DLL_FUNCTIONS **pdll, NEW_DLL_FUNCTIONS **pnewdll)
+{
+	if (peng)
+		*peng = &meta_engfuncs;
+	if (pdll)
+		*pdll = pHookedDllFunctions;
+	if (pnewdll)
+		*pnewdll = pHookedNewDllFunctions;
+}
 
 #ifdef UNFINISHED
 int mutil_HookGameEvent(plid_t plid, game_event_t event, 
@@ -419,6 +434,8 @@ mutil_funcs_t MetaUtilFunctions = {
 	mutil_UnloadMetaPlugin, // pfnUnloadPlugin
 	mutil_UnloadMetaPluginByHandle, //pfnUnloadPluginByHandle
 	mutil_IsQueryingClientCvar, //pfnIsQueryingClientCvar
+	mutil_MakeRequestId,	// pfnMakeRequestId
+	mutil_GetHookTables,    // pfnGetHookTables
 #ifdef UNFINISHED
 	mutil_HookGameEvent,	// pfnGameEvent
 	mutil_HookLogTrigger,	// pfnLogTrigger

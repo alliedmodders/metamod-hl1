@@ -44,6 +44,8 @@
 #include "osdep.h"				// NAME_MAX, etc
 #include "types_meta.h"			// mBOOL
 #include "mplayer.h"			// MPlayerList
+#include "meta_eiface.h"        // HL_enginefuncs_t, meta_enginefuncs_t
+#include "engine_t.h"           // engine_t, Engine
 
 // file that lists plugins to load at startup
 #define PLUGINS_INI			"addons/metamod/plugins.ini"
@@ -77,19 +79,11 @@ typedef struct gamedll_s {
 extern gamedll_t GameDLL;
 
 // SDK variables for storing engine funcs and globals.
-extern enginefuncs_t g_engfuncs;
+extern HL_enginefuncs_t g_engfuncs;
 extern globalvars_t  *gpGlobals;
 
 // Our modified version of the engine funcs, to give to plugins.
-extern enginefuncs_t g_plugin_engfuncs;
-
-// Our structure for storing engine references.
-typedef struct engine_s {
-	enginefuncs_t	*funcs;			// engine funcs
-	globalvars_t	*globals;		// engine globals
-	enginefuncs_t	*pl_funcs;		// "modified" eng funcs we give to plugins
-} engine_t;
-extern engine_t Engine;
+extern meta_enginefuncs_t g_plugin_engfuncs;
 
 // Config structure.
 extern MConfig *Config;
@@ -117,6 +111,10 @@ extern MHookList *Hooks;
 extern meta_globals_t PublicMetaGlobals;
 extern meta_globals_t PrivateMetaGlobals;
 
+// hook function tables
+extern DLL_FUNCTIONS *pHookedDllFunctions;
+extern NEW_DLL_FUNCTIONS *pHookedNewDllFunctions;
+
 // (patch by hullu)
 // Safety check for metamod-bot-plugin bugfix.
 //  engine_api->pfnRunPlayerMove calls dllapi-functions before it returns.
@@ -125,6 +123,9 @@ extern meta_globals_t PrivateMetaGlobals;
 //  With call_count we can fix this by backuping up PublicMetaGlobals if 
 //  it's already being used.
 extern unsigned int CALL_API_count;
+
+// stores previous requestid counter
+extern int requestid_counter;
 
 // (patch by BAILOPAN)
 // Holds cached player info, right now only things for querying cvars

@@ -43,7 +43,7 @@ RSC=rc.exe
 # PROP Ignore_Export_Lib 1
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /MT /W3 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "METAMOD_EXPORTS" /YX /FD /c
-# ADD CPP /nologo /MD /W3 /GX /O2 /I ".." /I "..\..\..\hlsdk\multiplayer\common" /I "..\..\..\hlsdk\multiplayer\engine" /I "..\..\..\hlsdk\multiplayer\dlls" /I "..\..\..\hlsdk\multiplayer\pm_shared" /I "..\..\..\hlsdk\multiplayer source\common" /I "..\..\..\hlsdk\multiplayer source\engine" /I "..\..\..\hlsdk\multiplayer source\dlls" /I "..\..\..\hlsdk\multiplayer source\pm_shared" /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "METAMOD_EXPORTS" /YX /FD /c
+# ADD CPP /nologo /MD /W3 /GX /O2 /I ".." /I "..\..\..\hlsdk\multiplayer\common" /I "..\..\..\hlsdk\multiplayer\engine" /I "..\..\..\hlsdk\multiplayer\dlls" /I "..\..\..\hlsdk\multiplayer\pm_shared" /I "..\..\..\hlsdk\multiplayer source\common" /I "..\..\..\hlsdk\multiplayer source\engine" /I "..\..\..\hlsdk\multiplayer source\dlls" /I "..\..\..\hlsdk\multiplayer source\pm_shared" /D "METAMOD_CORE" /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /D "_USRDLL" /D "METAMOD_EXPORTS" /YX /FD /c
 # ADD BASE MTL /nologo /D "NDEBUG" /mktyplib203 /win32
 # ADD MTL /nologo /D "NDEBUG" /mktyplib203 /win32
 # ADD BASE RSC /l 0x409 /d "NDEBUG"
@@ -70,7 +70,7 @@ LINK32=link.exe
 # PROP Ignore_Export_Lib 1
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /MTd /W3 /Gm /GX /ZI /Od /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "METAMOD_EXPORTS" /YX /FD /c
-# ADD CPP /nologo /W3 /Gm /GX /Zi /Od /I ".." /I "..\..\..\hlsdk\multiplayer\common" /I "..\..\..\hlsdk\multiplayer\engine" /I "..\..\..\hlsdk\multiplayer\dlls" /I "..\..\..\hlsdk\multiplayer\pm_shared" /I "..\..\..\hlsdk\multiplayer source\common" /I "..\..\..\hlsdk\multiplayer source\engine" /I "..\..\..\hlsdk\multiplayer source\dlls" /I "..\..\..\hlsdk\multiplayer source\pm_shared" /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "METAMOD_EXPORTS" /YX /FD /c
+# ADD CPP /nologo /W3 /Gm /GX /Zi /Od /I ".." /I "..\..\..\hlsdk\multiplayer\common" /I "..\..\..\hlsdk\multiplayer\engine" /I "..\..\..\hlsdk\multiplayer\dlls" /I "..\..\..\hlsdk\multiplayer\pm_shared" /I "..\..\..\hlsdk\multiplayer source\common" /I "..\..\..\hlsdk\multiplayer source\engine" /I "..\..\..\hlsdk\multiplayer source\dlls" /I "..\..\..\hlsdk\multiplayer source\pm_shared" /D "METAMOD_CORE" /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "_USRDLL" /D "METAMOD_EXPORTS" /YX /FD /c
 # SUBTRACT CPP /Fr
 # ADD BASE MTL /nologo /D "_DEBUG" /mktyplib203 /win32
 # ADD MTL /nologo /D "_DEBUG" /mktyplib203 /win32
@@ -115,6 +115,10 @@ SOURCE=..\engine_api.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\engineinfo.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\game_support.cpp
 # End Source File
 # Begin Source File
@@ -136,6 +140,10 @@ SOURCE=..\linkplug.cpp
 # Begin Source File
 
 SOURCE=..\log_meta.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\meta_eiface.cpp
 # End Source File
 # Begin Source File
 
@@ -223,6 +231,18 @@ SOURCE=..\engine_api.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\engine_t.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\enginecallbacks.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\engineinfo.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\game_support.h
 # End Source File
 # Begin Source File
@@ -248,6 +268,10 @@ SOURCE=..\log_meta.h
 # Begin Source File
 
 SOURCE=..\meta_api.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\meta_eiface.h
 # End Source File
 # Begin Source File
 

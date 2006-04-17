@@ -4,7 +4,7 @@
 // games.h - list of supported game mods and their data
  
 /*
- * Copyright (c) 2001-2005 Will Day <willday@hpgx.net>
+ * Copyright (c) 2001-2006 Will Day <willday@hpgx.net>
  *
  *    This file is part of Metamod.
  *
@@ -82,6 +82,7 @@
 	{"kanonball",         "hl"MODARCH".so",           "kanonball.dll",     "Kanonball"},
 	{"monkeystrike",      "ms"MODARCH".so",           "monkey.dll",        "Monkeystrike"},
 	{"MorbidPR",          "morbid"MODARCH".so",       "morbid.dll",        "Morbid Inclination"},
+	{"movein",            "hl"MODARCH".so",           "hl.dll",            "Move In!"},
 	{"ns",                "ns"MODARCH".so",           "ns.dll",            "Natural Selection"},
 	{"nsp",               "ns"MODARCH".so",           "ns.dll",            "Natural Selection Beta"},
 	{"oel",               "hl"MODARCH".so",           "hl.dll",            "OeL Half-Life"},
@@ -103,6 +104,7 @@
 	{"rockcrowbar",       "rc"MODARCH".so",           "rc.dll",            "Rocket Crowbar"},
 	{"rspecies",          "hl"MODARCH".so",           "hl.dll",            "Rival Species"},
 	{"scihunt",           "shunt.so",                 "shunt.dll",         "Scientist Hunt"},
+	{"sdmmod",            "sdmmod"MODARCH".so",       "sdmmod.dll",        "Special Death Match"},
 	{"Ship",              "ship"MODARCH".so",         "ship.dll",          "The Ship"},
 	{"si",                "si"MODARCH".so",           "si.dll",            "Science & Industry"},
 	{"snow",              "snow"MODARCH".so",         "snow.dll",          "Snow-War"},

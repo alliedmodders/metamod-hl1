@@ -571,6 +571,7 @@ mBOOL MPlugin::load(PLUG_LOADTIME now) {
 					handle=NULL;
 			}
 			status=PL_BADFILE;
+			info=NULL;	//prevent crash
 			// meta_errno should be already set in query()
 			return(mFALSE);
 		}
@@ -805,7 +806,7 @@ mBOOL MPlugin::attach(PLUG_LOADTIME now) {
 	// Make copy of gameDLL's function tables for each plugin, so we don't
 	// risk the plugins screwing with the tables everyone uses.
 	if(GameDLL.funcs.dllapi_table && !gamedll_funcs.dllapi_table) {
-		gamedll_funcs.dllapi_table = (DLL_FUNCTIONS *) calloc(1, sizeof(DLL_FUNCTIONS));
+		gamedll_funcs.dllapi_table = (DLL_FUNCTIONS *) malloc(sizeof(DLL_FUNCTIONS));
 		if(!gamedll_funcs.dllapi_table) {
 			META_ERROR("dll: Failed attach plugin '%s': Failed malloc() for dllapi_table");
 			RETURN_ERRNO(mFALSE, ME_NOMEM);
@@ -814,13 +815,12 @@ mBOOL MPlugin::attach(PLUG_LOADTIME now) {
 				sizeof(DLL_FUNCTIONS));
 	}
 	if(GameDLL.funcs.newapi_table && !gamedll_funcs.newapi_table) {
-		gamedll_funcs.newapi_table = (NEW_DLL_FUNCTIONS *) malloc(sizeof(NEW_DLL_FUNCTIONS));
+		gamedll_funcs.newapi_table = (NEW_DLL_FUNCTIONS *) calloc(1, sizeof(meta_new_dll_functions_t));
 		if(!gamedll_funcs.newapi_table) {
 			META_ERROR("dll: Failed attach plugin '%s': Failed malloc() for newapi_table");
 			RETURN_ERRNO(mFALSE, ME_NOMEM);
 		}
-		memcpy(gamedll_funcs.newapi_table, GameDLL.funcs.newapi_table, 
-				sizeof(NEW_DLL_FUNCTIONS));
+		static_cast<meta_new_dll_functions_t*>(gamedll_funcs.newapi_table)->set_from(GameDLL.funcs.newapi_table);
 	}
 	if(!(pfn_attach = (META_ATTACH_FN) DLSYM(handle, "Meta_Attach"))) {
 		META_ERROR("dll: Failed attach plugin '%s': Couldn't find Meta_Attach(): %s", desc, DLERROR());
@@ -863,22 +863,24 @@ mBOOL MPlugin::attach(PLUG_LOADTIME now) {
 
 	// Look for API-NEW interface in plugin.  We do this before API2/API, because
 	// that's what the engine appears to do..
-	// But we only do this if the gamedll provides these, so that we don't
+	// [But we only do this if the gamedll provides these, so that we don't
 	// give a plugin the idea that we'll call them, when in fact we won't
 	// (since we don't export them to the engine when the gamedll doesn't
-	// provide them).
-	if(GameDLL.funcs.newapi_table) {
-		iface_vers=NEW_DLL_FUNCTIONS_VERSION;
-		GET_FUNC_TABLE_FROM_PLUGIN(pfnGetNewDLLFunctions, 
-				"GetNewDLLFunctions", newapi_table, 
-				NEW_DLL_FUNCTIONS_FN, NEW_DLL_FUNCTIONS,
-				&iface_vers, iface_vers, NEW_DLL_FUNCTIONS_VERSION);
-		iface_vers=NEW_DLL_FUNCTIONS_VERSION;
-		GET_FUNC_TABLE_FROM_PLUGIN(pfnGetNewDLLFunctions_Post, 
-				"GetNewDLLFunctions_Post", newapi_post_table, 
-				NEW_DLL_FUNCTIONS_FN, NEW_DLL_FUNCTIONS,
-				&iface_vers, iface_vers, NEW_DLL_FUNCTIONS_VERSION);
-	}
+	// provide them).]
+	// We now do this even when the gamedll doesn't provide these because
+	// the plugins might want to use new functions like CvarValue() also
+	// with older gamedlls which do not use the API-NEW themselves.
+	// It is yet unknown if this causes any problems in the engine.
+	iface_vers=NEW_DLL_FUNCTIONS_VERSION;
+	GET_FUNC_TABLE_FROM_PLUGIN(pfnGetNewDLLFunctions, 
+			"GetNewDLLFunctions", newapi_table, 
+			NEW_DLL_FUNCTIONS_FN, meta_new_dll_functions_t,
+			&iface_vers, iface_vers, NEW_DLL_FUNCTIONS_VERSION);
+	iface_vers=NEW_DLL_FUNCTIONS_VERSION;
+	GET_FUNC_TABLE_FROM_PLUGIN(pfnGetNewDLLFunctions_Post, 
+			"GetNewDLLFunctions_Post", newapi_post_table, 
+			NEW_DLL_FUNCTIONS_FN, meta_new_dll_functions_t,
+			&iface_vers, iface_vers, NEW_DLL_FUNCTIONS_VERSION);
 
 	// Look for API2 interface in plugin; preferred over API-1.
 	iface_vers=INTERFACE_VERSION;
@@ -908,12 +910,12 @@ mBOOL MPlugin::attach(PLUG_LOADTIME now) {
 	iface_vers=ENGINE_INTERFACE_VERSION;
 	GET_FUNC_TABLE_FROM_PLUGIN(pfnGetEngineFunctions, 
 			"GetEngineFunctions", engine_table, 
-			GET_ENGINE_FUNCTIONS_FN, enginefuncs_t,
+			GET_ENGINE_FUNCTIONS_FN, meta_enginefuncs_t,
 			&iface_vers, iface_vers, ENGINE_INTERFACE_VERSION);
 	iface_vers=ENGINE_INTERFACE_VERSION;
 	GET_FUNC_TABLE_FROM_PLUGIN(pfnGetEngineFunctions_Post, 
 			"GetEngineFunctions_Post", engine_post_table, 
-			GET_ENGINE_FUNCTIONS_FN, enginefuncs_t,
+			GET_ENGINE_FUNCTIONS_FN, meta_enginefuncs_t,
 			&iface_vers, iface_vers, ENGINE_INTERFACE_VERSION);
 
 	if(!dllapi_table && !dllapi_post_table 
@@ -1043,7 +1045,7 @@ mBOOL MPlugin::detach(PLUG_LOADTIME now, PL_UNLOAD_REASON reason) {
 		return mTRUE;
 
 	if(!(pfn_detach = (META_DETACH_FN) DLSYM(handle, "Meta_Detach"))) {
-		META_ERROR("dll: Error detach plugin '%s': Couldn't find Meta_detach(): %s", desc, DLERROR());
+		META_ERROR("dll: Error detach plugin '%s': Couldn't find Meta_Detach(): %s", desc, DLERROR());
 		// caller will dlclose()
 		RETURN_ERRNO(mFALSE, ME_DLMISSING);
 	}

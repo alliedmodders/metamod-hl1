@@ -37,7 +37,7 @@
 #ifndef LOG_META_H
 #define LOG_META_H
 
-#include <enginecallback.h>		// ALERT, etc
+#include "enginecallbacks.h"	// ALERT, etc
 #include "sdk_util.h"			// UTIL_VarArgs, etc
 
 // Debug logging.  
@@ -96,5 +96,7 @@ void META_WARNING(char *fmt, ...);
 void META_ERROR(char *fmt, ...);
 void META_LOG(char *fmt, ...);
 void META_CLIENT(edict_t *pEntity, char *fmt, ...);
+
+void flush_ALERT_buffer(void);
 
 #endif /* LOG_META_H */

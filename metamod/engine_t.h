@@ -1,10 +1,10 @@
 // vi: set ts=4 sw=4 :
 // vim: set tw=75 :
 
-// info_name.h - name, desc, author, etc
+// engine_t.h - The engine_t type
 
 /*
- * Copyright (c) 2001-2004 Will Day <willday@hpgx.net>
+ * Copyright (c) 2001-2006 Will Day <willday@hpgx.net>
  *
  *    This file is part of Metamod.
  *
@@ -34,23 +34,48 @@
  *
  */
 
-#ifndef INFO_NAME_H
-#define INFO_NAME_H
+#ifndef MM_ENGINE_T_H
+#define MM_ENGINE_T_H
 
-#include "vers_meta.h"		// VDATE, VVERSION, etc
+#include "eiface.h"             // engfuncs_t, globalvars_t
+#include "engineinfo.h"         // EngineInfo
 
-#define VNAME		"Metamod"
-#define VAUTHOR		"Will Day <willday@metamod.org>"
-#define VURL		"http://www.metamod.org/"
 
-#define COPYRIGHT_YEAR "2006"
+// Our structure for storing engine references.
+struct engine_t {
+    engine_t();
+    engine_t(const engine_t&);
+    engine_t& operator=(const engine_t&);
 
-// Various strings for the Windows DLL Resources in res_meta.rc
-#define RC_COMMENTS		"Metamod allows running multiple mod-like plugin DLLs, to add functionality or change the behavior of the running HLDS game mod.  See " VURL
-#define RC_DESC			"Metamod Half-Life MOD DLL"
-#define RC_FILENAME		"METAMOD.DLL"
-#define RC_INTERNAL		"METAMOD"
-#define RC_COPYRIGHT	"Copyright© 2001-" COPYRIGHT_YEAR  " Will Day; GPL licensed"
-#define RC_LICENSE      "Licensed under the GNU General Public License"
+	enginefuncs_t	*funcs;			// engine funcs
+	globalvars_t	*globals;		// engine globals
+	enginefuncs_t	*pl_funcs;		// "modified" eng funcs we give to plugins
+    EngineInfo       info;          // some special info elements
+};
 
-#endif /* INFO_NAME_H */
+inline engine_t::engine_t() 
+    : funcs(NULL), globals(NULL), pl_funcs(NULL), info() 
+{
+}
+
+
+inline engine_t::engine_t(const engine_t& _rhs) 
+    : funcs(_rhs.funcs), globals(_rhs.globals), pl_funcs(_rhs.pl_funcs), info(_rhs.info) 
+{
+}
+
+
+inline engine_t& engine_t::operator=(const engine_t& _rhs) 
+{
+    funcs = _rhs.funcs;
+    globals = _rhs.globals;
+    pl_funcs = _rhs.pl_funcs;
+    info = _rhs.info;
+    return *this;
+}
+
+
+extern engine_t Engine;
+
+#endif /* MM_ENGINE_T_H */
+

@@ -38,12 +38,22 @@
 #include <stdarg.h>		// va_start, etc
 
 #include <extdll.h>				// always
-#include <enginecallback.h>		// ALERT, etc
+#include "enginecallbacks.h"	// ALERT, etc
 
 #include "log_meta.h"			// me
 #include "osdep.h"				// win32 vsnprintf, etc
 
 cvar_t meta_debug = {"meta_debug", "0", FCVAR_EXTDLL, 0, NULL};
+
+enum MLOG_SERVICE {
+	mlsCONS = 1,
+	mlsDEV,
+	mlsIWEL,
+	mlsCLIENT
+};
+
+static void buffered_ALERT(MLOG_SERVICE service, ALERT_TYPE atype, const char *prefix, const char *fmt, va_list ap);
+
 
 // Print to console.
 void META_CONS(char *fmt, ...) {
@@ -64,62 +74,59 @@ void META_CONS(char *fmt, ...) {
 }
 
 // Log developer-level messages (obsoleted).
+static const char *const prefixDEV = "[META] dev:";
 void META_DEV(char *fmt, ...) {
 	va_list ap;
-	char buf[MAX_LOGMSG_LEN];
 	int dev;
 
-	dev=(int) CVAR_GET_FLOAT("developer");
-	if(dev==0) return;
+	if(NULL != g_engfuncs.pfnCVarGetFloat) {
+		dev=(int) CVAR_GET_FLOAT("developer");
+		if(dev==0) return;
+	}
 
 	va_start(ap, fmt);
-	vsnprintf(buf, sizeof(buf), fmt, ap);
+	buffered_ALERT(mlsDEV, at_logged, prefixDEV, fmt, ap);
 	va_end(ap);
-	ALERT(at_logged, "[META] dev: %s\n", buf);
 }
 
 // Log infos.
+static const char *const prefixINFO = "[META] INFO:";
 void META_INFO(char *fmt, ...) {
 	va_list ap;
-	char buf[MAX_LOGMSG_LEN];
 
 	va_start(ap, fmt);
-	vsnprintf(buf, sizeof(buf), fmt, ap);
+	buffered_ALERT(mlsIWEL, at_logged, prefixINFO, fmt, ap);
 	va_end(ap);
-	ALERT(at_logged, "[META] INFO: %s\n", buf);
 }
 
 // Log warnings.
+static const char *const prefixWARNING = "[META] WARNING:";
 void META_WARNING(char *fmt, ...) {
 	va_list ap;
-	char buf[MAX_LOGMSG_LEN];
 
 	va_start(ap, fmt);
-	vsnprintf(buf, sizeof(buf), fmt, ap);
+	buffered_ALERT(mlsIWEL, at_logged, prefixWARNING, fmt, ap);
 	va_end(ap);
-	ALERT(at_logged, "[META] WARNING: %s\n", buf);
 }
 
 // Log errors.
+static const char *const prefixERROR = "[META] ERROR:";
 void META_ERROR(char *fmt, ...) {
 	va_list ap;
-	char buf[MAX_LOGMSG_LEN];
 
 	va_start(ap, fmt);
-	vsnprintf(buf, sizeof(buf), fmt, ap);
+	buffered_ALERT(mlsIWEL, at_logged, prefixERROR, fmt, ap);
 	va_end(ap);
-	ALERT(at_logged, "[META] ERROR: %s\n", buf);
 }
 
 // Normal log messages.
+static const char *const prefixLOG = "[META]";
 void META_LOG(char *fmt, ...) {
 	va_list ap;
-	char buf[MAX_LOGMSG_LEN];
 
 	va_start(ap, fmt);
-	vsnprintf(buf, sizeof(buf), fmt, ap);
+	buffered_ALERT(mlsIWEL, at_logged, prefixLOG, fmt, ap);
 	va_end(ap);
-	ALERT(at_logged, "[META] %s\n", buf);
 }
 
 // Print to client.
@@ -138,5 +145,70 @@ void META_CLIENT(edict_t *pEntity, char *fmt, ...) {
 		buf[len-1] = '\n';
 
 	CLIENT_PRINTF(pEntity, print_console, buf);
+}
+
+
+
+struct BufferedMessage {
+	MLOG_SERVICE service;
+	ALERT_TYPE atype;
+	const char *prefix;
+	char buf[MAX_LOGMSG_LEN];
+	BufferedMessage *next;
+};
+
+static BufferedMessage *messageQueueStart = NULL;
+static BufferedMessage *messageQueueEnd   = NULL;
+
+void buffered_ALERT(MLOG_SERVICE service, ALERT_TYPE atype, const char *prefix, const char *fmt, va_list ap) {
+	char buf[MAX_LOGMSG_LEN];
+	BufferedMessage *msg;
+
+	if (NULL != g_engfuncs.pfnAlertMessage) {
+		vsnprintf(buf, sizeof(buf), fmt, ap);
+		ALERT(atype, "%s %s\n", prefix, buf);
+		return;
+	}
+
+	// Engine AlertMessage function not available. Buffer message.
+	msg = new BufferedMessage;
+	if (NULL == msg) {
+		// though luck, gonna lose this message
+		return;
+	}
+	msg->service = service;
+	msg->atype = atype;
+	msg->prefix = prefix;
+	vsnprintf(msg->buf, sizeof(buf), fmt, ap);
+	msg->next = NULL;
+
+	if (NULL == messageQueueEnd) {
+		messageQueueStart = messageQueueEnd = msg;
+	} else {
+		messageQueueEnd->next = msg;
+		messageQueueEnd = msg;
+	}	
+} 
+
+
+// Flushes the message queue, printing messages to the respective
+// service. This function doesn't check anymore if the g_engfuncs
+// jumptable is set. Don't call it if it isn't set.
+void flush_ALERT_buffer(void) {
+	BufferedMessage *msg = messageQueueStart;
+	int dev = (int) CVAR_GET_FLOAT("developer");
+
+	while (NULL != msg) {
+		if(msg->service == mlsDEV && dev==0) {
+			;
+		} else {
+			ALERT(msg->atype, "b>%s %s\n", msg->prefix, msg->buf);
+		}
+		messageQueueStart = messageQueueStart->next;
+		delete msg;
+		msg = messageQueueStart;
+	}
+
+	messageQueueStart = messageQueueEnd = NULL;
 }
 
