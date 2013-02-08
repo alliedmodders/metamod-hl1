@@ -123,7 +123,8 @@ mBOOL install_gamedll(char *from, const char *to) {
 mBOOL setup_gamedll(gamedll_t *gamedll) {
 	static char override_desc_buf[256];
 	game_modinfo_t *known;
-	const char *cp, *knownfn=0;
+	const char *cp;
+	char *knownfn = NULL;
 	int override=0;
 
 	// Check for old-style "metagame.ini" file and complain.
@@ -133,9 +134,9 @@ mBOOL setup_gamedll(gamedll_t *gamedll) {
 	// First, look for a known game, based on gamedir.
 	if((known=lookup_game(gamedll->name))) {
 #ifdef _WIN32
-		knownfn=known->win_dll;
+		knownfn=strdup(known->win_dll);
 #elif defined(linux)
-		knownfn=known->linux_so;
+		knownfn=strdup(known->linux_so);
 #else
 #error "OS unrecognized"
 #endif /* _WIN32 */
@@ -176,10 +177,23 @@ mBOOL setup_gamedll(gamedll_t *gamedll) {
 				knownfn);
 		// Check if the gamedll file exists. If not, try to install it from
 		// the cache.
+		mBOOL ok = mTRUE;
 		if(!valid_gamedir_file(gamedll->pathname)) {
 			snprintf(gamedll->real_pathname, sizeof(gamedll->real_pathname), "%s/dlls/%s", 
 					gamedll->gamedir, knownfn);
-			install_gamedll(gamedll->pathname, gamedll->real_pathname);
+			ok = install_gamedll(gamedll->pathname, gamedll->real_pathname);
+		}
+
+		// If the file still doesn't exist, and knownfn has an "_i386.so"
+		// in it, try to strip the _i386.so out.
+		if (!ok) {
+			if (char *loc = strstr(knownfn, "_i386.so")) {
+				strcpy(loc, ".so");
+				snprintf(gamedll->pathname, sizeof(gamedll->pathname), "dlls/%s", knownfn);
+				snprintf(gamedll->real_pathname, sizeof(gamedll->real_pathname),
+						gamedll->gamedir, knownfn);
+				install_gamedll(gamedll->pathname, gamedll->real_pathname);
+			}
 		}
 
 		// Now make an absolute path
@@ -216,5 +230,8 @@ mBOOL setup_gamedll(gamedll_t *gamedll) {
 		META_LOG("Recognized game '%s'; using dllfile '%s'", gamedll->name, 
 				gamedll->file);
 	}
+
+	free(knownfn);
+
 	return(mTRUE);
 }
