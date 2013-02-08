@@ -108,7 +108,7 @@ char *my_strtok_r(char *s, const char *delim, char **ptrptr) {
 //    http://msdn.microsoft.com/library/en-us/debug/errors_0sdh.asp
 // except without FORMAT_MESSAGE_ALLOCATE_BUFFER, since we use a local
 // static buffer.
-char *str_GetLastError(void) {
+const char *str_GetLastError(void) {
 	static char buf[MAX_STRBUF_LEN];
 	FormatMessage(FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS, 
 			NULL, GetLastError(), 
