@@ -128,7 +128,7 @@ inline int old_valid_file(char *path) {
 	FREE_FILE(cp);
 	return(ret);
 }
-int valid_gamedir_file(const char *path);
+int valid_gamedir_file(char *path);
 char *full_gamedir_path(const char *path, char *fullpath);
 
 // Turn a variable/function name into the corresponding string, optionally

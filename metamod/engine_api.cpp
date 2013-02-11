@@ -263,7 +263,7 @@ void mm_ServerExecute(void) {
 	META_ENGINE_HANDLE_void(FN_SERVEREXECUTE, pfnServerExecute, ());
 	RETURN_API_void()
 }
-void mm_engClientCommand(edict_t *pEdict, const char *szFmt, ...) {
+void mm_engClientCommand(edict_t *pEdict, char *szFmt, ...) {
 	META_ENGINE_HANDLE_void_varargs(FN_CLIENTCOMMAND_ENG, pfnClientCommand, pEdict, szFmt);
 	RETURN_API_void()
 }
@@ -348,7 +348,7 @@ void mm_CVarSetString(const char *szVarName, const char *szValue) {
 	RETURN_API_void()
 }
 
-void mm_AlertMessage(ALERT_TYPE atype, const char *szFmt, ...) {
+void mm_AlertMessage(ALERT_TYPE atype, char *szFmt, ...) {
 #ifndef UNFINISHED
 	META_ENGINE_HANDLE_void_varargs(FN_ALERTMESSAGE, pfnAlertMessage, atype, szFmt);
 #else /* UNFINISHED */

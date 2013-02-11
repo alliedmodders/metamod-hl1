@@ -47,7 +47,7 @@
 typedef struct api_info_s {
 	mBOOL trace;		// if true, log info about this function
 	int loglevel;		// level at which to log info about this function
-	const char *name;	// string representation of function name
+	char *name;			// string representation of function name
 } api_info_t;
 
 

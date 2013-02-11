@@ -94,9 +94,7 @@ MHookList *Hooks;
 // Very first metamod function that's run.
 // Do startup operations...
 void metamod_startup(void) {
-	const char *mmfile = NULL;
-	const char *cfile = NULL;
-	const char *cp;
+	char *cp, *mmfile=NULL, *cfile=NULL;
 
 	META_CONS("   ");
 	META_CONS("   %s version %s  Copyright (c) 2001-%s %s", VNAME, VVERSION, COPYRIGHT_YEAR, VAUTHOR);

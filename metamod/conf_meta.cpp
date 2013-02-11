@@ -59,7 +59,7 @@ void MConfig::init(option_t *global_options) {
 		set(optp, optp->init);
 }
 
-option_t *MConfig::find(const char *lookup) {
+option_t *MConfig::find(char *lookup) {
 	option_t *optp;
 
 	for(optp=list; optp->name && !strmatch(optp->name, lookup); optp++);
@@ -69,7 +69,7 @@ option_t *MConfig::find(const char *lookup) {
 		RETURN_ERRNO(NULL, ME_NOTFOUND);
 }
 
-mBOOL MConfig::set(const char *key, const char *value) {
+mBOOL MConfig::set(char *key, char *value) {
 	option_t *optp;
 	optp=find(key);
 	if(optp)
@@ -78,7 +78,7 @@ mBOOL MConfig::set(const char *key, const char *value) {
 		RETURN_ERRNO(mFALSE, ME_NOTFOUND);
 }
 
-mBOOL MConfig::set(option_t *setp, const char *setstr) {
+mBOOL MConfig::set(option_t *setp, char *setstr) {
 	char pathbuf[PATH_MAX];
 	int *optval = (int *) setp->dest;
 	char **optstr = (char **) setp->dest;
@@ -150,7 +150,7 @@ mBOOL MConfig::set(option_t *setp, const char *setstr) {
 	return(mTRUE);
 }
 
-mBOOL MConfig::load(const char *fn) {
+mBOOL MConfig::load(char *fn) {
 	FILE *fp;
 	char loadfile[PATH_MAX];
 	char line[MAX_CONF_LEN];

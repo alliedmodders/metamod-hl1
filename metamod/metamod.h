@@ -68,7 +68,7 @@ extern cvar_t meta_version;
 // Info about the game dll/mod.
 typedef struct gamedll_s {
 	char name[NAME_MAX];		// ie "cstrike" (from gamedir)
-	const char *desc;			// ie "Counter-Strike"
+	char *desc;					// ie "Counter-Strike"
 	char gamedir[PATH_MAX];		// ie "/home/willday/half-life/cstrike"
 	char pathname[PATH_MAX];	// ie "/home/willday/half-life/cstrike/dlls/cs_i386.so"
 	char const *file;			// ie "cs_i386.so"
@@ -201,7 +201,7 @@ mBOOL meta_load_gamedll(void);
 	MPlugin *iplug; \
 	FN_TYPE pfn_routine=NULL; \
 	int loglevel=api_info_table.pfnName.loglevel; \
-	const char *pfn_string=api_info_table.pfnName.name; \
+	char *pfn_string=api_info_table.pfnName.name; \
 	meta_globals_t backup_meta_globals; \
 	/* fix bug with metamod-bot-plugins (hullu)*/ \
 	if (CALL_API_count++>0) \
@@ -308,7 +308,7 @@ mBOOL meta_load_gamedll(void);
 	MPlugin *iplug; \
 	FN_TYPE pfn_routine=NULL; \
 	int loglevel=api_info_table.pfnName.loglevel; \
-	const char *pfn_string=api_info_table.pfnName.name; \
+	char *pfn_string=api_info_table.pfnName.name; \
 	meta_globals_t backup_meta_globals; \
 	/*Fix bug with metamod-bot-plugins*/ \
 	if (CALL_API_count++>0) \

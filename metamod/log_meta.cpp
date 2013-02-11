@@ -56,7 +56,7 @@ static void buffered_ALERT(MLOG_SERVICE service, ALERT_TYPE atype, const char *p
 
 
 // Print to console.
-void META_CONS(const char *fmt, ...) {
+void META_CONS(char *fmt, ...) {
 	va_list ap;
 	char buf[MAX_LOGMSG_LEN];
 	unsigned int len;
@@ -75,7 +75,7 @@ void META_CONS(const char *fmt, ...) {
 
 // Log developer-level messages (obsoleted).
 static const char *const prefixDEV = "[META] dev:";
-void META_DEV(const char *fmt, ...) {
+void META_DEV(char *fmt, ...) {
 	va_list ap;
 	int dev;
 
@@ -91,7 +91,7 @@ void META_DEV(const char *fmt, ...) {
 
 // Log infos.
 static const char *const prefixINFO = "[META] INFO:";
-void META_INFO(const char *fmt, ...) {
+void META_INFO(char *fmt, ...) {
 	va_list ap;
 
 	va_start(ap, fmt);
@@ -101,7 +101,7 @@ void META_INFO(const char *fmt, ...) {
 
 // Log warnings.
 static const char *const prefixWARNING = "[META] WARNING:";
-void META_WARNING(const char *fmt, ...) {
+void META_WARNING(char *fmt, ...) {
 	va_list ap;
 
 	va_start(ap, fmt);
@@ -111,7 +111,7 @@ void META_WARNING(const char *fmt, ...) {
 
 // Log errors.
 static const char *const prefixERROR = "[META] ERROR:";
-void META_ERROR(const char *fmt, ...) {
+void META_ERROR(char *fmt, ...) {
 	va_list ap;
 
 	va_start(ap, fmt);
@@ -121,7 +121,7 @@ void META_ERROR(const char *fmt, ...) {
 
 // Normal log messages.
 static const char *const prefixLOG = "[META]";
-void META_LOG(const char *fmt, ...) {
+void META_LOG(char *fmt, ...) {
 	va_list ap;
 
 	va_start(ap, fmt);
@@ -130,7 +130,7 @@ void META_LOG(const char *fmt, ...) {
 }
 
 // Print to client.
-void META_CLIENT(edict_t *pEntity, const char *fmt, ...) {
+void META_CLIENT(edict_t *pEntity, char *fmt, ...) {
 	va_list ap;
 	char buf[MAX_CLIENTMSG_LEN];
 	unsigned int len;

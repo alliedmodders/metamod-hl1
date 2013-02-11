@@ -37,7 +37,7 @@
 
 #include "osdep.h"			// win32 vsnprintf, etc
 
-char* UTIL_VarArgs( const char *format, ... )
+char* UTIL_VarArgs( char *format, ... )
 {
 	va_list		argptr;
 	static char		string[1024];

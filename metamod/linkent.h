@@ -55,7 +55,7 @@
 typedef void (*ENTITY_FN) (entvars_t *);
 
 // Function to perform common code of LINK_ENTITY_TO_GAME.
-void do_link_ent(ENTITY_FN *pfnEntity, int *missing, const char *entStr, 
+void do_link_ent(ENTITY_FN *pfnEntity, int *missing, char *entStr, 
 		entvars_t *pev);
 
 #define LINK_ENTITY_TO_GAME(entityName) \
@@ -63,7 +63,7 @@ void do_link_ent(ENTITY_FN *pfnEntity, int *missing, const char *entStr,
 	void entityName(entvars_t *pev) { \
 		static ENTITY_FN pfnEntity = NULL; \
 		static int missing=0; \
-		const char *entStr; \
+		char *entStr; \
 		entStr = STRINGIZE(entityName, 0); \
 		do_link_ent(&pfnEntity, &missing, entStr, pev); \
 	}
@@ -86,7 +86,7 @@ void do_link_ent(ENTITY_FN *pfnEntity, int *missing, const char *entStr,
 	void entityName(entvars_t *pev) { \
 		static ENTITY_FN pfnEntity = NULL; \
 		static int missing=0; \
-		const char *entStr; \
+		char *entStr; \
 		MPlugin *findp; \
 		entStr = STRINGIZE(entityName, 0); \
 		if(missing) \

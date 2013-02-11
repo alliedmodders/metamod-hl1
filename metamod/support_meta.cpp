@@ -54,7 +54,7 @@ void do_exit(int exitval) {
 // Also, formerly named just "valid_file".
 //
 // Special-case-recognize "/dev/null" as a valid file.
-int valid_gamedir_file(const char *path) {
+int valid_gamedir_file(char *path) {
 	char buf[PATH_MAX];
 	struct stat st;
 	int ret, reg, size;

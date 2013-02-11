@@ -60,10 +60,10 @@ typedef enum {
 typedef mBOOL (*SETOPT_FN) (char *key, char *value);
 
 typedef struct option_s {
-	const char *name;		// option name
-	cf_type_t type;			// option type
-	void *dest;				// addr of destination variable, or handler function
-	const char *init;		// initial value, as a string, just as config file would
+	char *name;		// option name
+	cf_type_t type;	// option type
+	void *dest;		// addr of destination variable, or handler function
+	char *init;		// initial value, as a string, just as config file would
 } option_t;
 
 class MConfig {
@@ -72,8 +72,8 @@ class MConfig {
 		option_t *list;
 		char *filename;
 		// functions
-		option_t *find(const char *lookup);
-		mBOOL set(option_t *setp, const char *value);
+		option_t *find(char *lookup);
+		mBOOL set(option_t *setp, char *value);
 		// Private; to satisfy -Weffc++ "has pointer data members but does
 		// not override" copy/assignment constructor.
 		void operator=(const MConfig &src);
@@ -88,8 +88,8 @@ class MConfig {
 		char *exec_cfg;		// ie metaexec.cfg, exec.cfg
 		// functions
 		void init(option_t *global_options);
-		mBOOL load(const char *filename);
-		mBOOL set(const char *key, const char *value);
+		mBOOL load(char *filename);
+		mBOOL set(char *key, char *value);
 		void show(void);
 };
 
