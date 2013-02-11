@@ -88,8 +88,10 @@ ifeq "$(OS)" "linux"
 	ifeq "$(ARCHD)" "x86_64"
 		ARCH=x86_64
 		ARCHD=.amd64
+		MODARCH=amd64
 	else
 		ARCHD=
+		MODARCH=i386
 	endif
 else	## windows
 	INSTALL=cp
@@ -135,9 +137,13 @@ endif
 
 CCOPT += $(CCO) -ffast-math -funroll-loops \
 	-fomit-frame-pointer -fexpensive-optimizations \
-	-fno-exceptions -fno-rtti -s -Wno-uninitialized
+	-fno-exceptions -fno-rtti -s
 
-CCOPT += -falign-loops=2 -falign-jumps=2 -falign-functions=2 
+ifeq "$(GCCMAJ)" "3"
+	CCOPT += -falign-loops=2 -falign-jumps=2 -falign-functions=2 
+else
+	CCOPT += -malign-loops=2 -malign-jumps=2 -malign-functions=2 
+endif
 
 # optimization level; overridden for certain problematic files
 CCO = -O6
@@ -257,7 +263,7 @@ $(OBJDIR_LINUX)/%.o: $(SRCDIR)/%.cpp
 	$(DO_CC_LINUX)
 
 # linux .so target file
-LIBFILE_LINUX = $(MODNAME).so
+LIBFILE_LINUX = $(MODNAME)_$(MODARCH).so
 TARGET_LINUX = $(OBJDIR_LINUX)/$(LIBFILE_LINUX)
 
 
