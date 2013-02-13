@@ -158,12 +158,20 @@ endif
 
 CCOPT += $(CCO) -ffast-math -funroll-loops \
 	-fomit-frame-pointer -fexpensive-optimizations \
-	-fno-exceptions -fno-rtti -s
+	-fno-exceptions -fno-rtti
 
 CCOPT += -falign-loops=2 -falign-jumps=2 -falign-functions=2 
 
 ifeq "$(GCCMAJ)" "4"
 	CCOPT += -fvisibility=hidden -fvisibility-inlines-hidden
+endif
+
+# ld on OS X doesn't actually strip symbols with this flag
+ifneq "$(OS)" "Darwin"
+	CCOPT += -s
+	STRIP_CMD =
+else
+	STRIP_CMD = strip -ux $(TARGET_DARWIN)
 endif
 
 # optimization level; overridden for certain problematic files
@@ -241,6 +249,7 @@ else	# debug
 	OBJDIR_WIN = $(OBJDIR_WIN_DBG)
 	OBJDIR_DARWIN = $(OBJDIR_DARWIN_DBG)
 	DLLS_DIR := $(DLLS_DIR)/debug
+	STRIP_CMD =
 endif
 
 include Config.mak
@@ -406,6 +415,7 @@ $(TARGET_LINUX): msgs/debug msgs/log msgs/error $(OBJDIR_LINUX) $(OBJ_LINUX)
 
 $(TARGET_DARWIN): msgs/debug msgs/log msgs/error $(OBJDIR_DARWIN) $(OBJ_DARWIN)
 	$(LINK_DARWIN)
+	$(STRIP_CMD)
 
 # for plugins, recompile meta_api.cpp if info_name.h changed
 $(OBJDIR_LINUX)/meta_api.o $(OBJDIR_DARWIN)/meta_api.o $(OBJDIR_WIN)/meta_api.o: info_name.h
