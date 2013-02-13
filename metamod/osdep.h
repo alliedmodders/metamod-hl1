@@ -60,6 +60,9 @@ extern mBOOL dlclose_handle_invalid;
 #elif defined(_WIN32)
 	#define PLATFORM		"mswin"
 	#define PLATFORM_SPC	"win32"
+#elif defined(__APPLE__)
+	#define PLATFORM		"osx"
+	#define PLATFORM_SPC	"osx32"
 #else /* unknown */
 	#error "OS unrecognized"
 #endif /* unknown */
@@ -83,7 +86,7 @@ extern mBOOL dlclose_handle_invalid;
 	#define DLLEXPORT	__declspec(dllexport)
 	// WINAPI should be provided in the windows compiler headers.
 	// It's usually defined to something like "__stdcall".
-#elif defined(linux)
+#elif defined(linux) || defined(__APPLE__)
 	#define DLLEXPORT	/* */
 	#define WINAPI		/* */
 #endif /* linux */
@@ -118,7 +121,7 @@ extern mBOOL dlclose_handle_invalid;
 
 
 // Functions & types for DLL open/close/etc operations.
-#ifdef linux
+#if defined(linux) || defined(__APPLE__)
 	#include <dlfcn.h>
 	typedef void* DLHANDLE;
 	typedef void* DLFUNC;
@@ -191,7 +194,7 @@ mBOOL os_safe_call(REG_CMD_FN pfn);
 // Note that both OS's include room for null-termination:
 //   linux:    "# chars in a path name including nul"
 //   win32:    "note that the sizes include space for 0-terminator"
-#ifdef linux
+#if defined(linux) || defined(__APPLE__)
 	#include <limits.h>
 #elif defined(_WIN32)
 	#include <stdlib.h>
@@ -201,7 +204,7 @@ mBOOL os_safe_call(REG_CMD_FN pfn);
 
 
 // Various other windows routine differences.
-#ifdef linux
+#if defined(linux) || defined(__APPLE__)
 	#include <unistd.h>	// sleep
 	#ifndef O_BINARY
     	#define O_BINARY 0
@@ -286,7 +289,7 @@ void mm_set_new_handler( void );
 
 
 // Thread handling...
-#ifdef linux
+#if defined(linux) || defined(__APPLE__)
 	#include <pthread.h>
 	typedef	pthread_t 	THREAD_T;
 	// returns 0==success, non-zero==failure
@@ -320,7 +323,7 @@ void mm_set_new_handler( void );
 
 
 // Mutex handling...
-#ifdef linux
+#if defined(linux) || defined(__APPLE__)
 	typedef pthread_mutex_t		MUTEX_T;
 	inline int MUTEX_INIT(MUTEX_T *mutex) {
 		int ret;
@@ -365,7 +368,7 @@ void mm_set_new_handler( void );
 
 
 // Condition variables...
-#ifdef linux
+#if defined(linux) || defined(__APPLE__)
 	typedef pthread_cond_t	COND_T;
 	inline int COND_INIT(COND_T *cond) {
 		int ret;
@@ -451,7 +454,7 @@ void mm_set_new_handler( void );
 //      non-case-sensitive.
 //  - For linux, this requires no work, as paths uses slashes (/) natively,
 //    and pathnames are case-sensitive.
-#ifdef linux
+#if defined(linux) || defined(__APPLE__)
 #define normalize_pathname(a)
 #elif defined(_WIN32)
 inline void normalize_pathname(char *path) {
@@ -511,7 +514,7 @@ inline char *realpath(const char *file_name, char *resolved_name) {
 // Generic "error string" from a recent OS call.  For linux, this is based
 // on errno.  For win32, it's based on GetLastError.
 inline const char *str_os_error(void) {
-#ifdef linux
+#if defined(linux) || defined(__APPLE__)
 	return(strerror(errno));
 #elif defined(_WIN32)
 	return(str_GetLastError());

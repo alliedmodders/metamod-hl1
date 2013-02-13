@@ -34,7 +34,7 @@
  *
  */
 
-#include <malloc.h>				// malloc, etc
+#include <stdlib.h>				// malloc, etc
 #include <errno.h>				// errno, etc
 
 #include <extdll.h>				// always

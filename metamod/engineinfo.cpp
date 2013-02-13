@@ -12,13 +12,18 @@
 #  define _WINSPOOL_H	
 #  include <windows.h>
 #  include <winnt.h>     // Header structures
-#else 
+#elif defined(linux) 
 #  ifndef _GNU_SOURCE
 #    define _GNU_SOURCE
 #  endif
 #  include <dlfcn.h>			// dladdr()
 #  include <link.h>				// ElfW(Phdr/Ehdr) macros.
                   				// _DYNAMIC, r_debug, link_map, etc.
+#else
+# include <CoreFoundation/CoreFoundation.h>
+# include <dlfcn.h>				// dladdr()
+# include <mach-o/loader.h>		// Mach-O structures
+# include <mach-o/fat.h>		// Mach-O structures for fat binaries
 #endif /* _WIN32 */ 
 
 #include <string.h>				// strlen(), strrchr(), strcmp()
@@ -69,7 +74,7 @@ bool EngineInfo::check_for_engine_module( const char* _pName )
 	}
 	m_type[size] = '\0';
 
-#else /* _WIN32 */
+#elif defined(linux)
 
 	const char* pType;
 
@@ -115,6 +120,21 @@ bool EngineInfo::check_for_engine_module( const char* _pName )
 	}
 	m_type[size] = '\0';
 
+#else
+
+	// The engine module is engine.dylib
+	pC = strrchr( _pName, '.' );
+
+	pC -= 6;
+	if ( 0 != strcmp( pC, "engine.dylib" ) ) {
+		return false;
+	}
+
+	size = 0;
+	while ( *pC != '.' && size < c_EngineInfo__typeLen-1 ) {
+		m_type[size++] = *pC++;
+	}
+	m_type[size] = '\0';
 
 #endif /* _WIN32 */
 
@@ -226,7 +246,7 @@ void EngineInfo::set_code_range( unsigned char* _pBase, PIMAGE_NT_HEADERS _pNThd
 }
 
 
-#else /* _WIN32 */
+#elif defined(linux) /* _WIN32 */
 
 
 int EngineInfo::phdr_elfhdr( void* _pElfHdr )
@@ -340,6 +360,96 @@ void EngineInfo::set_code_range( void* _pBase, ElfW(Phdr)* _pPhdr )
 }
 
 
+#else
+
+int EngineInfo::mhdr_dladdr( void* pMem )
+{
+	Dl_info info;
+
+	if ( 0 != dladdr(pMem, &info) ) {
+		// Check if this is the engine module
+		if ( check_for_engine_module(info.dli_fname) ) {
+			return mhdr_machohdr( info.dli_fbase );
+		}
+	}
+
+	return NOTFOUND;
+}
+
+int EngineInfo::mhdr_machohdr( void* pMachoHdr )
+{
+	fat_header* pFatHdr = (fat_header *)pMachoHdr;
+	mach_header* pHdr = (mach_header *)pMachoHdr;
+	fat_arch* pFatArchs;
+	segment_command *pSegment;
+	section *pSection;
+	uint32_t nArchs;
+	uint32_t nCmds;
+	uint32_t nSections;
+
+	if ( NULL == pMachoHdr ) return INVALID_ARG;
+
+	// Check for fat binary first.
+	// Note that fat_header and fat_arch are always stored in big-endian.
+	if ( CFSwapInt32BigToHost( pFatHdr->magic ) == FAT_MAGIC ) {
+		nArchs = CFSwapInt32BigToHost( pFatHdr->nfat_arch );
+		pFatArchs = (fat_arch *) ((char *) pMachoHdr + sizeof(fat_header));
+
+		// Look for the 32-bit Mach-O header
+		for (uint32_t i = 0; i < nArchs; i++) {
+			if ( CFSwapInt32BigToHost( pFatArchs[i].cputype ) == CPU_TYPE_I386
+				&& CFSwapInt32BigToHost ( pFatArchs[i].cpusubtype ) == CPU_SUBTYPE_I386_ALL ) {
+
+				pHdr = (mach_header *) ((char *) pMachoHdr + CFSwapInt32BigToHost( pFatArchs[i].offset ));
+				break;
+			}
+		}
+
+	}
+
+	// Find __TEXT segment and __text section
+	if ( pHdr->magic == MH_MAGIC
+		&& pHdr->filetype == MH_DYLIB ) {
+
+		nCmds = pHdr->ncmds;
+		pSegment = (segment_command *) ((char *) pHdr + sizeof(mach_header));
+
+		for (uint32_t i = 0; i < nCmds; i++) {
+
+			if ( pSegment->cmd == LC_SEGMENT
+				&& strcmp( pSegment->segname, "__TEXT" ) == 0
+				&& pSegment->initprot == (VM_PROT_READ | VM_PROT_EXECUTE) ) {
+
+				nSections = pSegment->nsects;
+				pSection = (section *) ((char *) pSegment + sizeof(segment_command));
+
+				for (uint32_t j = 0; j < nSections; j++) {
+					if ( strcmp( pSection->sectname, "__text" ) == 0 ) {
+						set_code_range( pHdr, pSection );
+						return 0;
+					}
+				}
+			}
+
+			pSegment = (segment_command *) ((char *) pSegment + pSegment->cmdsize);
+
+		}
+
+	}
+
+	return HEADER_NOTFOUND;
+}
+
+void EngineInfo::set_code_range( void* _pBase, section* pCodeSection )	
+{
+	unsigned char* pBase = (unsigned char*)_pBase;
+
+	m_codeStart = pBase + pCodeSection->addr;
+	m_codeEnd = pBase + pCodeSection->addr + pCodeSection->size - 1;
+	m_state = STATE_VALID;
+}
+
+
 #endif /* _WIN32 */
 
 
@@ -363,8 +473,8 @@ int EngineInfo::initialise( enginefuncs_t* _pFuncs )
 		ret = vac_pe_approx( _pFuncs );
 	}
 
-#else /* _WIN32 */
-
+#elif defined(linux) /* _WIN32 */
+	
 	// If we have no reference pointer to start from we can only try to use
 	// the r_debug symbol.
 	if ( NULL == _pFuncs ) {
@@ -375,6 +485,10 @@ int EngineInfo::initialise( enginefuncs_t* _pFuncs )
 	if ( 0 != phdr_dladdr(_pFuncs) ) {
 		ret = phdr_r_debug();
 	}
+
+#else
+
+	ret = mhdr_dladdr(_pFuncs);	
 
 #endif /* _WIN32 */
 

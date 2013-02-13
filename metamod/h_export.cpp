@@ -54,7 +54,7 @@ BOOL WINAPI DllMain(HINSTANCE /* hinstDLL */, DWORD fdwReason,
     }
 	return(TRUE);
 }
-#elif defined(linux)
+#elif defined(linux) || defined(__APPLE__)
 // Linux routines to correspond to ATTACH and DETACH cases above.  These
 // aren't required by linux, but are included here for completeness, and
 // just in case we come across a need to do something at dll load or

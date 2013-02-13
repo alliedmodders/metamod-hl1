@@ -35,7 +35,7 @@
  */
 
 #include <errno.h>				// errno, etc
-#include <malloc.h>				// malloc, etc
+#include <stdlib.h>				// malloc, etc
 #include <sys/types.h>			// stat
 #include <sys/stat.h>			// stat
 
@@ -417,7 +417,7 @@ char *MPlugin::resolve_prefix(char *path) {
 //     path
 //     path_mm
 //     path_MM
-//     path.so (linux), path.dll (win32)
+//     path.so (linux), path.dll (win32), path.dylib (osx)
 //     path_i386.so, path_i486.so, etc (if linux)
 // meta_errno values:
 //  - none
@@ -448,6 +448,8 @@ char *MPlugin::resolve_suffix(char *path) {
 	snprintf(buf, sizeof(buf), "%s.dll", path);
 #elif defined(linux)
 	snprintf(buf, sizeof(buf), "%s.so", path);
+#elif defined(__APPLE__)
+	snprintf(buf, sizeof(buf), "%s.dylib", path);
 #else
 #error "OS unrecognized"
 #endif /* _WIN32 */

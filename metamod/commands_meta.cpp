@@ -313,6 +313,10 @@ void cmd_meta_load(void) {
 		META_CONS("      mm_name.so");
 		META_CONS("      name_i386.so");
 		META_CONS("      name_i686.so");
+#elif defined(__APPLE__)
+		META_CONS("      name.dylib");
+		META_CONS("      name_mm.dylib");
+		META_CONS("      mm_name.dylib");
 #elif defined(_WIN32)
 		META_CONS("      name.dll");
 		META_CONS("      name_mm.dll");
