@@ -1321,7 +1321,7 @@ mBOOL MPlugin::newer_file(void) {
 // SHOW is max 4 chars, for "show" output.
 // meta_errno values:
 //  - none
-char *MPlugin::str_status(STR_STATUS fmt) {
+const char *MPlugin::str_status(STR_STATUS fmt) {
 	switch(status) {
 		case PL_EMPTY:
 			if(fmt==ST_SHOW) return("empt");
@@ -1355,7 +1355,7 @@ char *MPlugin::str_status(STR_STATUS fmt) {
 // SHOW is max 4 chars, for "show" output.
 // meta_errno values:
 //  - none
-char *MPlugin::str_action(STR_ACTION fmt) {
+const char *MPlugin::str_action(STR_ACTION fmt) {
 	switch(action) {
 		case PA_NULL:
 			if(fmt==SA_SHOW) return("NULL");
@@ -1391,7 +1391,7 @@ char *MPlugin::str_action(STR_ACTION fmt) {
 // NOW is to describe current situation of load/unload attempt.
 // meta_errno values:
 //  - none
-char *MPlugin::str_loadtime(PLUG_LOADTIME ptime, STR_LOADTIME fmt) {
+const char *MPlugin::str_loadtime(PLUG_LOADTIME ptime, STR_LOADTIME fmt) {
 	switch(ptime) {
 		case PT_NEVER:
 			if(fmt==SL_SHOW) return("Never");
@@ -1425,7 +1425,7 @@ char *MPlugin::str_loadtime(PLUG_LOADTIME ptime, STR_LOADTIME fmt) {
 // Return a string describing why a plugin is to be unloaded.
 // meta_errno values:
 //  - none
-char *MPlugin::str_reason(PL_UNLOAD_REASON preason, PL_UNLOAD_REASON preal_reason) {
+const char *MPlugin::str_reason(PL_UNLOAD_REASON preason, PL_UNLOAD_REASON preal_reason) {
 	char buf[128];
 	
 	if(preason == PNL_PLUGIN)
@@ -1460,7 +1460,7 @@ char *MPlugin::str_reason(PL_UNLOAD_REASON preason, PL_UNLOAD_REASON preal_reaso
 // Return a string describing how the plugin was loaded.
 // meta_errno values:
 //  - none
-char *MPlugin::str_source(STR_SOURCE fmt) {
+const char *MPlugin::str_source(STR_SOURCE fmt) {
 	switch(source) {
 		case PS_INI:
 			if(fmt==SO_SHOW) return("ini");

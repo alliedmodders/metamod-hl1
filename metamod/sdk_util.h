@@ -93,9 +93,9 @@ inline void SET_SERVERINFO(char *key, char *value) {
 }
 
 // Get a "localinfo" value.
-inline char *LOCALINFO(char *key) {
+inline char *LOCALINFO(const char *key) {
 	edict_t *server=NULL;
-	return(ENTITY_KEYVALUE(server, key));
+	return(ENTITY_KEYVALUE(server, (char *)key));
 }
 
 // Set a "localinfo" value.
@@ -111,5 +111,7 @@ unsigned short FixedUnsigned16(float value, float scale);
 // Our slightly modified version, using an edict_t pointer instead of a
 // CBaseEntity pointer.
 void META_UTIL_HudMessage(edict_t *pEntity, const hudtextparms_t &textparms, const char *pMessage);
+
+char* UTIL_VarArgs( const char *format, ... );
 
 #endif /* SDK_UTIL_H */
