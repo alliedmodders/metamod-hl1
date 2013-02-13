@@ -86,10 +86,18 @@ ifeq "$(OS)" "linux"
 	TARGET_FILE=$(TARGET_LINUX)
 	ARCHD = $(shell uname -m)
 	ifeq "$(ARCHD)" "x86_64"
-		ARCH=x86_64
-		ARCHD=.amd64
+		ifeq "$(ARCH)" "i386"
+			ARCHD=
+			MODARCH=i386
+		else
+			ARCH=x86_64
+			ARCHD=.amd64
+			MODARCH=amd64
+		endif
 	else
 		ARCHD=
+		MODARCH=i386
+
 	endif
 else	## windows
 	INSTALL=cp
@@ -218,6 +226,10 @@ include Config.mak
 # any local CFLAGS from Config.mak
 CFLAGS += $(EXTRA_CFLAGS)
 
+ifeq "$(MODARCH)" "i386"
+	CFLAGS += -m32
+endif
+
 # provide timezone info
 $(OBJDIR_LINUX)/vdate.o $(OBJDIR_WIN)/vdate.o: CFLAGS += -DCOMPILE_TZ=\"$(COMPILE_TZ)\"
 
@@ -332,6 +344,11 @@ linux_opt:
 win32_opt: 
 	$(MAKE) win32 OPT=opt
 
+linux32:
+	$(MAKE) linux ARCH=i386
+linux32_opt:
+	$(MAKE) linux ARCH=i386 OPT=opt
+
 $(TARGET_LINUX): msgs/debug msgs/log msgs/error $(OBJDIR_LINUX) $(OBJ_LINUX)
 	$(LINK_LINUX)
 
@@ -399,9 +416,14 @@ clean_win32:
 #	-rm -f $(OBJDIR_WIN)/*
 	-rm -rf $(OBJDIR_WIN)
 
+clean_linux32:
+	$(MAKE) clean_linux ARCH=i386
+
 cleanall_linux:
 	$(MAKE) clean_linux
+	$(MAKE) clean_linux32
 	$(MAKE) clean_linux OPT=opt
+	$(MAKE) clean_linux32 OPT=opt
 
 cleanall_win32:
 	$(MAKE) clean_win32
