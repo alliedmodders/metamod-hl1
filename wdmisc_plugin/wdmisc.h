@@ -42,7 +42,7 @@ void do_my_getengfuncs(void);
 void bounce_init(void);
 void bounce_check(void);
 
-void wd_AlertMessage(ALERT_TYPE atype, char *szFmt, ...);
+void wd_AlertMessage(ALERT_TYPE atype, const char *szFmt, ...);
 
 void wd_msglist(void);
 void wd_msgid(void);

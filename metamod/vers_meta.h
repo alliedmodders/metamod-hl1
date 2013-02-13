@@ -48,7 +48,7 @@
 # endif /* _MSC_VER */
 #endif /* not OPT_TYPE */
 
-#define VDATE			"2013-02-09"
+#define VDATE			"2013-02-11"
 #define VVERSION		"1.20"
 #define RC_VERS_DWORD	1,20,0,0	// Version Windows DLL Resources in res_meta.rc
 

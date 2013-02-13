@@ -115,7 +115,7 @@ void do_my_getengfuncs(void) {
 // on, which makes the code a bit less readable than doing just a "strstr"
 // on the log line. 
 
-void wd_AlertMessage(ALERT_TYPE atype, char *szFmt, ...) {
+void wd_AlertMessage(ALERT_TYPE atype, const char *szFmt, ...) {
 	va_list ap;
 	static char buf[MAX_LOGMSG_LEN];
 	char *cp, *ep;

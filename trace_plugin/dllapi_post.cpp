@@ -203,7 +203,7 @@ void PM_Init_Post( struct playermove_s *ppmove ) {
 	DLL_TRACE(pfnPM_Init, P_POST, (""));
 	RETURN_META(MRES_IGNORED);
 }
-char PM_FindTextureType_Post( char *name ) {
+char PM_FindTextureType_Post( const char *name ) {
 	DLL_TRACE(pfnPM_FindTextureType, P_POST, (""));
 	RETURN_META_VALUE(MRES_IGNORED, '\0');
 }

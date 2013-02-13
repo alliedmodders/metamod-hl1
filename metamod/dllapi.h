@@ -98,7 +98,7 @@ extern void mm_Sys_Error( const char *error_string );
 // From SDK pm_shared/pm_shared.h:
 extern void mm_PM_Move ( struct playermove_s *ppmove, int server );
 extern void mm_PM_Init ( struct playermove_s *ppmove );
-extern char mm_PM_FindTextureType ( char *name );
+extern char mm_PM_FindTextureType ( const char *name );
 
 // From SDK dlls/client.h:
 extern void mm_SetupVisibility( edict_t *pViewEntity, edict_t *pClient, unsigned char **pvs, unsigned char **pas );
@@ -165,7 +165,7 @@ typedef void (*FN_SYS_ERROR) ( const char *error_string );
 
 typedef void (*FN_PM_MOVE) ( struct playermove_s *ppmove, int server );
 typedef void (*FN_PM_INIT) ( struct playermove_s *ppmove );
-typedef char (*FN_PM_FINDTEXTURETYPE) ( char *name );
+typedef char (*FN_PM_FINDTEXTURETYPE) ( const char *name );
 
 typedef void (*FN_SETUPVISIBILITY) ( edict_t *pViewEntity, edict_t *pClient, unsigned char **pvs, unsigned char **pas );
 typedef void (*FN_UPDATECLIENTDATA)  ( const struct edict_s *ent, int sendweapons, struct clientdata_s *cd );

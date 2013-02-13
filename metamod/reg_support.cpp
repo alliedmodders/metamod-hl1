@@ -127,7 +127,7 @@ void meta_command_handler(void) {
 // The string handed to the engine is just a strdup() of the plugin's
 // string.  The function pointer handed to the engine is actually a pointer
 // to a generic command-handler function (see above).
-void meta_AddServerCommand(char *cmd_name, void (*function) (void)) {
+void meta_AddServerCommand(const char *cmd_name, void (*function) (void)) {
 	MPlugin *iplug=NULL; MRegCmd *icmd=NULL;
 
 	META_DEBUG(4, ("called: meta_AddServerCommand; cmd_name=%s, function=%d", cmd_name, function));

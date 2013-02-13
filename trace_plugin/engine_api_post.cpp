@@ -46,11 +46,11 @@
 #include "log_plugin.h"
 
 
-int PrecacheModel_Post(char *s) {
+int PrecacheModel_Post(const char *s) {
 	ENGINE_TRACE(pfnPrecacheModel, P_POST, (""));
 	RETURN_META_VALUE(MRES_IGNORED, 0);
 }
-int PrecacheSound_Post(char *s) {
+int PrecacheSound_Post(const char *s) {
 	ENGINE_TRACE(pfnPrecacheSound, P_POST, (""));
 	RETURN_META_VALUE(MRES_IGNORED, 0);
 }
@@ -71,7 +71,7 @@ void SetSize_Post(edict_t *e, const float *rgflMin, const float *rgflMax) {
 	ENGINE_TRACE(pfnSetSize, P_POST, (""));
 	RETURN_META(MRES_IGNORED);
 }
-void ChangeLevel_Post(char *s1, char *s2) {
+void ChangeLevel_Post(const char *s1, const char *s2) {
 	// trace output in Pre
 	ENGINE_TRACE(pfnChangeLevel, P_POST, (""));
 	RETURN_META(MRES_IGNORED);
@@ -223,7 +223,7 @@ void GetAimVector_Post(edict_t *ent, float speed, float *rgflReturn) {
 	RETURN_META(MRES_IGNORED);
 }
 
-void ServerCommand_Post(char *str) {
+void ServerCommand_Post(const char *str) {
 	// trace output in Pre
 	ENGINE_TRACE(pfnServerCommand, P_POST, (""));
 	RETURN_META(MRES_IGNORED);
@@ -232,7 +232,7 @@ void ServerExecute_Post(void) {
 	ENGINE_TRACE(pfnServerExecute, P_POST, (""));
 	RETURN_META(MRES_IGNORED);
 }
-void engClientCommand_Post(edict_t *pEdict, char *szFmt, ...) {
+void engClientCommand_Post(edict_t *pEdict, const char *szFmt, ...) {
 	// trace output in Pre
 	ENGINE_TRACE(pfnClientCommand, P_POST, (""));
 	RETURN_META(MRES_IGNORED);
@@ -327,15 +327,15 @@ void CVarSetString_Post(const char *szVarName, const char *szValue) {
 	RETURN_META(MRES_IGNORED);
 }
 
-void AlertMessage_Post(ALERT_TYPE atype, char *szFmt, ...) {
+void AlertMessage_Post(ALERT_TYPE atype, const char *szFmt, ...) {
 	// trace output in Pre
 	ENGINE_TRACE(pfnAlertMessage, P_POST, (""));
 	RETURN_META(MRES_IGNORED);
 }
 #ifdef HLSDK_3_2_OLD_EIFACE
-void EngineFprintf_Post(FILE *pfile, char *szFmt, ...) {
+void EngineFprintf_Post(FILE *pfile, const char *szFmt, ...) {
 #else 
-void EngineFprintf_Post(void *pfile, char *szFmt, ...) {
+void EngineFprintf_Post(void *pfile, const char *szFmt, ...) {
 #endif
 	// trace output in Pre
 	ENGINE_TRACE(pfnEngineFprintf, P_POST, (""));
@@ -569,21 +569,21 @@ char *GetInfoKeyBuffer_Post(edict_t *e) {
 	ENGINE_TRACE(pfnGetInfoKeyBuffer, P_POST, (""));
 	RETURN_META_VALUE(MRES_IGNORED, NULL);
 }
-char *InfoKeyValue_Post(char *infobuffer, char *key) {
+char *InfoKeyValue_Post(char *infobuffer, const char *key) {
 	ENGINE_TRACE(pfnInfoKeyValue, P_POST, ("value=%s", 
 				META_RESULT_ORIG_RET(char *)));
 	RETURN_META_VALUE(MRES_IGNORED, NULL);
 }
-void SetKeyValue_Post(char *infobuffer, char *key, char *value) {
+void SetKeyValue_Post(char *infobuffer, const char *key, const char *value) {
 	ENGINE_TRACE(pfnSetKeyValue, P_POST, (""));
 	RETURN_META(MRES_IGNORED);
 }
-void SetClientKeyValue_Post(int clientIndex, char *infobuffer, char *key, char *value) {
+void SetClientKeyValue_Post(int clientIndex, char *infobuffer, const char *key, const char *value) {
 	ENGINE_TRACE(pfnSetClientKeyValue, P_POST, (""));
 	RETURN_META(MRES_IGNORED);
 }
 
-int IsMapValid_Post(char *filename) {
+int IsMapValid_Post(const char *filename) {
 	ENGINE_TRACE(pfnIsMapValid, P_POST, ("file=%s, val=%d",
 				filename, META_RESULT_ORIG_RET(int)));
 	RETURN_META_VALUE(MRES_IGNORED, 0);
@@ -592,7 +592,7 @@ void StaticDecal_Post( const float *origin, int decalIndex, int entityIndex, int
 	ENGINE_TRACE(pfnStaticDecal, P_POST, (""));
 	RETURN_META(MRES_IGNORED);
 }
-int PrecacheGeneric_Post(char *s) {
+int PrecacheGeneric_Post(const char *s) {
 	ENGINE_TRACE(pfnPrecacheGeneric, P_POST, (""));
 	RETURN_META_VALUE(MRES_IGNORED, 0);
 }
@@ -739,7 +739,7 @@ void GetPlayerStats_Post( const edict_t *pClient, int *ping, int *packet_loss ) 
 	RETURN_META(MRES_IGNORED);
 }
 
-void AddServerCommand_Post( char *cmd_name, void (*function) (void) ) {
+void AddServerCommand_Post( const char *cmd_name, void (*function) (void) ) {
 	// trace output in Pre
 	ENGINE_TRACE(pfnAddServerCommand, P_POST, (""));
 	RETURN_META(MRES_IGNORED);
@@ -783,7 +783,7 @@ sentenceEntry_s *SequencePickSentence_Post(const char* groupName, int pickMethod
 	RETURN_META_VALUE(MRES_IGNORED, NULL);
 }
 
-int GetFileSize_Post(char *filename) {
+int GetFileSize_Post(const char *filename) {
 	// trace output in Post
 	ENGINE_TRACE(pfnGetFileSize, P_PRE, (""));
 	RETURN_META_VALUE(MRES_IGNORED, 0);

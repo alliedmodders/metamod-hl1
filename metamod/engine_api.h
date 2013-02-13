@@ -57,14 +57,14 @@ extern enginefuncs_t meta_engfuncs;
 #endif
 
 // From SDK engine/eiface.h:
-extern int mm_PrecacheModel(char *s);
-extern int mm_PrecacheSound(char *s);
+extern int mm_PrecacheModel(const char *s);
+extern int mm_PrecacheSound(const char *s);
 extern void mm_SetModel(edict_t *e, const char *m);
 extern int mm_ModelIndex(const char *m);
 extern int mm_ModelFrames(int modelIndex);
 
 extern void mm_SetSize(edict_t *e, const float *rgflMin, const float *rgflMax);
-extern void mm_ChangeLevel(char *s1, char *s2);
+extern void mm_ChangeLevel(const char *s1, const char *s2);
 extern void mm_GetSpawnParms(edict_t *ent);
 extern void mm_SaveSpawnParms(edict_t *ent);
 
@@ -106,7 +106,7 @@ extern const char *mm_TraceTexture(edict_t *pTextureEntity, const float *v1, con
 extern void mm_TraceSphere(const float *v1, const float *v2, int fNoMonsters, float radius, edict_t *pentToSkip, TraceResult *ptr);
 extern void mm_GetAimVector(edict_t *ent, float speed, float *rgflReturn);
 
-extern void mm_ServerCommand(char *str);
+extern void mm_ServerCommand(const char *str);
 extern void mm_ServerExecute(void);
 extern void ClientCommand(edict_t *pEdict, const char *szFmt, ...);
 
@@ -135,9 +135,9 @@ extern void mm_CVarSetString(const char *szVarName, const char *szValue);
 
 extern void mm_AlertMessage(ALERT_TYPE atype, const char *szFmt, ...);
 #ifdef HLSDK_3_2_OLD_EIFACE
-extern void mm_EngineFprintf(FILE *pfile, char *szFmt, ...);
+extern void mm_EngineFprintf(FILE *pfile, const char *szFmt, ...);
 #else
-extern void mm_EngineFprintf(void *pfile, char *szFmt, ...);
+extern void mm_EngineFprintf(void *pfile, const char *szFmt, ...);
 #endif
 
 #ifdef HLSDK_3_2_OLD_EIFACE
@@ -211,13 +211,13 @@ extern void mm_RunPlayerMove(edict_t *fakeclient, const float *viewangles, float
 extern int mm_NumberOfEntities(void);
 
 extern char *mm_GetInfoKeyBuffer(edict_t *e); //! passing in NULL gets the serverinfo
-extern char *mm_InfoKeyValue(char *infobuffer, char *key);
-extern void mm_SetKeyValue(char *infobuffer, char *key, char *value);
-extern void mm_SetClientKeyValue(int clientIndex, char *infobuffer, char *key, char *value);
+extern char *mm_InfoKeyValue(char *infobuffer, const char *key);
+extern void mm_SetKeyValue(char *infobuffer, const char *key, const char *value);
+extern void mm_SetClientKeyValue(int clientIndex, char *infobuffer, const char *key, const char *value);
 
 extern int mm_IsMapValid(char *filename);
 extern void mm_StaticDecal( const float *origin, int decalIndex, int entityIndex, int modelIndex );
-extern int mm_PrecacheGeneric(char *s);
+extern int mm_PrecacheGeneric(const char *s);
 extern int mm_GetPlayerUserId(edict_t *e ); //! returns the server assigned userid for this player. useful for logging frags, etc. returns -1 if the edict couldn't be found in the list of clients
 extern void mm_BuildSoundMsg(edict_t *entity, int channel, const char *sample, /*int*/float volume, float attenuation, int fFlags, int pitch, int msg_dest, int msg_type, const float *pOrigin, edict_t *ed);
 extern int mm_IsDedicatedServer(void);//! is this a dedicated server?
@@ -258,7 +258,7 @@ extern void mm_ForceUnmodified( FORCE_TYPE type, float *mins, float *maxs, const
 
 extern void mm_GetPlayerStats( const edict_t *pClient, int *ping, int *packet_loss );
 
-extern void mm_AddServerCommand( char *cmd_name, void (*function) (void) );
+extern void mm_AddServerCommand( const char *cmd_name, void (*function) (void) );
 // Added in SDK 2.2:
 extern qboolean mm_Voice_GetClientListening(int iReceiver, int iSender);
 extern qboolean mm_Voice_SetClientListening(int iReceiver, int iSender, qboolean bListen);
@@ -267,7 +267,7 @@ extern const char *mm_pfnGetPlayerAuthId(edict_t *e);
 // Added 2003-11-10 (no SDK update):
 extern sequenceEntry_s * mm_SequenceGet(const char* fileName, const char* entryName);
 extern sentenceEntry_s * mm_SequencePickSentence(const char* groupName, int pickMethod, int *picked);
-extern int mm_GetFileSize(char *filename);
+extern int mm_GetFileSize(const char *filename);
 extern unsigned int mm_GetApproxWavePlayLen(const char *filepath);
 extern int mm_IsCareerMatch(void);
 extern int mm_GetLocalizedStringLength(const char *label);
@@ -284,13 +284,13 @@ extern void mm_QueryClientCvarValue2(const edict_t *pEdict, const char *cvarName
 
 // Typedefs for the above functions:
 
-typedef int (*FN_PRECACHEMODEL) (char* s);
-typedef int (*FN_PRECACHESOUND) (char* s);
+typedef int (*FN_PRECACHEMODEL) (const char* s);
+typedef int (*FN_PRECACHESOUND) (const char* s);
 typedef void (*FN_SETMODEL) (edict_t *e, const char *m);
 typedef int (*FN_MODELINDEX) (const char *m);
 typedef int (*FN_MODELFRAMES) (int modelIndex);
 typedef void (*FN_SETSIZE) (edict_t *e, const float *rgflMin, const float *rgflMax);
-typedef void (*FN_CHANGELEVEL) (char *s1, char *s2);
+typedef void (*FN_CHANGELEVEL) (const char *s1, const char *s2);
 typedef void (*FN_GETSPAWNPARMS) (edict_t *ent);
 typedef void (*FN_SAVESPAWNPARMS) (edict_t *ent);
 typedef float (*FN_VECTOYAW) (const float *rgflVector);
@@ -323,7 +323,7 @@ typedef void (*FN_TRACEMODEL) (const float *v1, const float *v2, int hullNumber,
 typedef const char * (*FN_TRACETEXTURE) (edict_t *pTextureEntity, const float *v1, const float *v2 );
 typedef void (*FN_TRACESPHERE) (const float *v1, const float *v2, int fNoMonsters, float radius, edict_t *pentToSkip, TraceResult *ptr);
 typedef void (*FN_GETAIMVECTOR) (edict_t *ent, float speed, float *rgflReturn);
-typedef void (*FN_SERVERCOMMAND) (char *str);
+typedef void (*FN_SERVERCOMMAND) (const char *str);
 typedef void (*FN_SERVEREXECUTE) (void);
 typedef void (*FN_CLIENTCOMMAND_ENG) (edict_t *pEdict, const char *szFmt, ...);
 typedef void (*FN_PARTICLEEFFECT) (const float *org, const float *dir, float color, float count);
@@ -347,10 +347,10 @@ typedef void (*FN_CVARSETFLOAT) (const char *szVarName, float flValue);
 typedef void (*FN_CVARSETSTRING) (const char *szVarName, const char *szValue);
 typedef void (*FN_ALERTMESSAGE) (ALERT_TYPE atype, const char *szFmt, ...);
 #ifdef HLSDK_3_2_OLD_EIFACE
-typedef void (*FN_ENGINEFPRINTF) (FILE *pfile, char *szFmt, ...);
+typedef void (*FN_ENGINEFPRINTF) (FILE *pfile, const char *szFmt, ...);
 typedef void * (*FN_PVALLOCENTPRIVATEDATA) (edict_t *pEdict, long cb);
 #else
-typedef void (*FN_ENGINEFPRINTF) (void *pfile, char *szFmt, ...);
+typedef void (*FN_ENGINEFPRINTF) (void *pfile, const char *szFmt, ...);
 typedef void * (*FN_PVALLOCENTPRIVATEDATA) (edict_t *pEdict, int32 cb);
 #endif
 typedef void * (*FN_PVENTPRIVATEDATA) (edict_t *pEdict);
@@ -405,12 +405,12 @@ typedef edict_t * (*FN_CREATEFAKECLIENT) (const char *netname);
 typedef void (*FN_RUNPLAYERMOVE) (edict_t *fakeclient, const float *viewangles, float forwardmove, float sidemove, float upmove, unsigned short buttons, byte impulse, byte msec );
 typedef int (*FN_NUMBEROFENTITIES) (void);
 typedef char * (*FN_GETINFOKEYBUFFER) (edict_t *e);
-typedef char * (*FN_INFOKEYVALUE) (char *infobuffer, char *key);
-typedef void (*FN_SETKEYVALUE) (char *infobuffer, char *key, char *value);
-typedef void (*FN_SETCLIENTKEYVALUE) (int clientIndex, char *infobuffer, char *key, char *value);
-typedef int (*FN_ISMAPVALID) (char *filename);
+typedef char * (*FN_INFOKEYVALUE) (char *infobuffer, const char *key);
+typedef void (*FN_SETKEYVALUE) (char *infobuffer, const char *key, const char *value);
+typedef void (*FN_SETCLIENTKEYVALUE) (int clientIndex, char *infobuffer, const char *key, const char *value);
+typedef int (*FN_ISMAPVALID) (const char *filename);
 typedef void (*FN_STATICDECAL) ( const float *origin, int decalIndex, int entityIndex, int modelIndex );
-typedef int (*FN_PRECACHEGENERIC) (char *s);
+typedef int (*FN_PRECACHEGENERIC) (const char *s);
 typedef int (*FN_GETPLAYERUSERID) (edict_t *e );
 typedef void (*FN_BUILDSOUNDMSG) (edict_t *entity, int channel, const char *sample, /*int*/float volume, float attenuation, int fFlags, int pitch, int msg_dest, int msg_type, const float *pOrigin, edict_t *ed);
 typedef int (*FN_ISDEDICATEDSERVER) (void);
@@ -438,7 +438,7 @@ typedef int (*FN_CREATEINSTANCEDBASELINE) ( int classname, struct entity_state_s
 typedef void (*FN_CVAR_DIRECTSET) ( struct cvar_s *var, char *value );
 typedef void (*FN_FORCEUNMODIFIED) ( FORCE_TYPE type, float *mins, float *maxs, const char *filename );
 typedef void (*FN_GETPLAYERSTATS) ( const edict_t *pClient, int *ping, int *packet_loss );
-typedef void (*FN_ADDSERVERCOMMAND) ( char *cmd_name, void (*function) (void) );
+typedef void (*FN_ADDSERVERCOMMAND) ( const char *cmd_name, void (*function) (void) );
 // Added in SDK 2.2:
 typedef qboolean (*FN_VOICE_GETCLIENTLISTENING) (int iReceiver, int iSender);
 typedef qboolean (*FN_VOICE_SETCLIENTLISTENING) (int iReceiver, int iSender, qboolean bListen);
@@ -447,7 +447,7 @@ typedef const char * (*FN_GETPLAYERAUTHID) (edict_t *e);
 // Added 2003-11-10 (no SDK update):
 typedef sequenceEntry_s * (*FN_SEQUENCEGET) (const char* fileName, const char* entryName);
 typedef sentenceEntry_s * (*FN_SEQUENCEPICKSENTENCE) (const char* groupName, int pickMethod, int *picked);
-typedef int (*FN_GETFILESIZE) (char *filename);
+typedef int (*FN_GETFILESIZE) (const char *filename);
 typedef unsigned int (*FN_GETAPPROXWAVEPLAYLEN) (const char *filepath);
 typedef int (*FN_ISCAREERMATCH) (void);
 typedef int (*FN_GETLOCALIZEDSTRINGLENGTH) (const char *label);
