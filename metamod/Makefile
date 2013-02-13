@@ -162,6 +162,10 @@ CCOPT += $(CCO) -ffast-math -funroll-loops \
 
 CCOPT += -falign-loops=2 -falign-jumps=2 -falign-functions=2 
 
+ifeq "$(GCCMAJ)" "4"
+	CCOPT += -fvisibility=hidden -fvisibility-inlines-hidden
+endif
+
 # optimization level; overridden for certain problematic files
 CCO = -O3
 
