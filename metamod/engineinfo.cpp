@@ -78,7 +78,16 @@ bool EngineInfo::check_for_engine_module( const char* _pName )
 
 	const char* pType;
 
+	// The engine module is either hw.so or engine_.*so
+	pC = strrchr( _pName, '.' );
+	pC -= 2;
 
+	// Check for listen server module first
+	if ( 0 == strcmp(pC, "hw.so") ) {
+		return true;
+	}
+
+	// Check for engine_*.so
 	size = strlen( _pName );
 	if ( size < 11 ) {
 		// Forget it, this string is too short to even be 'engine_.so', so
@@ -122,12 +131,13 @@ bool EngineInfo::check_for_engine_module( const char* _pName )
 
 #else
 
-	// The engine module is engine.dylib
+	// The engine module is either hw.dylib or engine.dylib
 	pC = strrchr( _pName, '.' );
 
-	pC -= 6;
-	if ( 0 != strcmp( pC, "engine.dylib" ) ) {
-		return false;
+	pC -= 2;
+	if ( 0 != strcmp(pC, "hw.dylib") ) {
+		pC -= 4;
+		if ( 0 != strcmp(pC, "engine.dylib") ) return false;
 	}
 
 	size = 0;
