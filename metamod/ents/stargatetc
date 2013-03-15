@@ -128,3 +128,35 @@ weapon_tacgun
 zatarc_proj
 zone_gatetravel
 zone_shelter
+
+//
+// Version 1.0g
+//
+// From: "Paul McGinniss" <paulmcginniss20@msn.com>
+// Date: Fri, 30 May 2008 09:40:32 +1000
+//
+big_lance_proj
+entity_spawn_round
+env_fog
+env_model
+info_cap_rules
+info_marker
+info_observer
+info_radar_block
+mode_relay
+monster_implanted
+monster_skull
+special_teleport_in
+struct_goa
+struct_goa_actual
+struct_goa_actual_sub
+struct_tau
+struct_tau_actual
+struct_tau_actual_sub
+temp_eject
+weapon_c4
+weapon_glstaff
+weapon_spas
+weapon_usas
+zone_bomb_target
+zone_capture

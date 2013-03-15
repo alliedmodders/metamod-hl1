@@ -1,6 +1,30 @@
 Release Notes
 =-=-=-=-=-=-=
 
+Major changes with Metamod 1.20
+===============================
+
+  - New versions of HalfLife do not use '_i386' in the names of the Linux
+    game dll anymore. Metamod changed the lookup for game dlls in that it
+    first tries to strip anything after the last underscore ('_') in the
+    game dll and load that dll. If that file does not exist it falls back
+    to the old name for backwards compatibility.
+  - The HalfLife engine employs this stripping of the dll name on the
+    setting found in the liblist.gam file, too. That means that it will
+    look for metamod.so, even if the liblist.gam file lists
+    metamod_i386.so. Unlike Metamod, the engine will not fall back to the
+    old name and fail to load Metamod if it can not be found under
+    metamod.so. Therefore we are adding a symbolic link to the tarball.
+    When you unpack the tarball to your dlls directory you will get a link
+    of name metamod.so so that engine loading can work with the newer
+    engine, too. Should you install/update your Metamod dll by hand, you
+    will need to make sure that a newer engine can find the dll under
+    metamod.so, either by renameing the file or by creating a link to it.
+    This does only apply to Linux. The Windows file is still called
+    metamod.dll.
+
+--------------------------------------------------------------------------
+
 Major changes with Metamod 1.19
 ===============================
 

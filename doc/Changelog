@@ -1,5 +1,14 @@
 # vim: set tw=75 ft=none :
 
+2013-02-16 1.20
+ - Changed loading of Linux game dll to first try to find the dll under
+   known name with the last '_*' part stripped out. Falls back to the
+   old known name if a file with the stripped name is not found.
+
+2006/??/?? 1.19.1
+ - Added Mod support for Half-Life 1.5: Weapon Edition version 1.5.0.5.
+ - Added additional entities for Stargate TC 1.0g.
+
 2006/04/17 1.19
  - Added support for new HLSDK API functions QueryClientCvarValue2() and 
    ClientCvar2(). The helper function IS_QUERYING_CLIENT_CVAR() is now

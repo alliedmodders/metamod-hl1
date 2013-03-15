@@ -4,7 +4,7 @@
 // game_support.cpp - info to recognize different HL mod "games"
 
 /*
- * Copyright (c) 2001-2003 Will Day <willday@hpgx.net>
+ * Copyright (c) 2001-2013 Will Day <willday@hpgx.net>
  *
  *    This file is part of Metamod.
  *
@@ -98,7 +98,8 @@ mBOOL install_gamedll(char *from, const char *to) {
 	
 		// Writing the file was not successfull
 		if(length_out != length_in) {
-			META_DEBUG(3,("Installing gamedll from chache: Failed to write all %d bytes to file, only %d written: %s\n", length_in, length_out, strerror(errno)) );
+			META_DEBUG(3,("Installing gamedll from chache: Failed to write all %d bytes to file, only %d written: %s\n",
+							length_in, length_out, strerror(errno)) );
 			// Let's not leave a mess but clean up nicely.
 			if (length_out >= 0) unlink(to);
 			return mFALSE;
@@ -124,7 +125,9 @@ mBOOL setup_gamedll(gamedll_t *gamedll) {
 	static char override_desc_buf[256];
 	game_modinfo_t *known;
 	const char *cp;
-	char *knownfn = NULL;
+	const char *knownfn = 0;
+	const char *usedfn = 0;
+	char *strippedfn = 0;
 	int override=0;
 
 	// Check for old-style "metagame.ini" file and complain.
@@ -171,36 +174,74 @@ mBOOL setup_gamedll(gamedll_t *gamedll) {
 	}
 	// Else use Auto-detect dll.
 	else {
-		// Again, as above, I abuse the real_pathname member to store the full pathname
-		// and the pathname member to store the relative name to pass it to the 
-		// install_gamedll function to save stack space. They are going
-		// to get overwritten later on, so that's ok.
-		snprintf(gamedll->pathname, sizeof(gamedll->pathname), "dlls/%s", 
-				knownfn);
-		// Check if the gamedll file exists. If not, try to install it from
-		// the cache.
-		mBOOL ok = mTRUE;
-		if(!valid_gamedir_file(gamedll->pathname)) {
-			snprintf(gamedll->real_pathname, sizeof(gamedll->real_pathname), "%s/dlls/%s", 
-					gamedll->gamedir, knownfn);
-			ok = install_gamedll(gamedll->pathname, gamedll->real_pathname);
+#ifdef linux
+		// The engine changed game dll lookup behaviour in that it strips
+		// anything after the last '_' from the name and tries to load the
+		// resulting name. The DSO names were changed and do not have the
+		// '_i386' part in them anymore, so cs_i386.so became cs.so. We
+		// have to adapt to that and try to load the DSO name without the
+		// '_*' part first, to see if we have a new version file available.
+
+		strippedfn = strdup(knownfn);
+
+		char *loc = strrchr(strippedfn, '_');
+
+		// A small safety net here: make sure that we are dealing with
+		// a file name at least four characters long and ending in
+		// '.so'. This way we can be sure that we can safely overwrite
+		// anything from the '_' on with '.so'.
+		int size = 0;
+		const char *ext;
+		if(0 != loc) {
+			size = strlen(strippedfn);
+			ext = strippedfn + (size - 3);
 		}
 
-		// If the file still doesn't exist, and knownfn has an "_i386.so"
-		// in it, try to strip the _i386.so out.
-		if (!ok) {
-			if (char *loc = strstr(knownfn, "_i386.so")) {
-				strcpy(loc, ".so");
-				snprintf(gamedll->pathname, sizeof(gamedll->pathname), "dlls/%s", knownfn);
-				snprintf(gamedll->real_pathname, sizeof(gamedll->real_pathname),
+		if(0 != loc && size > 3 && 0 == strcasecmp(ext, ".so")) {
+			
+			strcpy(loc, ".so");
+			META_DEBUG(4, ("Checking for new version game DLL name '%s'.\n", strippedfn) );
+
+			// Again, as above, I abuse the real_pathname member to store the full pathname
+			// and the pathname member to store the relative name to pass it to the 
+			// install_gamedll function to save stack space. They are going
+			// to get overwritten later on, so that's ok.
+			snprintf(gamedll->pathname, sizeof(gamedll->pathname), "dlls/%s", 
+					 strippedfn);
+			// Check if the gamedll file exists. If not, try to install it from
+			// the cache.
+			mBOOL ok = mTRUE;
+			if(!valid_gamedir_file(gamedll->pathname)) {
+				snprintf(gamedll->real_pathname, sizeof(gamedll->real_pathname), "%s/dlls/%s", 
+						 gamedll->gamedir, strippedfn);
+				ok = install_gamedll(gamedll->pathname, gamedll->real_pathname);
+			}
+			if(ok) usedfn = strippedfn;
+		}
+		else {
+			META_DEBUG(4, ("Known game DLL name does not qualify for checking for a stripped version, skipping: '%s'.\n",
+							strippedfn) );
+		}
+#endif /* linux */
+
+		// If no file to be used was found, try the old known DLL file
+		// name.
+		if (0 == usedfn) {
+			META_DEBUG(4, ("Checking for old version game DLL name '%s'.\n", knownfn) );
+			snprintf(gamedll->pathname, sizeof(gamedll->pathname), "dlls/%s", knownfn);
+			// Check if the gamedll file exists. If not, try to install it from
+			// the cache.
+			if(!valid_gamedir_file(gamedll->pathname)) {
+				snprintf(gamedll->real_pathname, sizeof(gamedll->real_pathname), "%s/dlls/%s", 
 						gamedll->gamedir, knownfn);
 				install_gamedll(gamedll->pathname, gamedll->real_pathname);
 			}
+			usedfn = knownfn;
 		}
 
 		// Now make an absolute path
 		snprintf(gamedll->pathname, sizeof(gamedll->pathname), "%s/dlls/%s", 
-				gamedll->gamedir, knownfn);
+				gamedll->gamedir, usedfn);
 	}
 
 	// get filename from pathname
@@ -213,7 +254,7 @@ mBOOL setup_gamedll(gamedll_t *gamedll) {
 	// gamedir, in case it differs from the "override" dll path.
 	if(known && override)
 		snprintf(gamedll->real_pathname, sizeof(gamedll->real_pathname),
-				"%s/dlls/%s", gamedll->gamedir, knownfn);
+				"%s/dlls/%s", gamedll->gamedir, usedfn);
 	else // !known or !override
 		STRNCPY(gamedll->real_pathname, gamedll->pathname, 
 				sizeof(gamedll->real_pathname));
@@ -233,7 +274,7 @@ mBOOL setup_gamedll(gamedll_t *gamedll) {
 				gamedll->file);
 	}
 
-	free(knownfn);
+	if(0 != strippedfn) free(strippedfn);
 
 	return(mTRUE);
 }
