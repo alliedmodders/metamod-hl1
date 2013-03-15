@@ -280,6 +280,8 @@ extern void mm_ResetTutorMessageDecayData(void);
 extern void mm_QueryClientCvarValue(const edict_t *pEdict, const char *cvarName);    //! Obsolete! Use mm_QueryClientCvarValue2 instead
 //Added 2005-11-22 (no SDK update)
 extern void mm_QueryClientCvarValue2(const edict_t *pEdict, const char *cvarName, int requestID);
+//Added 2009-06-17 (no SDK update)
+extern int mm_EngCheckParm(const char *pchCmdLineToken, char **pchNextVal);
 
 
 // Typedefs for the above functions:
@@ -460,5 +462,7 @@ typedef void (*FN_RESETTUTORMESSAGEDECAYDATA) (void);
 typedef void (*FN_QUERYCLIENTCVARVALUE)(const edict_t *pEdict, const char *cvarName);  //! Obsolete! Use FN_QUERYCLIENTCVARVALUE2 instead
 //Added 2005-11-22 (no SDK update)
 typedef void (*FN_QUERYCLIENTCVARVALUE2)(const edict_t *pEdict, const char *cvarName, int requestID);
+//Added 2009-06-17 (no SDK update)
+typedef int (*FN_ENGCHECKPARM)(const char *pchCmdLineToken, char **pchNextVal);
 
 #endif /* ENGINE_API_H */

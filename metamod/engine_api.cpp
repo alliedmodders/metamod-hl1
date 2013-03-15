@@ -879,6 +879,13 @@ void mm_QueryClientCvarValue2(const edict_t *pEdict, const char *cvarName, int r
 	RETURN_API_void();
 }
 
+//Added 2009-06-17 (no SDK update)
+int mm_EngCheckParm(const char *pchCmdLineToken, char **pchNextVal)
+{
+	META_ENGINE_HANDLE(int, 0, FN_ENGCHECKPARM, pfnEngCheckParm, (pchCmdLineToken, pchNextVal));
+	RETURN_API();
+}
+
 meta_enginefuncs_t meta_engfuncs(
 	&mm_PrecacheModel,			// pfnPrecacheModel()
 	&mm_PrecacheSound,			// pfnPrecacheSound()
@@ -1087,7 +1094,10 @@ meta_enginefuncs_t meta_engfuncs(
 	&mm_QueryClientCvarValue,		// pfnQueryClientCvarValue()
 
 	//Added 2005-11-22 (no SDK update)
-	&mm_QueryClientCvarValue2		// pfnQueryClientCvarValue2()
+	&mm_QueryClientCvarValue2,		// pfnQueryClientCvarValue2()
+
+	// Added 2009-06-17 (no SDK update)
+	&mm_EngCheckParm			// pfnEngCheckParm()
 );
 
 

@@ -267,6 +267,8 @@ engine_info_t engine_info = {
 	{ mFALSE,  3,   "QueryClientCvarValue" }, //pfnQueryClientCvarValue
 	// Added 2005-11-22 (no SDK update)
 	{ mFALSE,  3,   "QueryClientCvarValue2" }, //pfnQueryClientCvarValue2
+	// Added 2009-06-17 (no SDK update)
+	{ mFALSE,  8,	"EngCheckParm" }, //pfnEngCheckParm
 	// end
 	{ mFALSE,  0,	NULL },
 };

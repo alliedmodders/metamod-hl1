@@ -856,6 +856,12 @@ void QueryClientCvarValue2(const edict_t *pEdict, const char *cvarName, int requ
 	RETURN_META(MRES_IGNORED);
 }
 
+int EngCheckParm(const char *pchCmdLineToken, char **pchNextVal)
+{
+	ENGINE_TRACE(pfnEngCheckParm, P_PRE, ("token=%s",pchCmdLineToken?pchCmdLineToken:"nil"));
+	RETURN_META_VALUE(MRES_IGNORED, 0);
+}
+
 
 enginefuncs_t meta_engfuncs = {
 	PrecacheModel,			// pfnPrecacheModel()
@@ -1062,6 +1068,7 @@ enginefuncs_t meta_engfuncs = {
 	ResetTutorMessageDecayData,		// pfnResetTutorMessageDecayData()
 	QueryClientCvarValue,			// pfnQueryClientCvarValue()
 	QueryClientCvarValue2,			// pfnQueryClientCvarValue2()
+	EngCheckParm,					// pfnEngCheckParm()
 };
 
 C_DLLEXPORT int GetEngineFunctions(enginefuncs_t *pengfuncsFromEngine, 

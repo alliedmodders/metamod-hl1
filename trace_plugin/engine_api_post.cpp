@@ -853,6 +853,14 @@ void QueryClientCvarValue2_Post(const edict_t *pEdict, const char *cvar, int req
 	RETURN_META(MRES_IGNORED);
 }
 
+// Added 2009-06-17 (no SDK update):
+
+int EngCheckParm_Post(const char *pchCmdLineToken, char **pchNextVal) {
+	// trace output in Post
+	ENGINE_TRACE(pfnEngCheckParm, P_POST, ("token=%s, nextval=%s",pchCmdLineToken?pchCmdLineToken:"nil",pchNextVal?*pchNextVal:"nil"));
+	RETURN_META_VALUE(MRES_IGNORED, 0);
+}
+
 enginefuncs_t meta_engfuncs_post = {
 	PrecacheModel_Post,			// pfnPrecacheModel()
 	PrecacheSound_Post,			// pfnPrecacheSound()
@@ -1060,6 +1068,8 @@ enginefuncs_t meta_engfuncs_post = {
 	QueryClientCvarValue_Post,			// pfnQueryClientCvarValue()
 	// Added 2005-11-22 (no SDK update):
 	QueryClientCvarValue2_Post,			// pfnQueryClientCvarValue2()
+	// Added 2009-06-17 (no SDK update):
+	EngCheckParm_Post,					// pfnEngCheckParm()
 };
 
 C_DLLEXPORT int GetEngineFunctions_Post(enginefuncs_t *pengfuncsFromEngine, int *interfaceVersion ) 
