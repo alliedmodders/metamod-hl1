@@ -111,7 +111,7 @@ extern void mm_ServerExecute(void);
 extern void ClientCommand(edict_t *pEdict, const char *szFmt, ...);
 
 extern void mm_ParticleEffect(const float *org, const float *dir, float color, float count);
-extern void mm_LightStyle(int style, char *val);
+extern void mm_LightStyle(int style, const char *val);
 extern int mm_DecalIndex(const char *name);
 extern int mm_PointContents(const float *rgflVector);
 
@@ -197,7 +197,7 @@ extern void mm_SetView(const edict_t *pClient, const edict_t *pViewent );
 extern float mm_Time( void );
 extern void mm_CrosshairAngle(const edict_t *pClient, float pitch, float yaw);
 
-extern byte * mm_LoadFileForMe(char *filename, int *pLength);
+extern byte * mm_LoadFileForMe(const char *filename, int *pLength);
 extern void mm_FreeFile(void *buffer);
 
 extern void mm_EndSection(const char *pszSectionName); //! trigger_endsection
@@ -239,7 +239,7 @@ extern int mm_CheckVisibility( const edict_t *entity, unsigned char *pset );
 
 extern void mm_DeltaSetField( struct delta_s *pFields, const char *fieldname );
 extern void mm_DeltaUnsetField( struct delta_s *pFields, const char *fieldname );
-extern void mm_DeltaAddEncoder( char *name, void (*conditionalencode)( struct delta_s *pFields, const unsigned char *from, const unsigned char *to ) );
+extern void mm_DeltaAddEncoder( const char *name, void (*conditionalencode)( struct delta_s *pFields, const unsigned char *from, const unsigned char *to ) );
 extern int mm_GetCurrentPlayer( void );
 extern int mm_CanSkipPlayer( const edict_t *player );
 extern int mm_DeltaFindField( struct delta_s *pFields, const char *fieldname );
@@ -249,7 +249,7 @@ extern void mm_DeltaUnsetFieldByIndex( struct delta_s *pFields, int fieldNumber 
 extern void mm_SetGroupMask( int mask, int op );
 
 extern int CreateInstancedBaseline( int classname, struct entity_state_s *baseline );
-extern void mm_Cvar_DirectSet( struct cvar_s *var, char *value );
+extern void mm_Cvar_DirectSet( struct cvar_s *var, const char *value );
 
 //! Forces the client and server to be running with the same version of the specified file
 //!( e.g., a player model ).
@@ -281,7 +281,7 @@ extern void mm_QueryClientCvarValue(const edict_t *pEdict, const char *cvarName)
 //Added 2005-11-22 (no SDK update)
 extern void mm_QueryClientCvarValue2(const edict_t *pEdict, const char *cvarName, int requestID);
 //Added 2009-06-17 (no SDK update)
-extern int mm_EngCheckParm(const char *pchCmdLineToken, char **pchNextVal);
+extern int mm_CheckParm(const char *pchCmdLineToken, char **ppnext);
 
 
 // Typedefs for the above functions:
@@ -329,7 +329,7 @@ typedef void (*FN_SERVERCOMMAND) (const char *str);
 typedef void (*FN_SERVEREXECUTE) (void);
 typedef void (*FN_CLIENTCOMMAND_ENG) (edict_t *pEdict, const char *szFmt, ...);
 typedef void (*FN_PARTICLEEFFECT) (const float *org, const float *dir, float color, float count);
-typedef void (*FN_LIGHTSTYLE) (int style, char *val);
+typedef void (*FN_LIGHTSTYLE) (int style, const char *val);
 typedef int (*FN_DECALINDEX) (const char *name);
 typedef int (*FN_POINTCONTENTS) (const float *rgflVector);
 typedef void (*FN_MESSAGEBEGIN) (int msg_dest, int msg_type, const float *pOrigin, edict_t *ed);
@@ -395,7 +395,7 @@ typedef float (*FN_RANDOMFLOAT) (float flLow, float flHigh);
 typedef void (*FN_SETVIEW) (const edict_t *pClient, const edict_t *pViewent );
 typedef float (*FN_TIME) ( void );
 typedef void (*FN_CROSSHAIRANGLE) (const edict_t *pClient, float pitch, float yaw);
-typedef byte * (*FN_LOADFILEFORME) (char *filename, int *pLength);
+typedef byte * (*FN_LOADFILEFORME) (const char *filename, int *pLength);
 typedef void (*FN_FREEFILE) (void *buffer);
 typedef void (*FN_ENDSECTION) (const char *pszSectionName);
 typedef int (*FN_COMPAREFILETIME) (char *filename1, char *filename2, int *iCompare);
@@ -429,7 +429,7 @@ typedef unsigned char * (*FN_SETFATPAS) ( float *org );
 typedef int (*FN_CHECKVISIBILITY) ( const edict_t *entity, unsigned char *pset );
 typedef void (*FN_DELTASETFIELD) ( struct delta_s *pFields, const char *fieldname );
 typedef void (*FN_DELTAUNSETFIELD) ( struct delta_s *pFields, const char *fieldname );
-typedef void (*FN_DELTAADDENCODER) ( char *name, void (*conditionalencode)( struct delta_s *pFields, const unsigned char *from, const unsigned char *to ) );
+typedef void (*FN_DELTAADDENCODER) ( const char *name, void (*conditionalencode)( struct delta_s *pFields, const unsigned char *from, const unsigned char *to ) );
 typedef int (*FN_GETCURRENTPLAYER) ( void );
 typedef int (*FN_CANSKIPPLAYER) ( const edict_t *player );
 typedef int (*FN_DELTAFINDFIELD) ( struct delta_s *pFields, const char *fieldname );
@@ -437,7 +437,7 @@ typedef void (*FN_DELTASETFIELDBYINDEX) ( struct delta_s *pFields, int fieldNumb
 typedef void (*FN_DELTAUNSETFIELDBYINDEX) ( struct delta_s *pFields, int fieldNumber );
 typedef void (*FN_SETGROUPMASK) ( int mask, int op );
 typedef int (*FN_CREATEINSTANCEDBASELINE) ( int classname, struct entity_state_s *baseline );
-typedef void (*FN_CVAR_DIRECTSET) ( struct cvar_s *var, char *value );
+typedef void (*FN_CVAR_DIRECTSET) ( struct cvar_s *var, const char *value );
 typedef void (*FN_FORCEUNMODIFIED) ( FORCE_TYPE type, float *mins, float *maxs, const char *filename );
 typedef void (*FN_GETPLAYERSTATS) ( const edict_t *pClient, int *ping, int *packet_loss );
 typedef void (*FN_ADDSERVERCOMMAND) ( const char *cmd_name, void (*function) (void) );
@@ -463,6 +463,6 @@ typedef void (*FN_QUERYCLIENTCVARVALUE)(const edict_t *pEdict, const char *cvarN
 //Added 2005-11-22 (no SDK update)
 typedef void (*FN_QUERYCLIENTCVARVALUE2)(const edict_t *pEdict, const char *cvarName, int requestID);
 //Added 2009-06-17 (no SDK update)
-typedef int (*FN_ENGCHECKPARM)(const char *pchCmdLineToken, char **pchNextVal);
+typedef int (*FN_CHECKPARM)(const char *pchCmdLineToken, char **ppnext);
 
 #endif /* ENGINE_API_H */

@@ -417,7 +417,7 @@ class MPlugin {
 	SHOW_IFDEF(api_table, engine_info, pfnConstructTutorMessageDecayBuffer,	pre_str, post_str); \
 	SHOW_IFDEF(api_table, engine_info, pfnResetTutorMessageDecayData,		pre_str, post_str); \
 	SHOW_IFDEF(api_table, engine_info, pfnQueryClientCvarValue,				pre_str, post_str); \
-	SHOW_IFDEF(api_table, engine_info, pfnEngCheckParm,			pre_str, post_str);
+	SHOW_IFDEF(api_table, engine_info, pfnCheckParm,			pre_str, post_str);
 
 
 #endif /* MPLUGIN_H */

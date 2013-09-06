@@ -22,7 +22,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="..,..\..\..\hlsdk\multiplayer\common,..\..\..\hlsdk\multiplayer\engine,..\..\..\hlsdk\multiplayer\dlls,..\..\..\hlsdk\multiplayer\pm_shared,..\..\..\hlsdk\multiplayer source\common,..\..\..\hlsdk\multiplayer source\engine,..\..\..\hlsdk\multiplayer source\dlls,..\..\..\hlsdk\multiplayer source\pm_shared"
+				AdditionalIncludeDirectories="..,..\..\..\hlsdk\common,..\..\..\hlsdk\engine,..\..\..\hlsdk\dlls,..\..\..\hlsdk\pm_shared,..\..\..\hlsdk\public"
 				PreprocessorDefinitions="METAMOD_CORE;WIN32;_DEBUG;_WINDOWS;_USRDLL;METAMOD_EXPORTS"
 				RuntimeLibrary="1"
 				UsePrecompiledHeader="2"
@@ -88,7 +88,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				InlineFunctionExpansion="1"
-				AdditionalIncludeDirectories="..,..\..\..\hlsdk\multiplayer\common,..\..\..\hlsdk\multiplayer\engine,..\..\..\hlsdk\multiplayer\dlls,..\..\..\hlsdk\multiplayer\pm_shared,..\..\..\hlsdk\multiplayer source\common,..\..\..\hlsdk\multiplayer source\engine,..\..\..\hlsdk\multiplayer source\dlls,..\..\..\hlsdk\multiplayer source\pm_shared"
+				AdditionalIncludeDirectories="..,..\..\..\hlsdk\common,..\..\..\hlsdk\engine,..\..\..\hlsdk\dlls,..\..\..\hlsdk\pm_shared,..\..\..\hlsdk\public"				PreprocessorDefinitions="METAMOD_CORE;WIN32;NDEBUG;_WINDOWS;_USRDLL;METAMOD_EXPORTS"
 				PreprocessorDefinitions="METAMOD_CORE;WIN32;NDEBUG;_WINDOWS;_USRDLL;METAMOD_EXPORTS"
 				StringPooling="TRUE"
 				RuntimeLibrary="0"

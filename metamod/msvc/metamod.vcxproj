@@ -34,7 +34,6 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup>
     <_ProjectFileVersion>10.0.40219.1</_ProjectFileVersion>
-    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</LinkIncremental>
     <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</LinkIncremental>
     <CodeAnalysisRuleSet Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">AllRules.ruleset</CodeAnalysisRuleSet>
     <CodeAnalysisRules Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" />
@@ -46,7 +45,7 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>..;..\..\..\hlsdk\multiplayer\common;..\..\..\hlsdk\multiplayer\engine;..\..\..\hlsdk\multiplayer\dlls;..\..\..\hlsdk\multiplayer\pm_shared;..\..\..\hlsdk\multiplayer source\common;..\..\..\hlsdk\multiplayer source\engine;..\..\..\hlsdk\multiplayer source\dlls;..\..\..\hlsdk\multiplayer source\pm_shared;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..;..\..\..\hlsdk\common;..\..\..\hlsdk\engine;..\..\..\hlsdk\dlls;..\..\..\hlsdk\pm_shared;..\..\..\hlsdk\public;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>METAMOD_CORE;WIN32;_DEBUG;_WINDOWS;_USRDLL;METAMOD_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
       <PrecompiledHeader>
@@ -88,7 +87,7 @@
     <ClCompile>
       <Optimization>MaxSpeed</Optimization>
       <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
-      <AdditionalIncludeDirectories>..;..\..\..\hlsdk\multiplayer\common;..\..\..\hlsdk\multiplayer\engine;..\..\..\hlsdk\multiplayer\dlls;..\..\..\hlsdk\multiplayer\pm_shared;..\..\..\hlsdk\multiplayer source\common;..\..\..\hlsdk\multiplayer source\engine;..\..\..\hlsdk\multiplayer source\dlls;..\..\..\hlsdk\multiplayer source\pm_shared;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..;..\..\..\hlsdk\common;..\..\..\hlsdk\engine;..\..\..\hlsdk\dlls;..\..\..\hlsdk\pm_shared;..\..\..\hlsdk\public;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>METAMOD_CORE;WIN32;NDEBUG;_WINDOWS;_USRDLL;METAMOD_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <StringPooling>true</StringPooling>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>

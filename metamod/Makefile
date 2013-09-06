@@ -74,7 +74,7 @@ ifeq "$(USER)" "flori"
     TEST_DIR=/data/hlds_l/Admin/dlls
 endif
 
-SDKSRC=$(SDKTOP)/multiplayer
+SDKSRC=$(SDKTOP)
 
 #############################################################################
 # OS DEPENDENCIES
@@ -187,7 +187,8 @@ CCDEBUG+= -ggdb3
 
 
 SRCDIR=.
-INCLUDEDIRS=-I$(SRCDIR) -I$(METADIR) -I$(SDKSRC)/engine -I$(SDKSRC)/common -I$(SDKSRC)/pm_shared -I$(SDKSRC)/dlls -I$(SDKSRC)
+INCLUDEDIRS=-I$(SRCDIR) -I$(METADIR) -I$(SDKSRC)/engine -I$(SDKSRC)/common \
+	-I$(SDKSRC)/pm_shared -I$(SDKSRC)/dlls -I$(SDKSRC)/public -I$(SDKSRC)
 FILES_ALL = *.cpp *.h [A-Z]* *.rc
 
 CFLAGS=-Wall -Wno-unknown-pragmas 

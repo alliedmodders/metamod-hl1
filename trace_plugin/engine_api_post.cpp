@@ -242,7 +242,7 @@ void ParticleEffect_Post(const float *org, const float *dir, float color, float 
 	ENGINE_TRACE(pfnParticleEffect, P_POST, (""));
 	RETURN_META(MRES_IGNORED);
 }
-void LightStyle_Post(int style, char *val) {
+void LightStyle_Post(int style, const char *val) {
 	ENGINE_TRACE(pfnLightStyle, P_POST, (""));
 	RETURN_META(MRES_IGNORED);
 }
@@ -514,7 +514,7 @@ void CrosshairAngle_Post(const edict_t *pClient, float pitch, float yaw) {
 	RETURN_META(MRES_IGNORED);
 }
 
-byte *LoadFileForMe_Post(char *filename, int *pLength) {
+byte *LoadFileForMe_Post(const char *filename, int *pLength) {
 	ENGINE_TRACE(pfnLoadFileForMe, P_POST, (""));
 	RETURN_META_VALUE(MRES_IGNORED, NULL);
 }
@@ -680,7 +680,7 @@ void DeltaUnsetField_Post( struct delta_s *pFields, const char *fieldname ) {
 	ENGINE_TRACE(pfnDeltaUnsetField, P_POST, (""));
 	RETURN_META(MRES_IGNORED);
 }
-void DeltaAddEncoder_Post( char *name, void (*conditionalencode)( struct delta_s *pFields, const unsigned char *from, const unsigned char *to ) ) {
+void DeltaAddEncoder_Post( const char *name, void (*conditionalencode)( struct delta_s *pFields, const unsigned char *from, const unsigned char *to ) ) {
 	ENGINE_TRACE(pfnDeltaAddEncoder, P_POST, (""));
 	RETURN_META(MRES_IGNORED);
 }
@@ -715,7 +715,7 @@ int engCreateInstancedBaseline_Post( int classname, struct entity_state_s *basel
 	ENGINE_TRACE(pfnCreateInstancedBaseline, P_POST, (""));
 	RETURN_META_VALUE(MRES_IGNORED, 0);
 }
-void Cvar_DirectSet_Post( struct cvar_s *var, char *value ) {
+void Cvar_DirectSet_Post( struct cvar_s *var, const char *value ) {
 	ENGINE_TRACE(pfnCvar_DirectSet, P_POST, (""));
 	RETURN_META(MRES_IGNORED);
 }
@@ -855,9 +855,9 @@ void QueryClientCvarValue2_Post(const edict_t *pEdict, const char *cvar, int req
 
 // Added 2009-06-17 (no SDK update):
 
-int EngCheckParm_Post(const char *pchCmdLineToken, char **pchNextVal) {
+int CheckParm_Post(const char *pchCmdLineToken, char **ppnext) {
 	// trace output in Post
-	ENGINE_TRACE(pfnEngCheckParm, P_POST, ("token=%s, nextval=%s",pchCmdLineToken?pchCmdLineToken:"nil",pchNextVal?*pchNextVal:"nil"));
+	ENGINE_TRACE(pfnCheckParm, P_POST, ("token=%s, nextval=%s",pchCmdLineToken?pchCmdLineToken:"nil",ppnext?*ppnext:"nil"));
 	RETURN_META_VALUE(MRES_IGNORED, 0);
 }
 
@@ -1069,7 +1069,7 @@ enginefuncs_t meta_engfuncs_post = {
 	// Added 2005-11-22 (no SDK update):
 	QueryClientCvarValue2_Post,			// pfnQueryClientCvarValue2()
 	// Added 2009-06-17 (no SDK update):
-	EngCheckParm_Post,					// pfnEngCheckParm()
+	CheckParm_Post,						// pfnCheckParm()
 };
 
 C_DLLEXPORT int GetEngineFunctions_Post(enginefuncs_t *pengfuncsFromEngine, int *interfaceVersion ) 

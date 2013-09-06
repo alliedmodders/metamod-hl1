@@ -245,7 +245,7 @@ void ParticleEffect(const float *org, const float *dir, float color, float count
 	ENGINE_TRACE(pfnParticleEffect, P_PRE, (""));
 	RETURN_META(MRES_IGNORED);
 }
-void LightStyle(int style, char *val) {
+void LightStyle(int style, const char *val) {
 	ENGINE_TRACE(pfnLightStyle, P_PRE, (""));
 	RETURN_META(MRES_IGNORED);
 }
@@ -547,7 +547,7 @@ void CrosshairAngle(const edict_t *pClient, float pitch, float yaw) {
 	RETURN_META(MRES_IGNORED);
 }
 
-byte *LoadFileForMe(char *filename, int *pLength) {
+byte *LoadFileForMe(const char *filename, int *pLength) {
 	ENGINE_TRACE(pfnLoadFileForMe, P_PRE, ("file=%s", filename));
 	RETURN_META_VALUE(MRES_IGNORED, NULL);
 }
@@ -708,7 +708,7 @@ void DeltaUnsetField( struct delta_s *pFields, const char *fieldname ) {
 	ENGINE_TRACE(pfnDeltaUnsetField, P_PRE, ("field=%s", fieldname));
 	RETURN_META(MRES_IGNORED);
 }
-void DeltaAddEncoder( char *name, void (*conditionalencode)( struct delta_s *pFields, const unsigned char *from, const unsigned char *to ) ) {
+void DeltaAddEncoder( const char *name, void (*conditionalencode)( struct delta_s *pFields, const unsigned char *from, const unsigned char *to ) ) {
 	ENGINE_TRACE(pfnDeltaAddEncoder, P_PRE, (""));
 	RETURN_META(MRES_IGNORED);
 }
@@ -743,7 +743,7 @@ int engCreateInstancedBaseline( int classname, struct entity_state_s *baseline )
 	ENGINE_TRACE(pfnCreateInstancedBaseline, P_PRE, (""));
 	RETURN_META_VALUE(MRES_IGNORED, 0);
 }
-void Cvar_DirectSet( struct cvar_s *var, char *value ) {
+void Cvar_DirectSet( struct cvar_s *var, const char *value ) {
 	ENGINE_TRACE(pfnCvar_DirectSet, P_PRE, ("cvar=%s", var->name));
 	RETURN_META(MRES_IGNORED);
 }
@@ -856,9 +856,9 @@ void QueryClientCvarValue2(const edict_t *pEdict, const char *cvarName, int requ
 	RETURN_META(MRES_IGNORED);
 }
 
-int EngCheckParm(const char *pchCmdLineToken, char **pchNextVal)
+int CheckParm(const char *pchCmdLineToken, char **ppnext)
 {
-	ENGINE_TRACE(pfnEngCheckParm, P_PRE, ("token=%s",pchCmdLineToken?pchCmdLineToken:"nil"));
+	ENGINE_TRACE(pfnCheckParm, P_PRE, ("token=%s",pchCmdLineToken?pchCmdLineToken:"nil"));
 	RETURN_META_VALUE(MRES_IGNORED, 0);
 }
 
@@ -1068,7 +1068,7 @@ enginefuncs_t meta_engfuncs = {
 	ResetTutorMessageDecayData,		// pfnResetTutorMessageDecayData()
 	QueryClientCvarValue,			// pfnQueryClientCvarValue()
 	QueryClientCvarValue2,			// pfnQueryClientCvarValue2()
-	EngCheckParm,					// pfnEngCheckParm()
+	CheckParm,						// pfnCheckParm()
 };
 
 C_DLLEXPORT int GetEngineFunctions(enginefuncs_t *pengfuncsFromEngine, 

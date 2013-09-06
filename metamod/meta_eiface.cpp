@@ -216,7 +216,7 @@ meta_enginefuncs_t::meta_enginefuncs_t(
         void             (*_pfnServerExecute)                   (void),
         void             (*_pfnClientCommand)                   (edict_t*, const char*, ...),
         void             (*_pfnParticleEffect)                  (const float*, const float*, float, float),
-        void             (*_pfnLightStyle)                      (int, char*),
+        void             (*_pfnLightStyle)                      (int, const char*),
         int	             (*_pfnDecalIndex)                      (const char*),
         int              (*_pfnPointContents)                   (const float*),
         void             (*_pfnMessageBegin)                    (int, int, const float*, edict_t*),
@@ -268,7 +268,7 @@ meta_enginefuncs_t::meta_enginefuncs_t(
         void             (*_pfnSetView)                         (const edict_t*, const edict_t*),
         float            (*_pfnTime)                            (void),
         void             (*_pfnCrosshairAngle)                  (const edict_t*, float, float),
-        byte*            (*_pfnLoadFileForMe)                   (char*, int*),
+        byte*            (*_pfnLoadFileForMe)                   (const char*, int*),
         void             (*_pfnFreeFile)                        (void*),
         void             (*_pfnEndSection)                      (const char*),
         int              (*_pfnCompareFileTime)                 (char*, char*, int*),
@@ -302,7 +302,7 @@ meta_enginefuncs_t::meta_enginefuncs_t(
         int              (*_pfnCheckVisibility)                 (const edict_t*, unsigned char*),
         void             (*_pfnDeltaSetField)                   (struct delta_s*, const char*),
         void             (*_pfnDeltaUnsetField)                 (struct delta_s*, const char*),
-        void             (*_pfnDeltaAddEncoder)                 (char*, void (*)(struct delta_s*, const unsigned char*, const unsigned char*)),
+        void             (*_pfnDeltaAddEncoder)                 (const char*, void (*)(struct delta_s*, const unsigned char*, const unsigned char*)),
         int              (*_pfnGetCurrentPlayer)                (void),
         int              (*_pfnCanSkipPlayer)                   (const edict_t*),
         int              (*_pfnDeltaFindField)                  (struct delta_s*, const char*),
@@ -310,7 +310,7 @@ meta_enginefuncs_t::meta_enginefuncs_t(
         void             (*_pfnDeltaUnsetFieldByIndex)          (struct delta_s*, int),
         void             (*_pfnSetGroupMask)                    (int, int),
         int              (*_pfnCreateInstancedBaseline)         (int, struct entity_state_s*),
-        void             (*_pfnCvar_DirectSet)                  (struct cvar_s*, char*),
+        void             (*_pfnCvar_DirectSet)                  (struct cvar_s*, const char*),
         void             (*_pfnForceUnmodified)                 (FORCE_TYPE, float*, float*, const char*),
         void             (*_pfnGetPlayerStats)                  (const edict_t*, int*, int*),
         void             (*_pfnAddServerCommand)                (const char*, void (*) (void)),
@@ -330,7 +330,7 @@ meta_enginefuncs_t::meta_enginefuncs_t(
         void             (*_pfnResetTutorMessageDecayData)      (void),
         void             (*_pfnQueryClientCvarValue)            (const edict_t*, const char*),
         void             (*_pfnQueryClientCvarValue2)           (const edict_t*, const char*, int),
-        int              (*_pfnEngCheckParm)                    (const char*, char**)
+        int              (*_pfnCheckParm)                       (const char*, char**)
     )
 {
     pfnPrecacheModel = _pfnPrecacheModel;
@@ -490,7 +490,7 @@ meta_enginefuncs_t::meta_enginefuncs_t(
     pfnResetTutorMessageDecayData = _pfnResetTutorMessageDecayData;
     pfnQueryClientCvarValue = _pfnQueryClientCvarValue;
     pfnQueryClientCvarValue2 = _pfnQueryClientCvarValue2;
-    pfnEngCheckParm = _pfnEngCheckParm;
+    pfnCheckParm = _pfnCheckParm;
 
     memset( dummies, 0, sizeof(pdummyfunc) * c_NumDummies ); 
 }
@@ -531,7 +531,7 @@ void HL_enginefuncs_t::initialise_interface( enginefuncs_t *_pFuncs )
 //  	sentenceEntry_s*	(*pfnSequencePickSentence)		( const char* groupName, int pickMethod, int *picked );
 //	
 //		// LH: Give access to filesize via filesystem
-// 147:	int			(*pfnGetFileSize)						( char *filename );
+// 147:	int			(*pfnGetFileSize)						( const char *filename );
 //
 //		unsigned int (*pfnGetApproxWavePlayLen)				(const char *filepath);
 //		// MDC: Added for CZ career-mode
@@ -551,7 +551,7 @@ void HL_enginefuncs_t::initialise_interface( enginefuncs_t *_pFuncs )
 
 // 156:	void		(*pfnQueryClientCvarValue)				( const edict_t *player, const char *cvarName );
 // 157:	void		(*pfnQueryClientCvarValue2)				( const edict_t *player, const char *cvarName, int requestID );
-// 158: int			(*pfnEngCheckParm)						( const char *pchCmdLineToke, char **pchNextValue );
+// 158: int			(*pfnCheckParm)							( const char *pchCmdLineToke, char **ppnext );
 
 
 void HL_enginefuncs_t::determine_engine_interface_version( void )
@@ -605,8 +605,8 @@ void HL_enginefuncs_t::determine_engine_interface_version( void )
 	if ( ! Engine.info.is_valid_code_pointer(pfnQueryClientCvarValue2) ) {
 		pfnQueryClientCvarValue2 = NULL;
 	}
-	if ( ! Engine.info.is_valid_code_pointer(pfnEngCheckParm) ) {
-		pfnEngCheckParm = NULL;
+	if ( ! Engine.info.is_valid_code_pointer(pfnCheckParm) ) {
+		pfnCheckParm = NULL;
 	}
 
 	// Now begins our heuristic, where we try to determine the engine
@@ -679,10 +679,10 @@ void HL_enginefuncs_t::determine_engine_interface_version( void )
 	}
 	sm_version = 157;
 
-	// All functions up to EngCheckParm() are valid.
-	// If EngCheckParm() is not valid, leave it at the so far determined
+	// All functions up to CheckParm() are valid.
+	// If CheckParm() is not valid, leave it at the so far determined
 	// version. Otherwise the version is at least 158.
-	if ( pfnEngCheckParm == NULL) {
+	if ( pfnCheckParm == NULL) {
 		return;
 	}
 	sm_version = 158;
@@ -720,7 +720,7 @@ void HL_enginefuncs_t::fixup_engine_interface( void )
 	case 156:
 		pfnQueryClientCvarValue2 = NULL;
 	case 157:
-		pfnEngCheckParm = NULL;
+		pfnCheckParm = NULL;
 	}
 }
 

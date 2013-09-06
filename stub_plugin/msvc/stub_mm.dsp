@@ -43,7 +43,7 @@ RSC=rc.exe
 # PROP Ignore_Export_Lib 1
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /MT /W3 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "STUB_MM_EXPORTS" /YX /FD /c
-# ADD CPP /nologo /MD /W3 /GX /O2 /I "..\metamod" /I "..\..\..\hlsdk\multiplayer\common" /I "..\..\..\hlsdk\multiplayer\engine" /I "..\..\..\hlsdk\multiplayer\dlls" /I "..\..\..\hlsdk\multiplayer\pm_shared" /I "..\..\..\hlsdk\multiplayer source\common" /I "..\..\..\hlsdk\multiplayer source\engine" /I "..\..\..\hlsdk\multiplayer source\dlls" /I "..\..\..\hlsdk\multiplayer source\pm_shared" /I "..\..\metamod" /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "STUB_MM_EXPORTS" /YX /FD /c
+# ADD CPP /nologo /MD /W3 /GX /O2 /I "..\metamod" /I "..\..\..\hlsdk\common" /I "..\..\..\hlsdk\engine" /I "..\..\..\hlsdk\dlls" /I "..\..\..\hlsdk\pm_shared" /I "..\..\..\hlsdk\public" /I "..\..\metamod" /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "STUB_MM_EXPORTS" /YX /FD /c
 # ADD BASE MTL /nologo /D "NDEBUG" /mktyplib203 /win32
 # ADD MTL /nologo /D "NDEBUG" /mktyplib203 /win32
 # ADD BASE RSC /l 0x409 /d "NDEBUG"
@@ -70,7 +70,7 @@ LINK32=link.exe
 # PROP Ignore_Export_Lib 1
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /MTd /W3 /Gm /GX /ZI /Od /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "STUB_MM_EXPORTS" /YX /FD /GZ /c
-# ADD CPP /nologo /MTd /W3 /Gm /GX /ZI /Od /I "..\..\metamod" /I "..\..\..\hlsdk\multiplayer\common" /I "..\..\..\hlsdk\multiplayer\engine" /I "..\..\..\hlsdk\multiplayer\dlls" /I "..\..\..\hlsdk\multiplayer\pm_shared" /I "..\..\..\hlsdk\multiplayer source\common" /I "..\..\..\hlsdk\multiplayer source\engine" /I "..\..\..\hlsdk\multiplayer source\dlls" /I "..\..\..\hlsdk\multiplayer source\pm_shared" /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "STUB_MM_EXPORTS" /YX /FD /GZ /c
+# ADD CPP /nologo /MTd /W3 /Gm /GX /ZI /Od /I "..\metamod" /I "..\..\..\hlsdk\common" /I "..\..\..\hlsdk\engine" /I "..\..\..\hlsdk\dlls" /I "..\..\..\hlsdk\pm_shared" /I "..\..\..\hlsdk\public" /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "STUB_MM_EXPORTS" /YX /FD /GZ /c
 # ADD BASE MTL /nologo /D "_DEBUG" /mktyplib203 /win32
 # ADD MTL /nologo /D "_DEBUG" /mktyplib203 /win32
 # ADD BASE RSC /l 0x409 /d "_DEBUG"

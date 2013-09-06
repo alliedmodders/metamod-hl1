@@ -272,7 +272,7 @@ void mm_ParticleEffect(const float *org, const float *dir, float color, float co
 	META_ENGINE_HANDLE_void(FN_PARTICLEEFFECT, pfnParticleEffect, (org, dir, color, count));
 	RETURN_API_void()
 }
-void mm_LightStyle(int style, char *val) {
+void mm_LightStyle(int style, const char *val) {
 	META_ENGINE_HANDLE_void(FN_LIGHTSTYLE, pfnLightStyle, (style, val));
 	RETURN_API_void()
 }
@@ -577,7 +577,7 @@ void mm_CrosshairAngle(const edict_t *pClient, float pitch, float yaw) {
 	RETURN_API_void()
 }
 
-byte * mm_LoadFileForMe(char *filename, int *pLength) {
+byte * mm_LoadFileForMe(const char *filename, int *pLength) {
 	META_ENGINE_HANDLE(byte *, NULL, FN_LOADFILEFORME, pfnLoadFileForMe, (filename, pLength));
 	RETURN_API()
 }
@@ -729,7 +729,7 @@ void mm_DeltaUnsetField( struct delta_s *pFields, const char *fieldname ) {
 	META_ENGINE_HANDLE_void(FN_DELTAUNSETFIELD, pfnDeltaUnsetField, (pFields, fieldname));
 	RETURN_API_void()
 }
-void mm_DeltaAddEncoder( char *name, void (*conditionalencode)( struct delta_s *pFields, const unsigned char *from, const unsigned char *to ) ) {
+void mm_DeltaAddEncoder( const char *name, void (*conditionalencode)( struct delta_s *pFields, const unsigned char *from, const unsigned char *to ) ) {
 	META_ENGINE_HANDLE_void(FN_DELTAADDENCODER, pfnDeltaAddEncoder, (name, conditionalencode));
 	RETURN_API_void()
 }
@@ -763,7 +763,7 @@ int mm_engCreateInstancedBaseline( int classname, struct entity_state_s *baselin
 	META_ENGINE_HANDLE(int, 0, FN_CREATEINSTANCEDBASELINE, pfnCreateInstancedBaseline, (classname, baseline));
 	RETURN_API()
 }
-void mm_Cvar_DirectSet( struct cvar_s *var, char *value ) {
+void mm_Cvar_DirectSet( struct cvar_s *var, const char *value ) {
 	META_ENGINE_HANDLE_void(FN_CVAR_DIRECTSET, pfnCvar_DirectSet, (var, value));
 	RETURN_API_void()
 }
@@ -880,9 +880,9 @@ void mm_QueryClientCvarValue2(const edict_t *pEdict, const char *cvarName, int r
 }
 
 //Added 2009-06-17 (no SDK update)
-int mm_EngCheckParm(const char *pchCmdLineToken, char **pchNextVal)
+int mm_CheckParm(const char *pchCmdLineToken, char **ppnext)
 {
-	META_ENGINE_HANDLE(int, 0, FN_ENGCHECKPARM, pfnEngCheckParm, (pchCmdLineToken, pchNextVal));
+	META_ENGINE_HANDLE(int, 0, FN_CHECKPARM, pfnCheckParm, (pchCmdLineToken, ppnext));
 	RETURN_API();
 }
 
@@ -1097,7 +1097,7 @@ meta_enginefuncs_t meta_engfuncs(
 	&mm_QueryClientCvarValue2,		// pfnQueryClientCvarValue2()
 
 	// Added 2009-06-17 (no SDK update)
-	&mm_EngCheckParm			// pfnEngCheckParm()
+	&mm_CheckParm					// pfnCheckParm()
 );
 
 
