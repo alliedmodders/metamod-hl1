@@ -310,7 +310,7 @@ TARGET_LINUX = $(OBJDIR_LINUX)/$(LIBFILE_LINUX)
 
 # darwin .dylib compile commands
 DO_CC_DARWIN=$(CC) $(CFLAGS) $(INCLUDEDIRS) -o $@ -c $< $(FILTER)
-LINK_DARWIN=$(CC) $(CFLAGS) -dynamiclib -ldl -lm -lstdc++ $(EXTRA_LINK) $(OBJ_DARWIN) -o $@
+LINK_DARWIN=$(CC) $(CFLAGS) -dynamiclib -ldl -lm -lstdc++ -mmacosx-version-min=10.5 $(EXTRA_LINK) $(OBJ_DARWIN) -o $@
 
 # sort by date
 ifeq "$(OS)" "Darwin"
