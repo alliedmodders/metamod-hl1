@@ -23,7 +23,6 @@
 # include <CoreFoundation/CoreFoundation.h>
 # include <dlfcn.h>				// dladdr()
 # include <mach-o/loader.h>		// Mach-O structures
-# include <mach-o/fat.h>		// Mach-O structures for fat binaries
 #endif /* _WIN32 */ 
 
 #include <string.h>				// strlen(), strrchr(), strcmp()
@@ -388,34 +387,13 @@ int EngineInfo::mhdr_dladdr( void* pMem )
 
 int EngineInfo::mhdr_machohdr( void* pMachoHdr )
 {
-	fat_header* pFatHdr = (fat_header *)pMachoHdr;
 	mach_header* pHdr = (mach_header *)pMachoHdr;
-	fat_arch* pFatArchs;
 	segment_command *pSegment;
 	section *pSection;
-	uint32_t nArchs;
 	uint32_t nCmds;
 	uint32_t nSections;
 
 	if ( NULL == pMachoHdr ) return INVALID_ARG;
-
-	// Check for fat binary first.
-	// Note that fat_header and fat_arch are always stored in big-endian.
-	if ( CFSwapInt32BigToHost( pFatHdr->magic ) == FAT_MAGIC ) {
-		nArchs = CFSwapInt32BigToHost( pFatHdr->nfat_arch );
-		pFatArchs = (fat_arch *) ((char *) pMachoHdr + sizeof(fat_header));
-
-		// Look for the 32-bit Mach-O header
-		for (uint32_t i = 0; i < nArchs; i++) {
-			if ( CFSwapInt32BigToHost( pFatArchs[i].cputype ) == CPU_TYPE_I386
-				&& CFSwapInt32BigToHost ( pFatArchs[i].cpusubtype ) == CPU_SUBTYPE_I386_ALL ) {
-
-				pHdr = (mach_header *) ((char *) pMachoHdr + CFSwapInt32BigToHost( pFatArchs[i].offset ));
-				break;
-			}
-		}
-
-	}
 
 	// Find __TEXT segment and __text section
 	if ( pHdr->magic == MH_MAGIC
