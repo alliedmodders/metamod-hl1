@@ -42,6 +42,7 @@ void WINAPI GiveFnptrsToDll( enginefuncs_t* pengfuncsFromEngine, globalvars_t *p
 {
 	memcpy(&g_engfuncs, pengfuncsFromEngine, sizeof(enginefuncs_t));
 	gpGlobals = pGlobals;
+}
 
 // Avoid linking to libstdc++
 #if defined(linux)
