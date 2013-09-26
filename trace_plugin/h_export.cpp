@@ -47,3 +47,30 @@ void WINAPI GiveFnptrsToDll( enginefuncs_t* pengfuncsFromEngine, globalvars_t *p
 	// that g_engfuncs.pfnAlertMessage() can be resolved properly, heh. :)
 	UTIL_LogPrintf("[%s] dev: called: GiveFnptrsToDll\n", Plugin_info.logtag);
 }
+
+// Avoid linking to libstdc++
+#if defined(linux)
+extern "C" void __cxa_pure_virtual(void)
+{
+}
+
+void *operator new(size_t size)
+{
+	return malloc(size);
+}
+
+void *operator new[](size_t size)
+{
+	return malloc(size);
+}
+
+void operator delete(void *ptr)
+{
+	free(ptr);
+}
+
+void operator delete[](void * ptr)
+{
+	free(ptr);
+}
+#endif

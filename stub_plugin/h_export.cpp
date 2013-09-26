@@ -42,4 +42,30 @@ void WINAPI GiveFnptrsToDll( enginefuncs_t* pengfuncsFromEngine, globalvars_t *p
 {
 	memcpy(&g_engfuncs, pengfuncsFromEngine, sizeof(enginefuncs_t));
 	gpGlobals = pGlobals;
+
+// Avoid linking to libstdc++
+#if defined(linux)
+extern "C" void __cxa_pure_virtual(void)
+{
 }
+
+void *operator new(size_t size)
+{
+	return malloc(size);
+}
+
+void *operator new[](size_t size)
+{
+	return malloc(size);
+}
+
+void operator delete(void *ptr)
+{
+	free(ptr);
+}
+
+void operator delete[](void * ptr)
+{
+	free(ptr);
+}
+#endif}
