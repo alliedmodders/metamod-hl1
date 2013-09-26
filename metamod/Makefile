@@ -531,7 +531,7 @@ rmdlls:
 	-rm -f ../dlls/*.* ../dlls/debug/*.*
 
 spotless: cleanall
-	-rmdir $(OBJDIR_LINUX) $(OBJDIR_DARWIN) $(OBJDIR_WIN)
+	-rm -rf $(OBJDIR_LINUX) $(OBJDIR_DARWIN) $(OBJDIR_WIN)
 	-rm -f .snap $(GENERATED)
 
 distclean:	spotless
