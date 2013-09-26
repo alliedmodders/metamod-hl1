@@ -271,6 +271,6 @@ void QueryClientCvarValue_Post(const edict_t *pEdict, const char *cvar);
 void QueryClientCvarValue2_Post(const edict_t *pEdict, const char *cvar, int requestID);
 
 // Added 2009-06-17 (no SDK update):
-int EngCheckParm_Post(const char *pchCmdLineToken, char **pchNextVal);
+int CheckParm_Post(const char *pchCmdLineToken, char **pchNextVal);
 
 #endif /* ENGINE_API_POST_H */

@@ -345,7 +345,7 @@ struct meta_enginefuncs_t : public enginefuncs_t {
             void             (*_pfnResetTutorMessageDecayData)      (void),
             void             (*_pfnQueryClientCvarValue)            (const edict_t*, const char*),
             void             (*_pfnQueryClientCvarValue2)           (const edict_t*, const char*, int),
-            int              (*_pfnEngCheckParm)                    (const char *, char**)
+            int              (*_pfnCheckParm)                       (const char *, char**)
         );
 
         meta_enginefuncs_t( const meta_enginefuncs_t& );
@@ -381,7 +381,7 @@ struct meta_enginefuncs_t : public enginefuncs_t {
 		//      including pfnQueryClientCvarValue()
 		// 156: includes pfnQueryClientCvarValue()
 		// 157: includes pfnQueryClientCvarValue2()
-		// 158: includes pfnEngCheckParm()
+		// 158: includes pfnCheckParm()
 		static int sm_version;	
 
 };
