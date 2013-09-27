@@ -69,4 +69,4 @@ void operator delete[](void * ptr)
 {
 	free(ptr);
 }
-#endif}
+#endif
