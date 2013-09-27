@@ -512,7 +512,7 @@ dll_linux dll_darwin dll_win32:
 
 do_dll_linux: $(DLLS_DIR) $(DLLS_DIR)/$(LIBFILE_LINUX)
 do_dll_win32: $(DLLS_DIR) $(DLLS_DIR)/$(LIBFILE_WIN)
-do_dll_darwin: $(DLL_DIR) $(DLLS_DIR)/$(LIBFILE_DARWIN)
+do_dll_darwin: $(DLLS_DIR) $(DLLS_DIR)/$(LIBFILE_DARWIN)
 
 $(DLLS_DIR):
 	mkdir -p $(DLLS_DIR)
@@ -526,7 +526,7 @@ $(DLLS_DIR)/$(LIBFILE_WIN): $(TARGET_WIN)
 $(DLLS_DIR)/$(LIBFILE_DARWIN): $(TARGET_DARWIN)
 	$(INSTALL) $+ $@
 
-dlls: dll_linux dlls_darwin dll_win32
+dlls: dll_linux dll_darwin dll_win32
 rmdlls:
 	-rm -f ../dlls/*.* ../dlls/debug/*.*
 
