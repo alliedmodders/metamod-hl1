@@ -50,7 +50,7 @@
 extern mBOOL dlclose_handle_invalid;
 
 // String describing platform/DLL-type, for matching lines in plugins.ini.
-#ifdef linux
+#ifdef __linux
 	#define PLATFORM		"linux"
 #  ifdef __amd64__
 	#define PLATFORM_SPC	"lin64"
@@ -125,7 +125,7 @@ extern mBOOL dlclose_handle_invalid;
 
 
 // Functions & types for DLL open/close/etc operations.
-#if defined(linux) || defined(__APPLE__)
+#if defined(__linux) || defined(__APPLE__)
 	#include <dlfcn.h>
 	typedef void* DLHANDLE;
 	typedef void* DLFUNC;
@@ -198,7 +198,7 @@ mBOOL os_safe_call(REG_CMD_FN pfn);
 // Note that both OS's include room for null-termination:
 //   linux:    "# chars in a path name including nul"
 //   win32:    "note that the sizes include space for 0-terminator"
-#if defined(linux) || defined(__APPLE__)
+#if defined(__linux) || defined(__APPLE__)
 	#include <limits.h>
 #elif defined(_WIN32)
 	#include <stdlib.h>
@@ -208,7 +208,7 @@ mBOOL os_safe_call(REG_CMD_FN pfn);
 
 
 // Various other windows routine differences.
-#if defined(linux) || defined(__APPLE__)
+#if defined(__linux) || defined(__APPLE__)
 	#include <unistd.h>	// sleep
 	#ifndef O_BINARY
     	#define O_BINARY 0
@@ -293,7 +293,7 @@ void mm_set_new_handler( void );
 
 
 // Thread handling...
-#if defined(linux) || defined(__APPLE__)
+#if defined(__linux) || defined(__APPLE__)
 	#include <pthread.h>
 	typedef	pthread_t 	THREAD_T;
 	// returns 0==success, non-zero==failure
@@ -327,7 +327,7 @@ void mm_set_new_handler( void );
 
 
 // Mutex handling...
-#if defined(linux) || defined(__APPLE__)
+#if defined(__linux) || defined(__APPLE__)
 	typedef pthread_mutex_t		MUTEX_T;
 	inline int MUTEX_INIT(MUTEX_T *mutex) {
 		int ret;
@@ -372,7 +372,7 @@ void mm_set_new_handler( void );
 
 
 // Condition variables...
-#if defined(linux) || defined(__APPLE__)
+#if defined(__linux) || defined(__APPLE__)
 	typedef pthread_cond_t	COND_T;
 	inline int COND_INIT(COND_T *cond) {
 		int ret;
@@ -458,7 +458,7 @@ void mm_set_new_handler( void );
 //      non-case-sensitive.
 //  - For linux, this requires no work, as paths uses slashes (/) natively,
 //    and pathnames are case-sensitive.
-#if defined(linux) || defined(__APPLE__)
+#if defined(__linux) || defined(__APPLE__)
 #define normalize_pathname(a)
 #elif defined(_WIN32)
 inline void normalize_pathname(char *path) {
@@ -518,7 +518,7 @@ inline char *realpath(const char *file_name, char *resolved_name) {
 // Generic "error string" from a recent OS call.  For linux, this is based
 // on errno.  For win32, it's based on GetLastError.
 inline const char *str_os_error(void) {
-#if defined(linux) || defined(__APPLE__)
+#if defined(__linux) || defined(__APPLE__)
 	return(strerror(errno));
 #elif defined(_WIN32)
 	return(str_GetLastError());
