@@ -1,5 +1,5 @@
 Metamod
-=-=-=-=
+=======
 
 a Half-Life utility mod
 
@@ -31,5 +31,3 @@ to AdminMod DLL, MetaMod allows you to add features from multiple,
 separate DLLs. Under that framework, AdminMod can be a plugin itself, and
 be run alongside numerous other plugins. And, as of version 2.50 of
 AdminMod, AM has now transitioned to running as a Metamod plugin.
-
---------------------------------------------------------------------------
